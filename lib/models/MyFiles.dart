@@ -1,4 +1,4 @@
-import 'package:admin/constants.dart';
+import 'package:finia_app/constants.dart';
 import 'package:flutter/material.dart';
 
 class CloudStorageInfo {

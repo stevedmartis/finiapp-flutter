@@ -1,6 +1,9 @@
-import 'package:admin/models/MyFiles.dart';
-import 'package:admin/responsive.dart';
+import 'package:finia_app/models/MyFiles.dart';
+import 'package:finia_app/responsive.dart';
+import 'package:finia_app/screens/dashboard/floid_widget.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../constants.dart';
 import 'file_info_card.dart';
@@ -9,6 +12,14 @@ class MyFiles extends StatelessWidget {
   const MyFiles({
     Key? key,
   }) : super(key: key);
+
+  Future<void> _launchUrl() async {
+    final Uri url = Uri.parse(
+        'https://admin.floid.app/finia_app/widget/80c2083bbc755fa3548e55c627c78006?sandbox');
+    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+      throw 'Could not launch $url';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,9 +41,16 @@ class MyFiles extends StatelessWidget {
                       defaultPadding / (Responsive.isMobile(context) ? 2 : 1),
                 ),
               ),
-              onPressed: () {},
+              onPressed: () {
+                (!kIsWeb)
+                    ? Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => FloidWidgetScreen()))
+                    : _launchUrl();
+              },
               icon: Icon(Icons.add),
-              label: Text("Add New"),
+              label: Text("Add New 1"),
             ),
           ],
         ),

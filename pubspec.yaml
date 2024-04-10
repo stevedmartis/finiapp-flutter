@@ -1,4 +1,4 @@
-name: admin
+name: finia_app
 description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
@@ -18,7 +18,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.17.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -32,6 +32,9 @@ dependencies:
   flutter_svg: ^2.0.5
   fl_chart: ^0.62.0
   provider: ^6.0.5
+  webview_flutter: ^4.7.0
+  url_launcher: ^6.2.5
+  pinput: ^4.0.0
 
 dev_dependencies:
   flutter_test:
@@ -51,6 +54,10 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - assets/icons/facebook.svg
+    - assets/icons/google.svg
+    - assets/icons/apple-logo.svg
+    - assets/images/signup-vector.svg
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
