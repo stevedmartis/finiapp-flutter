@@ -1,17 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:finia_app/helper/colors.dart';
 import 'package:finia_app/screens/main/main_screen.dart';
 import 'package:finia_app/screens/phone_login.dart';
 import 'package:finia_app/widgets/signup_with_phone.dart';
 import 'package:pinput/pinput.dart';
-import 'package:provider/provider.dart';
-import 'package:finia_app/screens/providers/auth_provider.dart';
-import 'package:finia_app/controllers/MenuAppController.dart'; // Importa MenuAppController
 
 class Verification extends StatefulWidget {
-  const Verification({Key? key});
+  const Verification({Key? key}) : super(key: key);
 
   @override
   State<Verification> createState() => _VerificationState();
@@ -25,6 +21,7 @@ class _VerificationState extends State<Verification> {
 
   @override
   void initState() {
+    super.initState();
     _verification = TextEditingController();
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (secondsRemaining != 0) {
@@ -37,7 +34,6 @@ class _VerificationState extends State<Verification> {
         });
       }
     });
-    super.initState();
   }
 
   @override
@@ -52,22 +48,17 @@ class _VerificationState extends State<Verification> {
     double screenWidth = MediaQuery.of(context).size.width;
     bool isDesktop = screenWidth > 600;
 
-    // Obtiene la instancia de MenuAppController
-    final menuAppController = context.read<MenuAppController>();
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const PhoneLogin()),
-            );
-          },
-          icon: const Icon(Icons.arrow_back_ios_rounded),
-        ),
         elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_rounded),
+          onPressed: () => Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const PhoneLogin()),
+          ),
+        ),
       ),
       body: SafeArea(
         child: Center(
@@ -87,16 +78,8 @@ class _VerificationState extends State<Verification> {
                   showCursor: true,
                   pinAnimationType: PinAnimationType.slide,
                   keyboardType: TextInputType.number,
-                  defaultPinTheme: PinTheme(
-                    decoration: BoxDecoration(
-                      color: ColorSys.kSecondary,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    height: 50,
-                    width: 50,
-                  ),
                   onCompleted: (pin) {
-                    // Verificar el PIN
+                    // Implement verification logic here
                   },
                 ),
                 SizedBox(height: 20),
@@ -107,17 +90,14 @@ class _VerificationState extends State<Verification> {
                     TextButton(
                       onPressed: enableResend
                           ? () {
-                              // Lógica para reenviar el código
+                              // Logic to resend code
                             }
                           : null,
                       child: Text(
                         !enableResend
                             ? secondsRemaining.toString()
                             : "Resend code",
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(color: Theme.of(context).primaryColor),
+                        style: TextStyle(color: Theme.of(context).primaryColor),
                       ),
                     ),
                   ],
@@ -126,16 +106,9 @@ class _VerificationState extends State<Verification> {
                 SignupWithPhone(
                   name: "Verify",
                   onPressed: () {
-                    Provider.of<AuthProvider>(context, listen: false).signIn();
-
-                    // Navegar a la pantalla principal, pasando menuAppController
-                    Navigator.pushAndRemoveUntil(
+                    Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => MainScreen(
-                                menuAppController: menuAppController,
-                              )),
-                      (Route<dynamic> route) => false,
+                      MaterialPageRoute(builder: (context) => MainScreen()),
                     );
                   },
                 ),
