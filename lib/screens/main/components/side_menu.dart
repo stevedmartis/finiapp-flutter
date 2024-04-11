@@ -1,5 +1,7 @@
+import 'package:finia_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
 class SideMenu extends StatelessWidget {
   const SideMenu({
@@ -53,6 +55,13 @@ class SideMenu extends StatelessWidget {
             title: "Settings",
             svgSrc: "assets/icons/menu_setting.svg",
             press: () {},
+          ),
+          DrawerListTile(
+            title: "SignOut",
+            svgSrc: "assets/icons/menu_profile.svg",
+            press: () {
+              context.read<AuthService>().signOut();
+            },
           ),
         ],
       ),

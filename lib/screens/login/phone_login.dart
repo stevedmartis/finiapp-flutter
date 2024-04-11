@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:finia_app/screens/sign_in.dart';
-import 'package:finia_app/screens/verification.dart';
+import 'package:finia_app/screens/login/sign_in.dart';
+import 'package:finia_app/screens/login/verification.dart';
 import 'package:finia_app/widgets/phone_number_field.dart';
 import 'package:finia_app/widgets/remember_me.dart';
 import 'package:finia_app/widgets/signup_with_phone.dart';

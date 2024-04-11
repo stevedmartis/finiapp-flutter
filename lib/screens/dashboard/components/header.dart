@@ -1,5 +1,6 @@
 import 'package:finia_app/controllers/MenuAppController.dart';
 import 'package:finia_app/responsive.dart';
+import 'package:finia_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -78,9 +79,14 @@ class SearchField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthService>(context, listen: false);
+
     return TextField(
       decoration: InputDecoration(
-        hintText: "Search",
+        hintText: authProvider.isAuthenticated &&
+                authProvider.user?.displayName != null
+            ? 'Bienvenido, ${authProvider.user!.displayName}!'
+            : 'No estás autenticado',
         fillColor: secondaryColor,
         filled: true,
         border: OutlineInputBorder(

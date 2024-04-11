@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:finia_app/screens/main/main_screen.dart';
-import 'package:finia_app/screens/phone_login.dart';
+import 'package:finia_app/screens/login/phone_login.dart';
 import 'package:finia_app/widgets/signup_with_phone.dart';
 import 'package:pinput/pinput.dart';
 

@@ -35,6 +35,10 @@ dependencies:
   webview_flutter: ^4.7.0
   url_launcher: ^6.2.5
   pinput: ^4.0.0
+  google_sign_in: ^6.2.1
+  firebase_auth: ^4.19.1
+  firebase_core: ^2.29.0
+  
 
 dev_dependencies:
   flutter_test:

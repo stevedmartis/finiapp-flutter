@@ -6,18 +6,19 @@ class SocialButton extends StatelessWidget {
   final String name;
   final String icon;
   final bool appleLogo;
+  final VoidCallback? onPressed;
 
-  const SocialButton({
-    super.key,
-    required this.name,
-    required this.icon,
-    this.appleLogo = false,
-  });
+  const SocialButton(
+      {super.key,
+      required this.name,
+      required this.icon,
+      this.appleLogo = false,
+      this.onPressed});
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: onPressed,
       style: ElevatedButton.styleFrom(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12.0),

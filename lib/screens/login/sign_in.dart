@@ -1,9 +1,12 @@
+import 'package:finia_app/screens/main/main_screen.dart';
+import 'package:finia_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:finia_app/screens/phone_login.dart';
+import 'package:finia_app/screens/login/phone_login.dart';
 import 'package:finia_app/widgets/horizontal_line.dart';
 import 'package:finia_app/widgets/signup_with_phone.dart';
 import 'package:finia_app/widgets/social_button.dart';
+import 'package:provider/provider.dart';
 
 class SignIn extends StatelessWidget {
   const SignIn({super.key});
@@ -74,16 +77,23 @@ class SignIn extends StatelessWidget {
           SocialButton(
             name: "Continue with Facebook",
             icon: "assets/icons/facebook.svg",
+            onPressed: () {
+              // Aquí manejarías el inicio de sesión con Facebook
+            },
           ),
           SizedBox(height: buttonSpacing), // Espacio entre botones
           SocialButton(
             name: "Continue with Google",
             icon: "assets/icons/google.svg",
+            onPressed: () => _signInWithGoogle(context),
           ),
           SizedBox(height: buttonSpacing), // Espacio entre botones
           SocialButton(
             name: "Continue with Apple",
             icon: "assets/icons/apple-logo.svg",
+            onPressed: () {
+              // Aquí manejarías el inicio de sesión con Apple
+            },
             appleLogo: true,
           ),
           SizedBox(
@@ -105,7 +115,9 @@ class SignIn extends StatelessWidget {
               children: [
                 const Text("Don't have an account? "),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    // Aquí manejarías la navegación al registro de usuarios
+                  },
                   child: Text(
                     "Sign up",
                     style: Theme.of(context)
@@ -120,5 +132,23 @@ class SignIn extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void _signInWithGoogle(BuildContext context) async {
+    // Accede a AuthProvider usando Provider.of<>
+    final authProvider = Provider.of<AuthService>(context, listen: false);
+
+    // Llama a signInWithGoogle en AuthProvider
+    await authProvider.signInWithGoogle();
+
+    // Verifica si el usuario está autenticado
+    if (authProvider.isAuthenticated) {
+      print("Inicio de sesión exitoso");
+    } else {
+      print("Error de inicio de sesión");
+      // Muestra un Snackbar en caso de error
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("Inicio de sesión fallido")));
+    }
   }
 }

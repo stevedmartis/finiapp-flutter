@@ -1,30 +1,31 @@
+import 'package:finia_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart'; // Importa firebase_core
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:finia_app/screens/providers/auth_provider.dart';
 import 'package:finia_app/controllers/MenuAppController.dart';
 import 'package:finia_app/screens/main/main_screen.dart';
-import 'package:finia_app/screens/sign_in.dart';
+import 'package:finia_app/screens/login/sign_in.dart';
 import 'package:finia_app/theme/app_theme.dart';
 import 'package:finia_app/constants.dart';
 
-void main() {
-  runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding
+      .ensureInitialized(); // Asegura la inicialización de los widgets
+  await Firebase.initializeApp(); // Inicializa Firebase
+  runApp(MyApp()); // Ejecuta la aplicación
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // No se realiza ninguna modificación aquí,
-    // ya que estamos manteniendo la estructura original sin eliminar GlobalKey.
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (context) =>
-              MenuAppController(), // Correcto para instanciar el MenuAppController.
+          create: (context) => MenuAppController(),
         ),
         ChangeNotifierProvider(
-          create: (context) => AuthProvider(), // Añade el AuthProvider aquí.
+          create: (context) => AuthService(),
         ),
       ],
       child: MaterialApp(
@@ -36,9 +37,8 @@ class MyApp extends StatelessWidget {
               .apply(bodyColor: Colors.white),
           canvasColor: secondaryColor,
         ),
-        home: Consumer<AuthProvider>(
+        home: Consumer<AuthService>(
           builder: (context, auth, _) {
-            // Aquí simplemente retornamos MainScreen sin cambios relacionados al GlobalKey.
             return auth.isAuthenticated ? MainScreen() : SignIn();
           },
         ),
