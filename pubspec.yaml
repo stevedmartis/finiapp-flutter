@@ -38,7 +38,10 @@ dependencies:
   google_sign_in: ^6.2.1
   firebase_auth: ^4.19.1
   firebase_core: ^2.29.0
-  
+  http: ^0.13.3
+  flutter_secure_storage: ^9.0.0
+  http_interceptor: ^1.0.2
+  mockito: ^5.4.4
 
 dev_dependencies:
   flutter_test:

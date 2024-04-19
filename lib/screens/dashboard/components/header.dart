@@ -42,6 +42,8 @@ class ProfileCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthService>(context, listen: false);
+
     return Container(
       margin: EdgeInsets.only(left: defaultPadding),
       padding: EdgeInsets.symmetric(
@@ -61,10 +63,14 @@ class ProfileCard extends StatelessWidget {
           ),
           if (!Responsive.isMobile(context))
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: defaultPadding / 2),
-              child: Text("Angelina Jolie"),
-            ),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: defaultPadding / 2),
+                child: Text(
+                  authProvider.isAuthenticated &&
+                          authProvider.user?.displayName != null
+                      ? '${authProvider.globalUser!.fullName}!'
+                      : 'Invitado',
+                )),
           Icon(Icons.keyboard_arrow_down),
         ],
       ),
@@ -79,14 +85,9 @@ class SearchField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final authProvider = Provider.of<AuthService>(context, listen: false);
-
     return TextField(
       decoration: InputDecoration(
-        hintText: authProvider.isAuthenticated &&
-                authProvider.user?.displayName != null
-            ? 'Bienvenido, ${authProvider.user!.displayName}!'
-            : 'No estás autenticado',
+        hintText: 'Buscar',
         fillColor: secondaryColor,
         filled: true,
         border: OutlineInputBorder(

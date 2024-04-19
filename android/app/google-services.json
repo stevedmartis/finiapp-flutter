@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "299487844774",
+    "project_id": "finiapp",
+    "storage_bucket": "finiapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:299487844774:android:354d02eb093315fb2c9767",
+        "android_client_info": {
+          "package_name": "com.example.admin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "299487844774-0uhr4rldflni096hf2h4srcp0hpsqf98.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAHPBpAYuRWclR6kbp3aD5SNyMdTOYA9yI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "299487844774-0uhr4rldflni096hf2h4srcp0hpsqf98.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "299487844774-hr0gpg1qn27goh453l8ov2891jdpb4d2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "cl.finia.app"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

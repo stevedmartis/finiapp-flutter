@@ -1,4 +1,3 @@
-import 'package:finia_app/screens/main/main_screen.dart';
 import 'package:finia_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';

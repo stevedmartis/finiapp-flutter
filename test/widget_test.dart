@@ -1,30 +1,26 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility that Flutter provides. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
 import 'package:finia_app/main.dart';
+import 'package:mockito/mockito.dart';
+import 'package:http_interceptor/http_interceptor.dart';
+import 'package:finia_app/services/auth_service.dart';
+
+class MockClient extends Mock implements InterceptedClient {}
+
+class MockAuthService extends Mock implements AuthService {}
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(MyApp());
+  testWidgets('MyApp uses mocked dependencies', (WidgetTester tester) async {
+    // Create mock instances
+    final mockClient = MockClient();
+    final mockAuthService = MockAuthService();
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    // Assuming you have default behavior for the mocks, otherwise stub them as needed
+    // when(mockAuthService.someMethod()).thenAnswer(...);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    // Build the app using the mock instances
+    await tester
+        .pumpWidget(MyApp(client: mockClient, authService: mockAuthService));
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Add your test logic here...
   });
 }
