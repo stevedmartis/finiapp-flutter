@@ -4,22 +4,9 @@ class UserAuth {
   final String? accessToken;
   final String? refreshToken;
 
-  UserAuth({
-    this.fullName,
-    this.email,
-    this.accessToken,
-    this.refreshToken,
-  });
+  UserAuth({this.fullName, this.email, this.accessToken, this.refreshToken});
 
-  factory UserAuth.fromJson(Map<String, dynamic> json) {
-    return UserAuth(
-      fullName: json['fullName'] as String?,
-      email: json['email'] as String?,
-      accessToken: json['accessToken'] as String?,
-      refreshToken: json['refreshToken'] as String?,
-    );
-  }
-
+  // Define the toJson method
   Map<String, dynamic> toJson() {
     return {
       'fullName': fullName,
@@ -27,5 +14,15 @@ class UserAuth {
       'accessToken': accessToken,
       'refreshToken': refreshToken,
     };
+  }
+
+  // Assuming there is also a fromJson factory constructor
+  factory UserAuth.fromJson(Map<String, dynamic> json) {
+    return UserAuth(
+      fullName: json['fullName'] as String?,
+      email: json['email'] as String?,
+      accessToken: json['accessToken'] as String?,
+      refreshToken: json['refreshToken'] as String?,
+    );
   }
 }

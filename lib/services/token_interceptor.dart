@@ -9,7 +9,7 @@ class TokenInterceptor implements InterceptorContract {
 
   @override
   Future<RequestData> interceptRequest({required RequestData data}) async {
-    String? token = await authService.tokenStorage.getToken();
+    String? token = await authService.tokenStorage.getAccessToken();
     if (token != null) {
       data.headers['Authorization'] = 'Bearer $token';
     }

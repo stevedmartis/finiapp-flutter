@@ -67,7 +67,7 @@ class ProfileCard extends StatelessWidget {
                     const EdgeInsets.symmetric(horizontal: defaultPadding / 2),
                 child: Text(
                   authProvider.isAuthenticated &&
-                          authProvider.user?.displayName != null
+                          authProvider.globalUser?.fullName != null
                       ? '${authProvider.globalUser!.fullName}!'
                       : 'Invitado',
                 )),

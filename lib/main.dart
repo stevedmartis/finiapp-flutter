@@ -1,4 +1,5 @@
 import 'package:finia_app/firebase_options.dart';
+import 'package:finia_app/helper/lifecycle_event.dart';
 import 'package:finia_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -20,7 +21,7 @@ void main() async {
   InterceptedClient client =
       InterceptedClient.build(interceptors: [TokenInterceptor(authService)]);
 
-  await authService.loadUserData();
+  await authService.loadUserData(); // Carga los datos del usuario
 
   runApp(MyApp(client: client, authService: authService));
 }
@@ -33,26 +34,42 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (context) => MenuAppController()),
-        ChangeNotifierProvider(
-            create: (context) => authService), // This line has been updated
-      ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Flutter Admin Panel',
-        theme: AppTheme.theme.copyWith(
-          scaffoldBackgroundColor: bgColor,
-          textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme)
-              .apply(bodyColor: Colors.white),
-          canvasColor: secondaryColor,
-        ),
-        home: Consumer<AuthService>(
-          builder: (context, auth, _) =>
-              auth.isAuthenticated ? MainScreen() : SignIn(),
-        ),
+    final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+    WidgetsBinding.instance.addObserver(
+      LifecycleEventHandler(
+        onResumed: () => authService.checkSession(),
       ),
     );
+
+    return MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (context) => MenuAppController()),
+          ChangeNotifierProvider.value(value: authService),
+        ],
+        child: MaterialApp(
+          key: navigatorKey,
+          debugShowCheckedModeBanner: false,
+          title: 'Flutter Admin Panel',
+          theme: AppTheme.theme.copyWith(
+            scaffoldBackgroundColor: bgColor,
+            textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme)
+                .apply(bodyColor: Colors.white),
+            canvasColor: secondaryColor,
+          ),
+          routes: {
+            '/mainScreen': (context) => MainScreen(),
+            '/signIn': (context) => SignIn(),
+          },
+          home: Consumer<AuthService>(
+            builder: (context, auth, _) {
+              if (auth.isLoading) {
+                return Text('');
+              } else {
+                return auth.isAuthenticated ? MainScreen() : SignIn();
+              }
+            },
+          ),
+        ));
   }
 }

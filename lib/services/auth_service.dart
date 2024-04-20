@@ -2,6 +2,7 @@ import 'package:finia_app/models/createUserDTO.dart';
 import 'package:finia_app/responses/userResponse.dart';
 import 'package:finia_app/storage/auth_secure_storage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
@@ -10,27 +11,34 @@ import 'dart:convert';
 class AuthService with ChangeNotifier {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final GlobalKey<NavigatorState>? navigatorKey;
 
-  User? _user;
   UserAuth? currentUser; // Almacena la información del usuario globalmente
+  bool isLoading = false;
 
-  AuthService() {
+  AuthService({this.navigatorKey}) {
     loadUserData();
     _listenAuthState();
   }
 
-  Future<void> loadUserData() async {
-    // Load user data from secure storage.
-    currentUser = await tokenStorage.getUser();
+  // Method to check the validity of the session
+  Future<bool> checkSession() async {
+    // Try to refresh the token to check session validity
+    bool isTokenRefreshed = await refreshToken();
+    if (isTokenRefreshed) {
+      // If the token is successfully refreshed, the session is valid
+      return true;
+    } else {
+      // If the token could not be refreshed, it may be expired or invalid
+      return false;
+    }
+  }
 
-    // Check if the user is already authenticated.
+  Future<void> loadUserData() async {
+    currentUser = await tokenStorage.getUser();
     if (currentUser != null) {
-      isLogin = true;
       notifyListeners();
     }
-
-    // Refresh the token if necessary.
-    await refreshToken();
   }
 
   final TokenStorage tokenStorage = TokenStorage();
@@ -65,14 +73,14 @@ class AuthService with ChangeNotifier {
   }
 
   bool isLogin = false;
-  bool get isAuthenticated => _user != null;
-  User? get user => _user;
+  bool get isAuthenticated => globalUser != null;
   UserAuth? get globalUser => currentUser; // Devuelve el AppUser global
 
   void _listenAuthState() {
     _firebaseAuth.authStateChanges().listen((User? user) {
-      _user = user;
-      notifyListeners();
+      if (user == null) {
+        signOut(); // Automatically sign out when user is null
+      }
     });
   }
 
@@ -108,6 +116,10 @@ class AuthService with ChangeNotifier {
   }
 
   Future<void> register(CreateUserDto user) async {
+    isLoading =
+        true; // Establecer isLoading como true antes de realizar la solicitud de registro
+    notifyListeners();
+
     var url = Uri.parse('http://localhost:3000/user');
     var headers = {'Content-Type': 'application/json'};
     var body = jsonEncode(user.toJson());
@@ -116,26 +128,46 @@ class AuthService with ChangeNotifier {
       var response = await http.post(url, headers: headers, body: body);
       if (response.statusCode == 201) {
         var data = jsonDecode(response.body);
-        currentUser = UserAuth.fromJson(data);
-        notifyListeners(); // Notify listeners that the global user has been updated
-        if (currentUser != null) {
-          await tokenStorage.saveUser(
-              currentUser!); // Save non-null user data to secure storage
+        if (data != null && data is Map<String, dynamic>) {
+          if (data['accessToken'] != null && data['refreshToken'] != null) {
+            await tokenStorage.saveToken(
+                data['accessToken'], data['refreshToken']);
+
+            currentUser = UserAuth.fromJson(data);
+            if (currentUser != null) {
+              await tokenStorage.saveUser(currentUser!);
+              notifyListeners();
+            } else {
+              print('Error: Failed to create user object from data');
+            }
+          } else {
+            print('Error: Missing tokens in response');
+          }
         } else {
-          // Handle the case where currentUser is null
-          print('Error: currentUser is null');
+          print('Error: Response format is incorrect');
         }
-        print(currentUser); // For debugging
       } else {
-        print('Error: ${response.statusCode}');
+        print('Registration failed with status: ${response.statusCode}');
       }
     } catch (e) {
-      print('Error making the request: $e');
+      print('Error making the registration request: $e');
+    } finally {
+      isLoading =
+          false; // Establecer isLoading como false después de completar la solicitud de registro
+      notifyListeners();
     }
   }
 
-  void signOut() async {
-    await _googleSignIn.signOut();
-    await _firebaseAuth.signOut();
+  Future<void> signOut() async {
+    try {
+      await _googleSignIn.signOut();
+      await _firebaseAuth.signOut();
+      await tokenStorage.deleteAllTokens();
+      currentUser = null;
+      isLogin = false;
+      notifyListeners();
+    } catch (error) {
+      print('Failed to sign out: $error');
+    }
   }
 }
