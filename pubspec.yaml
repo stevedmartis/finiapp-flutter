@@ -42,6 +42,7 @@ dependencies:
   flutter_secure_storage: ^9.0.0
   http_interceptor: ^1.0.2
   mockito: ^5.4.4
+  auto_size_text: ^3.0.0
 
 dev_dependencies:
   flutter_test:
@@ -65,6 +66,7 @@ flutter:
     - assets/icons/google.svg
     - assets/icons/apple-logo.svg
     - assets/images/signup-vector.svg
+    - assets/images/cards/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

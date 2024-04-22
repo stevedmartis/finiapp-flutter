@@ -54,7 +54,9 @@ class SideMenu extends StatelessWidget {
           DrawerListTile(
             title: "Settings",
             svgSrc: "assets/icons/menu_setting.svg",
-            press: () {},
+            press: () {
+              Navigator.pushNamed(context, '/cards');
+            },
           ),
           DrawerListTile(
             title: "SignOut",

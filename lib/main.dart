@@ -1,5 +1,6 @@
 import 'package:finia_app/firebase_options.dart';
 import 'package:finia_app/helper/lifecycle_event.dart';
+import 'package:finia_app/screens/credit_card/credit_cards_page.dart';
 import 'package:finia_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -60,6 +61,7 @@ class MyApp extends StatelessWidget {
           routes: {
             '/mainScreen': (context) => MainScreen(),
             '/signIn': (context) => SignIn(),
+            '/cards': (context) => CreditCardDemo()
           },
           home: Consumer<AuthService>(
             builder: (context, auth, _) {
