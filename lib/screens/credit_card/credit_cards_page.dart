@@ -80,14 +80,14 @@ class _CreditCardDemoState extends State<CreditCardDemo> {
     // Asegúrate de que no hay un índice fuera de rango si la lista está vacía
     if (cards.isEmpty) {
       return Scaffold(
-        appBar: AppBar(title: Text('Credit Card Slider Demo')),
+        appBar: AppBar(title: Text('Credit Cards')),
         body: Center(child: Text('No hay tarjetas disponibles')),
       );
     }
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Credit Card Slider Demo'),
+        title: Text('Credit Cards'),
       ),
       body: isScreenWide
           ? Row(

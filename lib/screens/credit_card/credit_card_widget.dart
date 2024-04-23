@@ -99,7 +99,7 @@ class CreditCard extends StatelessWidget {
       margin: EdgeInsets.symmetric(vertical: 4, horizontal: 4),
       alignment: Alignment.centerLeft,
       child: Image.asset(
-        'images/cards/chip.png',
+        'assets/images/cards/chip.png',
         height: 25,
       ),
     );

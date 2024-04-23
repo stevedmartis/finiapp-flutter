@@ -1,20 +1,39 @@
+import 'package:finia_app/services/auth_service.dart';
+import 'package:finia_app/services/finance_summary_service.dart';
 import 'package:flutter/material.dart';
 import 'package:finia_app/screens/dashboard/dashboard_screen.dart';
-import 'package:finia_app/controllers/MenuAppController.dart'; // Asegúrate de importar MenuAppController
+import 'package:finia_app/controllers/MenuAppController.dart';
 import 'components/side_menu.dart';
-import 'package:provider/provider.dart'; // Importa provider
+import 'package:provider/provider.dart';
 
-class MainScreen extends StatelessWidget {
+class MainScreen extends StatefulWidget {
+  @override
+  _MainScreenState createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final authProvider = Provider.of<AuthService>(context, listen: false);
+      if (Provider.of<FinancialDataService>(context, listen: false)
+              .financialData ==
+          null) {
+        Provider.of<FinancialDataService>(context, listen: false)
+            .fetchFinancialSummary(authProvider.currentUser!.userId!);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    // Accede a MenuAppController desde el contexto
     final menuAppController =
         Provider.of<MenuAppController>(context, listen: false);
 
     return Scaffold(
-      key: menuAppController
-          .scaffoldKey, // Asigna la GlobalKey del Scaffold aquí
-      drawer: SideMenu(), // Define tu drawer aquí
+      key: menuAppController.scaffoldKey,
+      drawer: SideMenu(),
       body: SafeArea(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -27,6 +46,23 @@ class MainScreen extends StatelessWidget {
               flex: 5,
               child: DashboardScreen(),
             ),
+/*             Expanded(
+              flex: 5,
+              child: Consumer<FinancialDataService>(
+                builder: (context, financialDataService, _) {
+                  final financialData = financialDataService.financialData;
+                  if (financialData != null) {
+                    // Aquí puedes utilizar los datos financieros para construir la interfaz de usuario
+                    return Text('${financialData.creditcards[0].name}');
+                  } else {
+                    // Muestra un indicador de carga u otra interfaz mientras se cargan los datos
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                },
+              ),
+            ), */
           ],
         ),
       ),

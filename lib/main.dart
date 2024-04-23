@@ -2,6 +2,7 @@ import 'package:finia_app/firebase_options.dart';
 import 'package:finia_app/helper/lifecycle_event.dart';
 import 'package:finia_app/screens/credit_card/credit_cards_page.dart';
 import 'package:finia_app/services/auth_service.dart';
+import 'package:finia_app/services/finance_summary_service.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -21,8 +22,6 @@ void main() async {
   AuthService authService = AuthService();
   InterceptedClient client =
       InterceptedClient.build(interceptors: [TokenInterceptor(authService)]);
-
-  await authService.loadUserData(); // Carga los datos del usuario
 
   runApp(MyApp(client: client, authService: authService));
 }
@@ -46,6 +45,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (context) => MenuAppController()),
+          ChangeNotifierProvider(create: (context) => FinancialDataService()),
           ChangeNotifierProvider.value(value: authService),
         ],
         child: MaterialApp(

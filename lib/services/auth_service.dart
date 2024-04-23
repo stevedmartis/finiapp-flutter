@@ -16,6 +16,8 @@ class AuthService with ChangeNotifier {
   UserAuth? currentUser; // Almacena la información del usuario globalmente
   bool isLoading = false;
 
+  final TokenStorage tokenStorage = TokenStorage();
+
   AuthService({this.navigatorKey}) {
     loadUserData();
     _listenAuthState();
@@ -40,8 +42,6 @@ class AuthService with ChangeNotifier {
       notifyListeners();
     }
   }
-
-  final TokenStorage tokenStorage = TokenStorage();
 
   Future<bool> refreshToken() async {
     String? refreshToken = await tokenStorage.getRefreshToken();
