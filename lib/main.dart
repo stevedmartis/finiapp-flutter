@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
           key: navigatorKey,
           debugShowCheckedModeBanner: false,
-          title: 'Flutter Admin Panel',
+          title: 'finIA',
           theme: AppTheme.theme.copyWith(
             scaffoldBackgroundColor: bgColor,
             textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme)
@@ -66,7 +66,7 @@ class MyApp extends StatelessWidget {
           home: Consumer<AuthService>(
             builder: (context, auth, _) {
               if (auth.isLoading) {
-                return Text('');
+                return CircularProgressIndicator();
               } else {
                 return auth.isAuthenticated ? MainScreen() : SignIn();
               }

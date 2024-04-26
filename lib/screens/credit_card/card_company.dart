@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
 
 class CardCompany {
+  static CardCompany visa = CardCompany(
+    Image.asset(
+      'assets/images/cards/visa.png',
+      height: 40,
+    ),
+  );
+
   static CardCompany americanExpress = CardCompany(
     Text(
       'AMERICAN \nEXPRESS',

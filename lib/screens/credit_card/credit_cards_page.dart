@@ -1,8 +1,11 @@
 import 'package:finia_app/screens/credit_card/card_background.dart';
+import 'package:finia_app/screens/credit_card/card_company.dart';
 import 'package:finia_app/screens/credit_card/credit_card_slider.dart';
 import 'package:finia_app/screens/credit_card/credit_card_widget.dart';
 import 'package:finia_app/screens/credit_card/validity.dart';
+import 'package:finia_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CreditCardDemo extends StatefulWidget {
   @override
@@ -14,10 +17,69 @@ class _CreditCardDemoState extends State<CreditCardDemo> {
   int _currentCardIndex = 0;
   late final PageController _pageController;
 
+  List<CreditCard> cards = [
+    CreditCard(
+        cardBackground: GradientCardBackground(
+          LinearGradient(
+            colors: [Colors.blue, Colors.green],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        cardNumber: '2345 5678 4565 8765',
+        cardHolderName: 'John Doe',
+        validity: Validity(validThruMonth: 12, validThruYear: 25),
+        total: 250000,
+        used: 200000,
+        available: 10,
+        delay: true,
+        company: CardCompany(Image.asset(
+          'assets/images/cards/visa.jpeg',
+          height: 40,
+        ))),
+    CreditCard(
+        cardBackground: SolidColorCardBackground(Colors.orange),
+        cardNumber: '3456 7896 7896 5678',
+        cardHolderName: 'Jane Doe',
+        validity: Validity(validThruMonth: 11, validThruYear: 24),
+        total: 150000,
+        used: 300000,
+        available: 5,
+        delay: true,
+        company: CardCompany(Image.asset(
+          'assets/images/cards/mastercard.png',
+          height: 40,
+        ))),
+    CreditCard(
+        cardBackground: GradientCardBackground(
+          LinearGradient(
+            colors: [Colors.blue, Colors.green],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        cardNumber: '1234 5678 9012 3456',
+        cardHolderName: 'John Doe',
+        validity: Validity(validThruMonth: 12, validThruYear: 25),
+        total: 40000,
+        used: 18000,
+        available: 2,
+        delay: true,
+        company: CardCompany(Image.asset(
+          'assets/images/cards/mastercard.png',
+          height: 40,
+        ))),
+  ];
+
   @override
   void initState() {
+    int initialIndex = Provider.of<AuthService>(context, listen: false).index;
+
     super.initState();
-    _pageController = PageController(viewportFraction: 0.3);
+    _pageController =
+        PageController(initialPage: initialIndex, viewportFraction: 0.3);
+
+    _currentCardIndex = initialIndex;
   }
 
   @override
@@ -42,40 +104,6 @@ class _CreditCardDemoState extends State<CreditCardDemo> {
   Widget build(BuildContext context) {
     var isScreenWide = MediaQuery.of(context).size.width >
         600; // Umbral para la pantalla ancha
-
-    // Asegúrate de tener al menos una tarjeta en esta lista
-    List<CreditCard> cards = [
-      CreditCard(
-        cardBackground: GradientCardBackground(
-          LinearGradient(
-            colors: [Colors.blue, Colors.green],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
-        cardNumber: '1234 5678 9012 3456',
-        cardHolderName: 'John Doe',
-        validity: Validity(validThruMonth: 12, validThruYear: 25),
-      ),
-      CreditCard(
-        cardBackground: SolidColorCardBackground(Colors.orange),
-        cardNumber: '9876 5432 1098 7654',
-        cardHolderName: 'Jane Doe',
-        validity: Validity(validThruMonth: 11, validThruYear: 24),
-      ),
-      CreditCard(
-        cardBackground: GradientCardBackground(
-          LinearGradient(
-            colors: [Colors.blue, Colors.green],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
-        cardNumber: '1234 5678 9012 3456',
-        cardHolderName: 'John Doe',
-        validity: Validity(validThruMonth: 12, validThruYear: 25),
-      ),
-    ];
 
     // Asegúrate de que no hay un índice fuera de rango si la lista está vacía
     if (cards.isEmpty) {
@@ -115,12 +143,24 @@ class _CreditCardDemoState extends State<CreditCardDemo> {
                 ),
               ],
             )
-          : CreditCardSlider(
-              cards,
-              pageController: _pageController,
-              initialCard: _currentCardIndex,
-              onCardClicked: _onCardClicked,
-              isVertical: true,
+          : Stack(
+              children: [
+                CreditCardSlider(
+                  cards,
+                  pageController: _pageController,
+                  initialCard: _currentCardIndex,
+                  onCardClicked: _onCardClicked,
+                  isVertical: true,
+                ),
+/*                 Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  child: CreditCardDetailWidget(
+                    card: cards[_currentCardIndex],
+                  ),
+                ), */
+              ],
             ),
     );
   }
@@ -139,12 +179,25 @@ class CreditCardDetailWidget extends StatelessWidget {
       margin: EdgeInsets.all(16.0),
       child: Padding(
         padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Card Number: ${card.cardNumber}'),
-            // ... Otros detalles de la tarjeta
-          ],
+        child: ClipRect(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Nombre: ${card.cardHolderName}'),
+              Text('Número: ${card.cardNumber}'),
+              Text('Total: ${card.total}'),
+              SizedBox(
+                width: 20,
+              ),
+              Text('Usado: ${card.used}'),
+              SizedBox(
+                width: 20,
+              ),
+              Text('Disponible: ${card.available}'),
+
+              // ... Otros detalles de la tarjeta
+            ],
+          ),
         ),
       ),
     );

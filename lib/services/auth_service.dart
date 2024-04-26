@@ -16,6 +16,28 @@ class AuthService with ChangeNotifier {
   UserAuth? currentUser; // Almacena la información del usuario globalmente
   bool isLoading = false;
 
+  int _index = 0;
+
+  // Getter to get the card number
+  int get index => _index;
+
+  // Setter to set the card number and notify listeners
+  set cardSelectNumber(int newNumber) {
+    _index = newNumber;
+    notifyListeners(); // Notify all listening widgets of a change
+  }
+
+  String? _cardsHero = 'cardsHome';
+
+  // Getter to get the card number
+  String? get cardsHero => _cardsHero;
+
+  // Setter to set the card number and notify listeners
+  set cardsHero(String? value) {
+    _cardsHero = value;
+    notifyListeners(); // Notify all listening widgets of a change
+  }
+
   final TokenStorage tokenStorage = TokenStorage();
 
   AuthService({this.navigatorKey}) {

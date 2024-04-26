@@ -1,5 +1,5 @@
-import 'package:finia_app/services/auth_service.dart';
-import 'package:finia_app/services/finance_summary_service.dart';
+/* import 'package:finia_app/services/auth_service.dart';
+import 'package:finia_app/services/finance_summary_service.dart'; */
 import 'package:flutter/material.dart';
 import 'package:finia_app/screens/dashboard/dashboard_screen.dart';
 import 'package:finia_app/controllers/MenuAppController.dart';
@@ -16,13 +16,13 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final authProvider = Provider.of<AuthService>(context, listen: false);
+/*       final authProvider = Provider.of<AuthService>(context, listen: false);
       if (Provider.of<FinancialDataService>(context, listen: false)
               .financialData ==
           null) {
         Provider.of<FinancialDataService>(context, listen: false)
             .fetchFinancialSummary(authProvider.currentUser!.userId!);
-      }
+      } */
     });
   }
 

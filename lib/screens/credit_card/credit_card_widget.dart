@@ -1,12 +1,14 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:finia_app/screens/credit_card/card_company.dart';
+import 'package:finia_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'card_background.dart';
-import 'card_company.dart';
 import 'card_network_type.dart';
 import 'validity.dart';
 
-class CreditCard extends StatelessWidget {
+class CreditCard extends StatefulWidget {
   final CardBackground cardBackground;
   final CardNetworkType? cardNetworkType;
   final CardCompany? company;
@@ -18,20 +20,71 @@ class CreditCard extends StatelessWidget {
   final Color validityColor;
   final Color cardHolderNameColor;
   final bool showChip;
+  final String? currency;
+  final double total;
+  final double used;
+  final double available;
+  final bool delay;
 
-  const CreditCard({
-    required this.cardBackground,
-    this.cardNetworkType,
-    this.cardNumber,
-    this.cardHolderName,
-    this.company,
-    this.validity,
-    this.roundedCornerRadius = 20,
-    this.numberColor = Colors.white,
-    this.validityColor = Colors.white,
-    this.cardHolderNameColor = Colors.white,
-    this.showChip = true,
-  });
+  const CreditCard(
+      {required this.cardBackground,
+      this.cardNetworkType,
+      this.cardNumber,
+      this.cardHolderName,
+      this.company,
+      this.validity,
+      this.roundedCornerRadius = 20,
+      this.numberColor = Colors.white,
+      this.validityColor = Colors.white,
+      this.cardHolderNameColor = Colors.white,
+      this.showChip = true,
+      this.currency = 'CLP',
+      this.total = 10.000,
+      this.used = 6,
+      this.available = 5.000,
+      this.delay = false});
+
+  @override
+  State<CreditCard> createState() => _CreditCardState();
+}
+
+class _CreditCardState extends State<CreditCard> with TickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _opacityAnimation;
+  bool _isDataLoading = true;
+
+  @override
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 700),
+      vsync: this,
+    );
+
+    _opacityAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+
+    loadData();
+  }
+
+  void loadData() async {
+    await Future.delayed(
+        const Duration(milliseconds: 100)); // Simulate data loading
+    if (mounted) {
+      setState(() {
+        _isDataLoading = false;
+      });
+      _controller.forward();
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,51 +97,64 @@ class CreditCard extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          if (company != null)
-            Align(
-              alignment: Alignment.centerLeft,
-              child: company!.widget,
-            ),
-          if (showChip) _buildChip(),
-          Column(
-            children: <Widget>[
-              _buildCardNumber(),
-              SizedBox(height: 4),
-              _buildValidity(),
-              SizedBox(height: 4),
-              _buildNameAndCardNetworkType(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              if (widget.showChip) _buildChip(),
+              if (widget.company != null)
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: widget.company!.widget,
+                ),
             ],
           ),
+          _isDataLoading
+              ? Center(
+                  child: SizedBox(height: 4),
+                )
+              : FadeTransition(
+                  opacity: _opacityAnimation,
+                  child: Column(
+                    children: <Widget>[
+                      _buildCardNumber(),
+                      SizedBox(height: 4),
+                      _buildValidity(),
+                      SizedBox(height: 4),
+                      _buildNameAndCardNetworkType(),
+                    ],
+                  ),
+                ),
+          // Construir los widgets una vez los datos estén listos
         ],
       ),
     );
   }
 
   BoxDecoration _buildBackground() {
-    if (cardBackground is SolidColorCardBackground) {
+    if (widget.cardBackground is SolidColorCardBackground) {
       SolidColorCardBackground solidColorCardBackground =
-          cardBackground as SolidColorCardBackground;
+          widget.cardBackground as SolidColorCardBackground;
       return BoxDecoration(
-        borderRadius: BorderRadius.circular(roundedCornerRadius),
+        borderRadius: BorderRadius.circular(widget.roundedCornerRadius),
         color: solidColorCardBackground.backgroundColor,
       );
-    } else if (cardBackground is GradientCardBackground) {
+    } else if (widget.cardBackground is GradientCardBackground) {
       GradientCardBackground gradientCardBackground =
-          cardBackground as GradientCardBackground;
+          widget.cardBackground as GradientCardBackground;
       return BoxDecoration(
-        borderRadius: BorderRadius.circular(roundedCornerRadius),
+        borderRadius: BorderRadius.circular(widget.roundedCornerRadius),
         gradient: gradientCardBackground.gradient,
       );
-    } else if (cardBackground is ImageCardBackground) {
+    } else if (widget.cardBackground is ImageCardBackground) {
       ImageCardBackground imageCardBackground =
-          cardBackground as ImageCardBackground;
+          widget.cardBackground as ImageCardBackground;
       return BoxDecoration(
-        borderRadius: BorderRadius.circular(roundedCornerRadius),
+        borderRadius: BorderRadius.circular(widget.roundedCornerRadius),
         image: imageCardBackground.build(),
       );
     } else {
       return BoxDecoration(
-        borderRadius: BorderRadius.circular(roundedCornerRadius),
+        borderRadius: BorderRadius.circular(widget.roundedCornerRadius),
         color: Colors.black,
       );
     }
@@ -106,16 +172,16 @@ class CreditCard extends StatelessWidget {
   }
 
   Widget _buildCardNumber() {
-    if (cardNumber == null || cardNumber!.trim() == "") {
+    if (widget.cardNumber == null || widget.cardNumber!.trim() == "") {
       return SizedBox.shrink();
     }
     return Align(
       alignment: Alignment.centerLeft,
       child: Text(
-        cardNumber!,
+        widget.cardNumber!,
         style: TextStyle(
           fontFamily: 'creditcard',
-          color: numberColor,
+          color: widget.numberColor,
           fontSize: 11,
         ),
       ),
@@ -123,7 +189,7 @@ class CreditCard extends StatelessWidget {
   }
 
   Widget _buildValidity() {
-    if (validity == null) {
+    if (widget.validity == null) {
       return SizedBox.shrink();
     }
     return Row(
@@ -134,15 +200,15 @@ class CreditCard extends StatelessWidget {
             Text(
               'VALID FROM',
               style: TextStyle(
-                color: validityColor,
+                color: widget.validityColor,
                 fontSize: 8,
               ),
             ),
             SizedBox(height: 2),
             Text(
-              '${validity!.validFromMonth.toString().padLeft(2, '0')}/${validity!.validFromYear.toString().padLeft(2, '0')}',
+              '${widget.validity!.validFromMonth.toString().padLeft(2, '0')}/${widget.validity!.validFromYear.toString().padLeft(2, '0')}',
               style: TextStyle(
-                color: validityColor,
+                color: widget.validityColor,
                 fontSize: 10,
                 fontFamily: 'creditcard',
               ),
@@ -155,15 +221,15 @@ class CreditCard extends StatelessWidget {
             Text(
               'VALID THRU',
               style: TextStyle(
-                color: validityColor,
+                color: widget.validityColor,
                 fontSize: 8,
               ),
             ),
             SizedBox(height: 2),
             Text(
-              '${validity!.validThruMonth.toString().padLeft(2, '0')}/${validity!.validThruYear.toString().padLeft(2, '0')}',
+              '${widget.validity!.validThruMonth.toString().padLeft(2, '0')}/${widget.validity!.validThruYear.toString().padLeft(2, '0')}',
               style: TextStyle(
-                color: validityColor,
+                color: widget.validityColor,
                 fontSize: 10,
                 fontFamily: 'creditcard',
               ),
@@ -178,31 +244,31 @@ class CreditCard extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        if (cardHolderName != null)
+        if (widget.cardHolderName != null)
           Expanded(
             flex: 3,
             child: AutoSizeText(
-              cardHolderName!.toUpperCase(),
+              widget.cardHolderName!.toUpperCase(),
               maxLines: 1,
               minFontSize: 8,
               style: TextStyle(
                 fontFamily: 'creditcard',
-                color: cardHolderNameColor,
+                color: widget.cardHolderNameColor,
               ),
             ),
           ),
         SizedBox(width: 16),
         Expanded(
           child: _buildCardNetworkType(),
-        )
+        ),
       ],
     );
   }
 
   Widget _buildCardNetworkType() {
-    if (cardNetworkType == null) {
+    if (widget.cardNetworkType == null) {
       return SizedBox.shrink();
     }
-    return cardNetworkType!.widget;
+    return widget.cardNetworkType!.widget;
   }
 }

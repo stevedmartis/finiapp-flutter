@@ -29,11 +29,7 @@ class MyFiles extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              "My Files",
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            ElevatedButton.icon(
+            /*  ElevatedButton.icon(
               style: TextButton.styleFrom(
                 padding: EdgeInsets.symmetric(
                   horizontal: defaultPadding * 1.5,
@@ -51,10 +47,9 @@ class MyFiles extends StatelessWidget {
               },
               icon: Icon(Icons.add),
               label: Text("Add New 1"),
-            ),
+            ), */
           ],
         ),
-        SizedBox(height: defaultPadding),
         Responsive(
           mobile: FileInfoCardGridView(
             crossAxisCount: _size.width < 650 ? 2 : 4,

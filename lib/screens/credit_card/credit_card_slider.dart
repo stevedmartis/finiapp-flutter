@@ -1,5 +1,10 @@
 import 'dart:math';
+
+import 'package:finia_app/screens/credit_card/credit_card_detail.dart';
+import 'package:finia_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import 'credit_card_widget.dart';
 
 typedef void OnCardClicked(int index);
@@ -20,7 +25,7 @@ class CreditCardSlider extends StatefulWidget {
     this.onCardClicked = _defaultOnCardClicked,
     this.repeatCards = RepeatCards.none,
     this.initialCard = 0,
-    this.percentOfUpperCard = 0.35,
+    this.percentOfUpperCard = 0.90,
     this.isVertical = true,
     required this.pageController, // Valor predeterminado vertical
   }) {
@@ -41,12 +46,14 @@ class CreditCardSlider extends StatefulWidget {
 class _CreditCardSliderState extends State<CreditCardSlider> {
   late PageController _pageController;
   late int _currentPageIndex;
-
+  int? _lastTappedIndex;
+  int _tapCount = 0;
   @override
   void initState() {
     super.initState();
 
     _currentPageIndex = widget.initialCard;
+    print(widget.creditCards[_currentPageIndex].cardNumber);
     // Inicializa con el valor de initialCard
     _pageController = widget.pageController;
     _pageController.addListener(_handlePageChange);
@@ -64,32 +71,29 @@ class _CreditCardSliderState extends State<CreditCardSlider> {
   @override
   void dispose() {
     _pageController.removeListener(_handlePageChange); // Remueve el listener
+
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (widget.repeatCards == RepeatCards.down ||
-        widget.repeatCards == RepeatCards.bothDirection) {
-      return PageView.builder(
-        controller: _pageController,
+    return PopScope(
+      onPopInvoked: (didPop) => {
+        Provider.of<AuthService>(context, listen: false).cardsHero = 'cardsHome'
+      },
+      child: PageView.builder(
+        controller: widget.pageController,
         scrollDirection:
             widget.isVertical ? Axis.vertical : Axis.horizontal, // Cambio aquí
+        itemCount: widget.creditCards.length,
         itemBuilder: (context, index) =>
-            _builder(index, widget.creditCards.length),
-      );
-    }
-    return PageView.builder(
-      controller: widget.pageController,
-      scrollDirection:
-          widget.isVertical ? Axis.vertical : Axis.horizontal, // Cambio aquí
-      itemCount: widget.creditCards.length,
-      itemBuilder: (context, index) =>
-          _builder(index, widget.creditCards.length),
+            _builder(index, widget.creditCards.length, context),
+      ),
     );
   }
 
-  Widget _builder(int index, int length) {
+  Widget _builder(int index, int length, context) {
+    final card = widget.creditCards[index % length];
     return AnimatedBuilder(
       animation: widget.pageController,
       builder: (context, child) {
@@ -134,9 +138,46 @@ class _CreditCardSliderState extends State<CreditCardSlider> {
       },
       child: GestureDetector(
         onTap: () {
-          widget.onCardClicked(index % length);
+          if (_currentPageIndex == index) {
+            // Check if the tapped card is the current one
+            if (_lastTappedIndex != index) {
+              // If it's the first tap or a different card was previously tapped
+              _lastTappedIndex = index;
+              _tapCount = 1;
+            } else {
+              // If the same card was tapped consecutively
+              _tapCount++;
+            }
+
+            if (_tapCount == 1) {
+              // Check if it's the second consecutive tap
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CreditCardDetail(
+                    card: card,
+                  ),
+                ),
+              ).then((value) => {
+                    // Reset tap count when returning from the detail page
+                    _tapCount = 0,
+                    _lastTappedIndex = null,
+                  });
+            }
+          } else {
+            // Optionally, animate to the tapped card if it's not the current one
+            _pageController.animateToPage(
+              index,
+              duration: Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+            );
+            _lastTappedIndex = null; // Reset the last tapped index
+            _tapCount = 0; // Reset the tap count
+          }
         },
-        child: widget.creditCards[index % length],
+        child: Hero(
+            tag: 'cardsMenu-${widget.creditCards[index % length].cardNumber}',
+            child: widget.creditCards[index % length]),
       ),
     );
   }

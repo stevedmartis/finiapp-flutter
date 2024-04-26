@@ -3,11 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
-class SideMenu extends StatelessWidget {
+class SideMenu extends StatefulWidget {
   const SideMenu({
     Key? key,
   }) : super(key: key);
 
+  @override
+  State<SideMenu> createState() => _SideMenuState();
+}
+
+class _SideMenuState extends State<SideMenu> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -25,6 +30,9 @@ class SideMenu extends StatelessWidget {
             title: "Credit Cards",
             svgSrc: "assets/icons/menu_tran.svg",
             press: () {
+              var authService =
+                  Provider.of<AuthService>(context, listen: false);
+              authService.cardsHero = 'cardsMenu';
               Navigator.pushNamed(context, '/cards');
             },
           ),
