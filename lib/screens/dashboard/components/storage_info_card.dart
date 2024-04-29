@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
+import 'package:intl/intl.dart';
 import '../../../constants.dart';
 
 class StorageInfoCard extends StatelessWidget {
@@ -8,12 +8,14 @@ class StorageInfoCard extends StatelessWidget {
     Key? key,
     required this.title,
     required this.svgSrc,
-    required this.amountOfFiles,
-    required this.numOfFiles,
+    required this.amount,
+    required this.currency,
+    this.date,
   }) : super(key: key);
 
-  final String title, svgSrc, amountOfFiles;
-  final int numOfFiles;
+  final Widget svgSrc;
+  final String title, amount, currency;
+  final DateTime? date;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +33,7 @@ class StorageInfoCard extends StatelessWidget {
           SizedBox(
             height: 20,
             width: 20,
-            child: SvgPicture.asset(svgSrc),
+            child: svgSrc,
           ),
           Expanded(
             child: Padding(
@@ -43,19 +45,28 @@ class StorageInfoCard extends StatelessWidget {
                     title,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    "$numOfFiles Files",
+                    amount + " " + currency,
                     style: Theme.of(context)
                         .textTheme
-                        .bodySmall!
+                        .bodyMedium!
                         .copyWith(color: Colors.white70),
                   ),
+                  if (date !=
+                      null) // Opcional, muestra la fecha si está disponible
+                    Text(
+                      DateFormat('yyyy-MM-dd', 'es_ES').format(date!),
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodySmall!
+                          .copyWith(color: Colors.white70),
+                    ),
                 ],
               ),
             ),
           ),
-          Text(amountOfFiles)
         ],
       ),
     );

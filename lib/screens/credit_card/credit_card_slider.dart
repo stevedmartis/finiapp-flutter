@@ -4,7 +4,6 @@ import 'package:finia_app/screens/credit_card/credit_card_detail.dart';
 import 'package:finia_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import 'credit_card_widget.dart';
 
 typedef void OnCardClicked(int index);
@@ -71,7 +70,6 @@ class _CreditCardSliderState extends State<CreditCardSlider> {
   @override
   void dispose() {
     _pageController.removeListener(_handlePageChange); // Remueve el listener
-
     super.dispose();
   }
 

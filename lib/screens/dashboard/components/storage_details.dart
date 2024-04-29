@@ -1,8 +1,48 @@
+import 'package:finia_app/models/transaction.model.dart';
+import 'package:finia_app/screens/dashboard/components/transaction_widget.dart';
 import 'package:flutter/material.dart';
 
 import '../../../constants.dart';
 import 'chart.dart';
-import 'storage_info_card.dart';
+
+List<TransactionCreditCard> transactions = [
+  TransactionCreditCard(
+      date: DateTime.now(),
+      description: "Compra Galletas",
+      inAmount: 0,
+      outAmount: 50000,
+      currency: "CLP",
+      icon: Icon(Icons.cookie, color: Color.fromARGB(255, 253, 127, 0))),
+  TransactionCreditCard(
+      date: DateTime.now(),
+      description: "Compra en Supermercado",
+      inAmount: 0,
+      outAmount: 50000,
+      currency: "CLP",
+      icon: Icon(Icons.store, color: Color.fromARGB(255, 0, 162, 238))),
+  TransactionCreditCard(
+      date: DateTime.now().subtract(Duration(days: 1)),
+      description: "Compra en Librería",
+      inAmount: 0,
+      outAmount: 30000,
+      currency: "CLP",
+      icon: Icon(Icons.book, color: Color.fromARGB(255, 250, 0, 0))),
+  TransactionCreditCard(
+      date: DateTime.now().subtract(Duration(days: 1)),
+      description: "Compra en Librería",
+      inAmount: 0,
+      outAmount: 30000,
+      currency: "CLP",
+      icon: Icon(Icons.book, color: Color.fromARGB(255, 253, 127, 0))),
+  TransactionCreditCard(
+      date: DateTime.now().subtract(Duration(days: 3)),
+      description: "Compra Galletas",
+      inAmount: 0,
+      outAmount: 50000,
+      currency: "CLP",
+      icon: Icon(Icons.cookie, color: Color.fromARGB(255, 253, 127, 0))),
+  // Agrega más transacciones según necesites
+];
 
 class StorageDetails extends StatelessWidget {
   const StorageDetails({
@@ -21,7 +61,7 @@ class StorageDetails extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Storage Details",
+            "Últimas Transacciones",
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
@@ -29,29 +69,11 @@ class StorageDetails extends StatelessWidget {
           ),
           SizedBox(height: defaultPadding),
           Chart(),
-          StorageInfoCard(
-            svgSrc: "assets/icons/Documents.svg",
-            title: "Documents Files",
-            amountOfFiles: "1.3GB",
-            numOfFiles: 1328,
-          ),
-          StorageInfoCard(
-            svgSrc: "assets/icons/media.svg",
-            title: "Media Files",
-            amountOfFiles: "15.3GB",
-            numOfFiles: 1328,
-          ),
-          StorageInfoCard(
-            svgSrc: "assets/icons/folder.svg",
-            title: "Other Files",
-            amountOfFiles: "1.3GB",
-            numOfFiles: 1328,
-          ),
-          StorageInfoCard(
-            svgSrc: "assets/icons/unknown.svg",
-            title: "Unknown",
-            amountOfFiles: "1.3GB",
-            numOfFiles: 140,
+          SizedBox(height: defaultPadding),
+          SizedBox(
+            child: TransactionsWidget(
+              transactions: transactions,
+            ),
           ),
         ],
       ),

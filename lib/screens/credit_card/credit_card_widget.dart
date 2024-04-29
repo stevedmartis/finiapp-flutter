@@ -1,8 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:finia_app/screens/credit_card/card_company.dart';
-import 'package:finia_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import 'card_background.dart';
 import 'card_network_type.dart';

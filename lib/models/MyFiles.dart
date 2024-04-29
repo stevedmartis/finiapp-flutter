@@ -2,12 +2,13 @@ import 'package:finia_app/constants.dart';
 import 'package:flutter/material.dart';
 
 class CloudStorageInfo {
-  final String? svgSrc, title, totalStorage;
+  final Widget? icon;
+  final String? title, totalStorage;
   final int? numOfFiles, percentage;
   final Color? color;
 
   CloudStorageInfo({
-    this.svgSrc,
+    this.icon,
     this.title,
     this.totalStorage,
     this.numOfFiles,
@@ -18,22 +19,22 @@ class CloudStorageInfo {
 
 List demoMyFiles = [
   CloudStorageInfo(
-    title: "Documents",
+    title: "Utilizado:",
     numOfFiles: 1328,
-    svgSrc: "assets/icons/Documents.svg",
-    totalStorage: "1.9GB",
+    icon: Icon(Icons.credit_card, color: Colors.blue),
+    totalStorage: "\$1.9",
     color: primaryColor,
-    percentage: 35,
+    percentage: 50,
   ),
   CloudStorageInfo(
-    title: "Google Drive",
+    title: "Disponible",
     numOfFiles: 1328,
-    svgSrc: "assets/icons/google_drive.svg",
-    totalStorage: "2.9GB",
+    icon: Icon(Icons.account_balance, color: Color(0xFFFFA113)),
+    totalStorage: "\$2.9",
     color: Color(0xFFFFA113),
     percentage: 35,
   ),
-  CloudStorageInfo(
+/*   CloudStorageInfo(
     title: "One Drive",
     numOfFiles: 1328,
     svgSrc: "assets/icons/one_drive.svg",
@@ -48,5 +49,5 @@ List demoMyFiles = [
     totalStorage: "7.3GB",
     color: Color(0xFF007EE5),
     percentage: 78,
-  ),
+  ), */
 ];

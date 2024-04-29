@@ -143,24 +143,12 @@ class _CreditCardDemoState extends State<CreditCardDemo> {
                 ),
               ],
             )
-          : Stack(
-              children: [
-                CreditCardSlider(
-                  cards,
-                  pageController: _pageController,
-                  initialCard: _currentCardIndex,
-                  onCardClicked: _onCardClicked,
-                  isVertical: true,
-                ),
-/*                 Positioned(
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  child: CreditCardDetailWidget(
-                    card: cards[_currentCardIndex],
-                  ),
-                ), */
-              ],
+          : CreditCardSlider(
+              cards,
+              pageController: _pageController,
+              initialCard: _currentCardIndex,
+              onCardClicked: _onCardClicked,
+              isVertical: true,
             ),
     );
   }

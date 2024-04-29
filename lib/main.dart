@@ -14,10 +14,13 @@ import 'package:finia_app/theme/app_theme.dart';
 import 'package:finia_app/constants.dart';
 import 'package:http_interceptor/http_interceptor.dart';
 import 'package:finia_app/services/token_interceptor.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  await initializeDateFormatting('es_ES');
 
   AuthService authService = AuthService();
   InterceptedClient client =
@@ -50,6 +53,7 @@ class MyApp extends StatelessWidget {
         ],
         child: MaterialApp(
           key: navigatorKey,
+          locale: Locale('es', 'ES'),
           debugShowCheckedModeBanner: false,
           title: 'finIA',
           theme: AppTheme.theme.copyWith(
