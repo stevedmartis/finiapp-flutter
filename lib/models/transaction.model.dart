@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class TransactionCreditCard {
+  final String id;
   final DateTime date;
   final String description;
   final int inAmount;
@@ -9,7 +10,8 @@ class TransactionCreditCard {
   final Widget icon;
 
   TransactionCreditCard(
-      {required this.date,
+      {required this.id,
+      required this.date,
       required this.description,
       required this.inAmount,
       required this.outAmount,
@@ -18,6 +20,7 @@ class TransactionCreditCard {
 
   factory TransactionCreditCard.fromJson(Map<String, dynamic> json) {
     return TransactionCreditCard(
+        id: json['icon'],
         date: DateTime.parse(json['date']),
         description: json['description'],
         inAmount: json['in'] as int,

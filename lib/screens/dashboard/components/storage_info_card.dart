@@ -5,13 +5,13 @@ import '../../../constants.dart';
 
 class StorageInfoCard extends StatelessWidget {
   const StorageInfoCard({
-    Key? key,
+    String? key,
     required this.title,
     required this.svgSrc,
     required this.amount,
     required this.currency,
     this.date,
-  }) : super(key: key);
+  });
 
   final Widget svgSrc;
   final String title, amount, currency;

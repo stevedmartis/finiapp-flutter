@@ -61,6 +61,7 @@ class TransactionsWidget extends StatelessWidget {
           title: key,
           children: tList
               .map((transaction) => StorageInfoCard(
+                    key: transaction.id,
                     title: transaction.description,
                     svgSrc: transaction.icon,
                     amount: transaction.outAmount.toString(),
