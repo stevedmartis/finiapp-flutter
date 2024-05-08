@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>299487844774-skea4lfo406mjiglred8ud042pl3a4ss.apps.googleusercontent.com</string>
+	<string>299487844774-hr0gpg1qn27goh453l8ov2891jdpb4d2.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.299487844774-skea4lfo406mjiglred8ud042pl3a4ss</string>
+	<string>com.googleusercontent.apps.299487844774-hr0gpg1qn27goh453l8ov2891jdpb4d2</string>
 	<key>API_KEY</key>
 	<string>AIzaSyDWooIwz9kHGu65PWiADW4_8lFUFPrWRgY</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.admin</string>
+	<string>cl.finia.app</string>
 	<key>PROJECT_ID</key>
 	<string>finiapp</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,6 +29,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:299487844774:ios:387d8af6e5ebf6422c9767</string>
+	<string>1:299487844774:ios:3cbbf9d44bb5d2ea2c9767</string>
+	
 </dict>
 </plist>

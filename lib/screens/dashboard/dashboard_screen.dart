@@ -1,18 +1,14 @@
 import 'package:finia_app/responsive.dart';
-import 'package:finia_app/screens/credit_card/card_background.dart';
-import 'package:finia_app/screens/credit_card/card_company.dart';
 import 'package:finia_app/screens/credit_card/credit_card_widget.dart';
-import 'package:finia_app/screens/credit_card/validity.dart';
 import 'package:finia_app/screens/dashboard/components/credit_card_horizontal.dart';
-import 'package:finia_app/screens/dashboard/components/my_fields.dart';
+
 import 'package:finia_app/screens/dashboard/floid_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../../constants.dart';
 import 'components/header.dart';
-import 'components/storage_details.dart';
+import 'components/transactions_list.page.dart';
 
 class DashboardScreen extends StatefulWidget {
   @override
@@ -35,60 +31,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    List<CreditCard> cards = [
-      CreditCard(
-          cardBackground: GradientCardBackground(
-            LinearGradient(
-              colors: [Colors.blue, Colors.green],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
-          cardNumber: '2345 5678 4565 8765',
-          cardHolderName: 'John Doe',
-          validity: Validity(validThruMonth: 12, validThruYear: 25),
-          total: 250000,
-          used: 200000,
-          available: 10,
-          delay: true,
-          company: CardCompany(Image.asset(
-            'assets/images/cards/visa.jpeg',
-            height: 40,
-          ))),
-      CreditCard(
-          cardBackground: SolidColorCardBackground(Colors.orange),
-          cardNumber: '3456 7896 7896 5678',
-          cardHolderName: 'Jane Doe',
-          validity: Validity(validThruMonth: 11, validThruYear: 24),
-          total: 150000,
-          used: 300000,
-          available: 5,
-          delay: true,
-          company: CardCompany(Image.asset(
-            'assets/images/cards/mastercard.png',
-            height: 40,
-          ))),
-      CreditCard(
-          cardBackground: GradientCardBackground(
-            LinearGradient(
-              colors: [Colors.blue, Colors.green],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
-          cardNumber: '1234 5678 9012 3456',
-          cardHolderName: 'John Doe',
-          validity: Validity(validThruMonth: 12, validThruYear: 25),
-          total: 40000,
-          used: 18000,
-          available: 2,
-          delay: true,
-          company: CardCompany(Image.asset(
-            'assets/images/cards/mastercard.png',
-            height: 40,
-          ))),
-    ];
-
     return SafeArea(
       child: SingleChildScrollView(
         primary: false,
@@ -101,7 +43,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Mis Tarjetas",
+                  "Mis Productos",
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 ElevatedButton.icon(
@@ -125,10 +67,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
               ],
             ),
-            SizedBox(
-              height: 200,
-              child: CreditCardHorizontalList(cards: cards),
-            ),
+            CreditCardHorizontalList(cards: myProducts),
             SizedBox(height: defaultPadding),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -138,12 +77,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   child: Column(
                     children: [
                       // WebViewWidget(controller: _controller),
-                      MyFiles(),
+                      //  InfoCardsAmounts(),
                       SizedBox(height: defaultPadding),
                       // RecentFiles(),
                       if (Responsive.isMobile(context))
                         SizedBox(height: defaultPadding),
-                      if (Responsive.isMobile(context)) StorageDetails(),
+                      if (Responsive.isMobile(context))
+                        TransactionHistorialPage(),
                     ],
                   ),
                 ),
@@ -153,7 +93,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 if (!Responsive.isMobile(context))
                   Expanded(
                     flex: 2,
-                    child: StorageDetails(),
+                    child: TransactionHistorialPage(),
                   ),
               ],
             )

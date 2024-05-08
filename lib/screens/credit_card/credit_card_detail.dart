@@ -1,9 +1,9 @@
+import 'package:finia_app/screens/dashboard/components/my_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:finia_app/constants.dart';
 import 'package:finia_app/responsive.dart';
-import 'package:finia_app/screens/dashboard/components/my_fields.dart';
-import 'package:finia_app/screens/dashboard/components/storage_details.dart';
+import 'package:finia_app/screens/dashboard/components/transactions_list.page.dart';
 import 'package:finia_app/services/auth_service.dart';
 import 'credit_card_widget.dart';
 
@@ -41,27 +41,29 @@ class _CreditCardDetailState extends State<CreditCardDetail> {
               ),
             ),
 
-            SliverToBoxAdapter(
-              child: Text(
-                textAlign: TextAlign.center,
-                'Total: \$${widget.card.total}',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-
             SliverPadding(
               padding: EdgeInsets.symmetric(horizontal: defaultPadding),
               sliver: SliverList(
                 delegate: SliverChildListDelegate(
                   [
                     SizedBox(height: defaultPadding),
-                    MyFiles(),
+                    InfoCardsAmounts(
+                      fileInfo: widget.card.fileInfo,
+                    ),
+
+                    Text(
+                      textAlign: TextAlign.center,
+                      'Total: \$${widget.card.total}',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    //  InfoCardsAmounts(files: demoMyFiles),
                     SizedBox(height: defaultPadding),
                     // Agrega más widgets si necesitas aquí, cada uno tendrá el padding horizontal.
-                    if (Responsive.isMobile(context)) StorageDetails(),
+                    if (Responsive.isMobile(context))
+                      TransactionHistorialPage(),
                   ],
                 ),
               ),

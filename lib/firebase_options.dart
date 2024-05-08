@@ -64,8 +64,9 @@ class DefaultFirebaseOptions {
     messagingSenderId: '299487844774',
     projectId: 'finiapp',
     storageBucket: 'finiapp.appspot.com',
-    iosClientId: '299487844774-skea4lfo406mjiglred8ud042pl3a4ss.apps.googleusercontent.com',
-    iosBundleId: 'com.example.admin',
+    iosClientId:
+        '299487844774-skea4lfo406mjiglred8ud042pl3a4ss.apps.googleusercontent.com',
+    iosBundleId: 'cl.finia.app',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
@@ -74,8 +75,9 @@ class DefaultFirebaseOptions {
     messagingSenderId: '299487844774',
     projectId: 'finiapp',
     storageBucket: 'finiapp.appspot.com',
-    iosClientId: '299487844774-skea4lfo406mjiglred8ud042pl3a4ss.apps.googleusercontent.com',
-    iosBundleId: 'com.example.admin',
+    iosClientId:
+        '299487844774-skea4lfo406mjiglred8ud042pl3a4ss.apps.googleusercontent.com',
+    iosBundleId: 'cl.finia.app',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(

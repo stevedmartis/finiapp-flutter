@@ -17,9 +17,9 @@ class CloudStorageInfo {
   });
 }
 
-List demoMyFiles = [
+List<CloudStorageInfo> demoMyFiles = [
   CloudStorageInfo(
-    title: "Utilizado:",
+    title: "Gastado:",
     numOfFiles: 1328,
     icon: Icon(Icons.credit_card, color: Colors.blue),
     totalStorage: "\$1.9",
@@ -27,7 +27,7 @@ List demoMyFiles = [
     percentage: 50,
   ),
   CloudStorageInfo(
-    title: "Disponible",
+    title: "Ingresado",
     numOfFiles: 1328,
     icon: Icon(Icons.account_balance, color: Color(0xFFFFA113)),
     totalStorage: "\$2.9",

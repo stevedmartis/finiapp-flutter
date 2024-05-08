@@ -1,8 +1,6 @@
-import 'package:finia_app/screens/credit_card/card_background.dart';
-import 'package:finia_app/screens/credit_card/card_company.dart';
 import 'package:finia_app/screens/credit_card/credit_card_slider.dart';
 import 'package:finia_app/screens/credit_card/credit_card_widget.dart';
-import 'package:finia_app/screens/credit_card/validity.dart';
+
 import 'package:finia_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,60 +14,6 @@ class _CreditCardDemoState extends State<CreditCardDemo> {
   // Inicializa el índice de la tarjeta actual con 0 o el índice de una tarjeta inicial
   int _currentCardIndex = 0;
   late final PageController _pageController;
-
-  List<CreditCard> cards = [
-    CreditCard(
-        cardBackground: GradientCardBackground(
-          LinearGradient(
-            colors: [Colors.blue, Colors.green],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
-        cardNumber: '2345 5678 4565 8765',
-        cardHolderName: 'John Doe',
-        validity: Validity(validThruMonth: 12, validThruYear: 25),
-        total: 250000,
-        used: 200000,
-        available: 10,
-        delay: true,
-        company: CardCompany(Image.asset(
-          'assets/images/cards/visa.jpeg',
-          height: 40,
-        ))),
-    CreditCard(
-        cardBackground: SolidColorCardBackground(Colors.orange),
-        cardNumber: '3456 7896 7896 5678',
-        cardHolderName: 'Jane Doe',
-        validity: Validity(validThruMonth: 11, validThruYear: 24),
-        total: 150000,
-        used: 300000,
-        available: 5,
-        delay: true,
-        company: CardCompany(Image.asset(
-          'assets/images/cards/mastercard.png',
-          height: 40,
-        ))),
-    CreditCard(
-        cardBackground: GradientCardBackground(
-          LinearGradient(
-            colors: [Colors.blue, Colors.green],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
-        cardNumber: '1234 5678 9012 3456',
-        cardHolderName: 'John Doe',
-        validity: Validity(validThruMonth: 12, validThruYear: 25),
-        total: 40000,
-        used: 18000,
-        available: 2,
-        delay: true,
-        company: CardCompany(Image.asset(
-          'assets/images/cards/mastercard.png',
-          height: 40,
-        ))),
-  ];
 
   @override
   void initState() {
@@ -106,7 +50,7 @@ class _CreditCardDemoState extends State<CreditCardDemo> {
         600; // Umbral para la pantalla ancha
 
     // Asegúrate de que no hay un índice fuera de rango si la lista está vacía
-    if (cards.isEmpty) {
+    if (myProducts.isEmpty) {
       return Scaffold(
         appBar: AppBar(title: Text('Credit Cards')),
         body: Center(child: Text('No hay tarjetas disponibles')),
@@ -123,7 +67,7 @@ class _CreditCardDemoState extends State<CreditCardDemo> {
                 Expanded(
                   flex: 2,
                   child: CreditCardSlider(
-                    cards,
+                    myProducts,
                     pageController: _pageController,
                     initialCard: _currentCardIndex,
                     onCardClicked: _onCardClicked,
@@ -137,14 +81,14 @@ class _CreditCardDemoState extends State<CreditCardDemo> {
                     child: CreditCardDetailWidget(
                       key: ValueKey(
                           _currentCardIndex), // Clave única para animación
-                      card: cards[_currentCardIndex],
+                      card: myProducts[_currentCardIndex],
                     ),
                   ),
                 ),
               ],
             )
           : CreditCardSlider(
-              cards,
+              myProducts,
               pageController: _pageController,
               initialCard: _currentCardIndex,
               onCardClicked: _onCardClicked,

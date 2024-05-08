@@ -5,18 +5,18 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Flutter-Responsive-Admin-Panel-or-Dashboard",
+            "name": "tmp_project",
             "request": "launch",
             "type": "dart"
         },
         {
-            "name": "Flutter-Responsive-Admin-Panel-or-Dashboard (profile mode)",
+            "name": "tmp_project (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "Flutter-Responsive-Admin-Panel-or-Dashboard (release mode)",
+            "name": "tmp_project (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"

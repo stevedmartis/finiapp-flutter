@@ -1,6 +1,6 @@
 {
-    "name": "admin",
-    "short_name": "admin",
+    "name": "FinIA",
+    "short_name": "finia",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

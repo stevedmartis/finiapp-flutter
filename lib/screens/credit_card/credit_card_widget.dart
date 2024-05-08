@@ -1,10 +1,136 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:finia_app/constants.dart';
+import 'package:finia_app/models/MyFiles.dart';
 import 'package:finia_app/screens/credit_card/card_company.dart';
 import 'package:flutter/material.dart';
 
 import 'card_background.dart';
 import 'card_network_type.dart';
 import 'validity.dart';
+
+List<CreditCard> myProducts = [
+  CreditCard(
+      fileInfo: [
+        CloudStorageInfo(
+          title: "Gastado:",
+          numOfFiles: 1328,
+          icon: Icon(
+            Icons.credit_card,
+            color: Colors.blue,
+            size: 20,
+          ),
+          totalStorage: "\$1.9",
+          color: primaryColor,
+          percentage: 50,
+        ),
+        CloudStorageInfo(
+          title: "Ingresado",
+          numOfFiles: 1328,
+          icon: Icon(
+            Icons.account_balance,
+            color: Color(0xFFFFA113),
+            size: 20,
+          ),
+          totalStorage: "\$2.9",
+          color: Color(0xFFFFA113),
+          percentage: 35,
+        ),
+      ],
+      cardBackground: GradientCardBackground(
+        LinearGradient(
+          colors: [Colors.blue, Colors.green],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+      ),
+      cardNumber: '2345 5678 4565 8765',
+      cardHolderName: 'John Doe',
+      validity: Validity(validThruMonth: 12, validThruYear: 25),
+      total: 250000,
+      used: 200000,
+      available: 10,
+      delay: true,
+      company: CardCompany(Image.asset(
+        'assets/images/cards/visa.jpeg',
+        height: 40,
+      ))),
+  CreditCard(
+      fileInfo: [
+        CloudStorageInfo(
+          title: "Gastado:",
+          numOfFiles: 1328,
+          icon: Icon(Icons.credit_card, color: Colors.blue, size: 20),
+          totalStorage: "\$1.9",
+          color: primaryColor,
+          percentage: 50,
+        ),
+        CloudStorageInfo(
+          title: "Ingresado",
+          numOfFiles: 1328,
+          icon: Icon(Icons.account_balance, color: Color(0xFFFFA113), size: 20),
+          totalStorage: "\$2.9",
+          color: Color(0xFFFFA113),
+          percentage: 35,
+        ),
+      ],
+      cardBackground: SolidColorCardBackground(Colors.orange),
+      cardNumber: '3456 7896 7896 5678',
+      cardHolderName: 'Jane Doe',
+      validity: Validity(validThruMonth: 11, validThruYear: 24),
+      total: 150000,
+      used: 300000,
+      available: 5,
+      delay: true,
+      company: CardCompany(Image.asset(
+        'assets/images/cards/mastercard.png',
+        height: 40,
+      ))),
+  CreditCard(
+      fileInfo: [
+        CloudStorageInfo(
+          title: "Gastado:",
+          numOfFiles: 1328,
+          icon: Icon(
+            Icons.credit_card,
+            color: Colors.blue,
+            size: 20,
+          ),
+          totalStorage: "\$1.9",
+          color: primaryColor,
+          percentage: 50,
+        ),
+        CloudStorageInfo(
+          title: "Ingresado",
+          numOfFiles: 1328,
+          icon: Icon(
+            Icons.account_balance,
+            color: Color(0xFFFFA113),
+            size: 20,
+          ),
+          totalStorage: "\$2.9",
+          color: Color(0xFFFFA113),
+          percentage: 35,
+        ),
+      ],
+      cardBackground: GradientCardBackground(
+        LinearGradient(
+          colors: [Colors.blue, Colors.green],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+      ),
+      cardNumber: '1234 5678 9012 3456',
+      cardHolderName: 'John Doe',
+      validity: Validity(validThruMonth: 12, validThruYear: 25),
+      total: 40000,
+      used: 18000,
+      available: 2,
+      delay: true,
+      company: CardCompany(Image.asset(
+        'assets/images/cards/mastercard.png',
+        height: 40,
+      ))),
+];
 
 class CreditCard extends StatefulWidget {
   final CardBackground cardBackground;
@@ -23,24 +149,27 @@ class CreditCard extends StatefulWidget {
   final double used;
   final double available;
   final bool delay;
+  final List<CloudStorageInfo> fileInfo;
 
-  const CreditCard(
-      {required this.cardBackground,
-      this.cardNetworkType,
-      this.cardNumber,
-      this.cardHolderName,
-      this.company,
-      this.validity,
-      this.roundedCornerRadius = 20,
-      this.numberColor = Colors.white,
-      this.validityColor = Colors.white,
-      this.cardHolderNameColor = Colors.white,
-      this.showChip = true,
-      this.currency = 'CLP',
-      this.total = 10.000,
-      this.used = 6,
-      this.available = 5.000,
-      this.delay = false});
+  const CreditCard({
+    required this.cardBackground,
+    this.cardNetworkType,
+    this.cardNumber,
+    this.cardHolderName,
+    this.company,
+    this.validity,
+    this.roundedCornerRadius = 20,
+    this.numberColor = Colors.white,
+    this.validityColor = Colors.white,
+    this.cardHolderNameColor = Colors.white,
+    this.showChip = true,
+    this.currency = 'CLP',
+    this.total = 10.000,
+    this.used = 6,
+    this.available = 5.000,
+    this.delay = false,
+    required this.fileInfo,
+  });
 
   @override
   State<CreditCard> createState() => _CreditCardState();
@@ -204,7 +333,7 @@ class _CreditCardState extends State<CreditCard> with TickerProviderStateMixin {
             ),
             SizedBox(height: 2),
             Text(
-              '${widget.validity!.validFromMonth.toString().padLeft(2, '0')}/${widget.validity!.validFromYear.toString().padLeft(2, '0')}',
+              '${widget.validity!.validThruMonth.toString().padLeft(2, '0')}/${widget.validity!.validThruYear.toString().padLeft(2, '0')}',
               style: TextStyle(
                 color: widget.validityColor,
                 fontSize: 10,

@@ -49,8 +49,8 @@ List<TransactionCreditCard> transactions = [
   // Agrega más transacciones según necesites
 ];
 
-class StorageDetails extends StatelessWidget {
-  const StorageDetails({
+class TransactionHistorialPage extends StatelessWidget {
+  const TransactionHistorialPage({
     Key? key,
   }) : super(key: key);
 
