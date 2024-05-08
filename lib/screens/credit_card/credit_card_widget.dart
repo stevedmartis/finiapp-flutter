@@ -12,10 +12,10 @@ List<CreditCard> myProducts = [
   CreditCard(
       fileInfo: [
         CloudStorageInfo(
-          title: "Gastado:",
+          title: "Ingresado:",
           numOfFiles: 1328,
           icon: Icon(
-            Icons.credit_card,
+            Icons.account_balance,
             color: Colors.blue,
             size: 20,
           ),
@@ -24,10 +24,10 @@ List<CreditCard> myProducts = [
           percentage: 50,
         ),
         CloudStorageInfo(
-          title: "Ingresado",
+          title: "Gastado",
           numOfFiles: 1328,
           icon: Icon(
-            Icons.account_balance,
+            Icons.credit_card,
             color: Color(0xFFFFA113),
             size: 20,
           ),
@@ -57,17 +57,17 @@ List<CreditCard> myProducts = [
   CreditCard(
       fileInfo: [
         CloudStorageInfo(
-          title: "Gastado:",
+          title: "Ingresado:",
           numOfFiles: 1328,
-          icon: Icon(Icons.credit_card, color: Colors.blue, size: 20),
+          icon: Icon(Icons.account_balance, color: Colors.blue, size: 20),
           totalStorage: "\$1.9",
           color: primaryColor,
           percentage: 50,
         ),
         CloudStorageInfo(
-          title: "Ingresado",
+          title: "Gastado",
           numOfFiles: 1328,
-          icon: Icon(Icons.account_balance, color: Color(0xFFFFA113), size: 20),
+          icon: Icon(Icons.credit_card, color: Color(0xFFFFA113), size: 20),
           totalStorage: "\$2.9",
           color: Color(0xFFFFA113),
           percentage: 35,
@@ -88,10 +88,10 @@ List<CreditCard> myProducts = [
   CreditCard(
       fileInfo: [
         CloudStorageInfo(
-          title: "Gastado:",
+          title: "Ingresado:",
           numOfFiles: 1328,
           icon: Icon(
-            Icons.credit_card,
+            Icons.account_balance,
             color: Colors.blue,
             size: 20,
           ),
@@ -100,10 +100,10 @@ List<CreditCard> myProducts = [
           percentage: 50,
         ),
         CloudStorageInfo(
-          title: "Ingresado",
+          title: "Gastado",
           numOfFiles: 1328,
           icon: Icon(
-            Icons.account_balance,
+            Icons.credit_card,
             color: Color(0xFFFFA113),
             size: 20,
           ),

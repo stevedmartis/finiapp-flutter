@@ -46,11 +46,10 @@ class _CreditCardDetailState extends State<CreditCardDetail> {
               sliver: SliverList(
                 delegate: SliverChildListDelegate(
                   [
-                    SizedBox(height: defaultPadding),
                     InfoCardsAmounts(
                       fileInfo: widget.card.fileInfo,
                     ),
-
+                    SizedBox(height: defaultPadding),
                     Text(
                       textAlign: TextAlign.center,
                       'Total: \$${widget.card.total}',
