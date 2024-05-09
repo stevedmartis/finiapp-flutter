@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../constants.dart';
 import 'components/header.dart';
-import 'components/transactions_list.page.dart';
 
 class DashboardScreen extends StatefulWidget {
   @override
@@ -69,7 +68,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
             CreditCardHorizontalList(cards: myProducts),
             SizedBox(height: defaultPadding),
-            Row(
+            /*  Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
@@ -97,6 +96,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
               ],
             )
+          
+ */
           ],
         ),
       ),

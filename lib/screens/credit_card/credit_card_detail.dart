@@ -46,18 +46,19 @@ class _CreditCardDetailState extends State<CreditCardDetail> {
               sliver: SliverList(
                 delegate: SliverChildListDelegate(
                   [
+                    SizedBox(height: 5),
                     InfoCardsAmounts(
                       fileInfo: widget.card.fileInfo,
                     ),
-                    SizedBox(height: defaultPadding),
-                    Text(
+                    // SizedBox(height: defaultPadding),
+                    /*     Text(
                       textAlign: TextAlign.center,
                       'Total: \$${widget.card.total}',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
                       ),
-                    ),
+                    ), */
                     //  InfoCardsAmounts(files: demoMyFiles),
                     SizedBox(height: defaultPadding),
                     // Agrega más widgets si necesitas aquí, cada uno tendrá el padding horizontal.

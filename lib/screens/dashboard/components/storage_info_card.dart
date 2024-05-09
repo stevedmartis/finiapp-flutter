@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../constants.dart';
 
-class StorageInfoCard extends StatelessWidget {
-  const StorageInfoCard({
+class AmmountsInfoCard extends StatelessWidget {
+  const AmmountsInfoCard({
     String? key,
     required this.title,
     required this.svgSrc,

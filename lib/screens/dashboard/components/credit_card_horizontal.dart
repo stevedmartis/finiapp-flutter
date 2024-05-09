@@ -1,6 +1,8 @@
+import 'package:finia_app/constants.dart';
 import 'package:finia_app/screens/credit_card/credit_card_detail.dart';
 import 'package:finia_app/screens/credit_card/credit_card_widget.dart';
 import 'package:finia_app/screens/dashboard/components/my_fields.dart';
+import 'package:finia_app/screens/dashboard/components/transactions_dashboard.dart';
 import 'package:flutter/material.dart';
 
 class CreditCardHorizontalList extends StatefulWidget {
@@ -28,7 +30,7 @@ class _CreditCardHorizontalListState extends State<CreditCardHorizontalList> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 420,
+      height: 800,
       child: PageView.builder(
         controller: _pageController,
         itemCount: widget.cards.length,
@@ -36,7 +38,7 @@ class _CreditCardHorizontalListState extends State<CreditCardHorizontalList> {
           return Column(
             children: [
               Expanded(
-                flex: 2,
+                flex: 1,
                 child: GestureDetector(
                   onTap: () => _handleCardTap(context, widget.cards[index]),
                   child: Hero(
@@ -46,12 +48,24 @@ class _CreditCardHorizontalListState extends State<CreditCardHorizontalList> {
                 ),
               ),
               SizedBox(
-                height: 8,
+                height: defaultPadding,
+              ),
+              Expanded(
+                flex: 0,
+                child: GestureDetector(
+                  onTap: () => _handleCardTap(context, widget.cards[index]),
+                  child: InfoCardsAmounts(
+                    fileInfo: widget.cards[index].fileInfo,
+                  ),
+                ),
               ),
               Expanded(
                 flex: 3,
-                child: InfoCardsAmounts(
-                  fileInfo: widget.cards[index].fileInfo,
+                child: GestureDetector(
+                  onTap: () => _handleCardTap(context, widget.cards[index]),
+                  child: TransactionsDashBoardList(
+                    transactions: widget.cards[index].transactions,
+                  ),
                 ),
               ),
             ],

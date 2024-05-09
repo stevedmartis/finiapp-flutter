@@ -60,7 +60,7 @@ class TransactionsWidget extends StatelessWidget {
         return CustomExpansionTile(
           title: key,
           children: tList
-              .map((transaction) => StorageInfoCard(
+              .map((transaction) => AmmountsInfoCard(
                     key: transaction.id,
                     title: transaction.description,
                     svgSrc: transaction.icon,

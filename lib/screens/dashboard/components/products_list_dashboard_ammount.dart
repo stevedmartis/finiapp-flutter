@@ -1,6 +1,5 @@
 import 'package:finia_app/models/MyFiles.dart';
 import 'package:flutter/material.dart';
-import 'package:finia_app/screens/credit_card/credit_card_detail.dart';
 import 'package:finia_app/screens/credit_card/credit_card_widget.dart';
 
 class ProductsListAmmountsDashboard extends StatefulWidget {
@@ -63,20 +62,9 @@ class _ProductsListAmmountsDashboardState
             scrollDirection: Axis.horizontal,
             itemCount: widget.cards.length,
             itemBuilder: (context, index) {
-              return GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          CreditCardDetail(card: widget.cards[index]),
-                    ),
-                  );
-                },
-                child: Hero(
-                  tag: 'cardsHome-${widget.cards[index].cardNumber}',
-                  child: widget.cards[index],
-                ),
+              return Hero(
+                tag: 'cardsHome-${widget.cards[index].cardNumber}',
+                child: widget.cards[index],
               );
             },
           ),

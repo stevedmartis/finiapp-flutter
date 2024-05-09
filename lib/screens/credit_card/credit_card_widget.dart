@@ -1,12 +1,57 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:finia_app/constants.dart';
 import 'package:finia_app/models/MyFiles.dart';
+import 'package:finia_app/models/transaction.model.dart';
 import 'package:finia_app/screens/credit_card/card_company.dart';
 import 'package:flutter/material.dart';
 
 import 'card_background.dart';
 import 'card_network_type.dart';
 import 'validity.dart';
+
+List<TransactionCreditCard> myTransactions = [
+  TransactionCreditCard(
+      id: '0',
+      date: DateTime.now(),
+      description: "Compra Galletas",
+      inAmount: 0,
+      outAmount: 50000,
+      currency: "CLP",
+      icon: Icon(Icons.cookie, color: Color.fromARGB(255, 253, 127, 0))),
+  TransactionCreditCard(
+      id: '1',
+      date: DateTime.now(),
+      description: "Compra en Supermercado",
+      inAmount: 0,
+      outAmount: 50000,
+      currency: "CLP",
+      icon: Icon(Icons.store, color: Color.fromARGB(255, 0, 162, 238))),
+  TransactionCreditCard(
+      id: '2',
+      date: DateTime.now().subtract(Duration(days: 1)),
+      description: "Compra en Librería",
+      inAmount: 0,
+      outAmount: 30000,
+      currency: "CLP",
+      icon: Icon(Icons.book, color: Color.fromARGB(255, 250, 0, 0))),
+  TransactionCreditCard(
+      id: '3',
+      date: DateTime.now().subtract(Duration(days: 1)),
+      description: "Compra en Librería",
+      inAmount: 0,
+      outAmount: 30000,
+      currency: "CLP",
+      icon: Icon(Icons.book, color: Color.fromARGB(255, 253, 127, 0))),
+  TransactionCreditCard(
+      id: '4',
+      date: DateTime.now().subtract(Duration(days: 3)),
+      description: "Compra Galletas",
+      inAmount: 0,
+      outAmount: 50000,
+      currency: "CLP",
+      icon: Icon(Icons.cookie, color: Color.fromARGB(255, 253, 127, 0))),
+  // Agrega más transacciones según necesites
+];
 
 List<CreditCard> myProducts = [
   CreditCard(
@@ -36,6 +81,7 @@ List<CreditCard> myProducts = [
           percentage: 35,
         ),
       ],
+      transactions: myTransactions,
       cardBackground: GradientCardBackground(
         LinearGradient(
           colors: [Colors.blue, Colors.green],
@@ -73,6 +119,7 @@ List<CreditCard> myProducts = [
           percentage: 35,
         ),
       ],
+      transactions: myTransactions,
       cardBackground: SolidColorCardBackground(Colors.orange),
       cardNumber: '3456 7896 7896 5678',
       cardHolderName: 'Jane Doe',
@@ -112,6 +159,7 @@ List<CreditCard> myProducts = [
           percentage: 35,
         ),
       ],
+      transactions: myTransactions,
       cardBackground: GradientCardBackground(
         LinearGradient(
           colors: [Colors.blue, Colors.green],
@@ -150,6 +198,7 @@ class CreditCard extends StatefulWidget {
   final double available;
   final bool delay;
   final List<CloudStorageInfo> fileInfo;
+  final List<TransactionCreditCard> transactions;
 
   const CreditCard({
     required this.cardBackground,
@@ -169,6 +218,7 @@ class CreditCard extends StatefulWidget {
     this.available = 5.000,
     this.delay = false,
     required this.fileInfo,
+    required this.transactions,
   });
 
   @override

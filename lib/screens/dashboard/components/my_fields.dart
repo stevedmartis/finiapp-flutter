@@ -17,7 +17,7 @@ class InfoCardsAmounts extends StatelessWidget {
     return Responsive(
       mobile: FileInfoCardGridView(
         files: fileInfo,
-        crossAxisCount: _size.width < 650 ? 2 : 4,
+        crossAxisCount: _size.width < 600 ? 2 : 4,
         childAspectRatio: _size.width < 650 && _size.width > 350 ? 1.3 : 1,
       ),
       tablet: FileInfoCardGridView(
