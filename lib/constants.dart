@@ -4,6 +4,9 @@ const primaryColor = Color(0xFF2697FF);
 const secondaryColor = Color(0xFF2A2D3E);
 const bgColor = Color(0xFF212332);
 
-const logoCOLOR1 = Color(0xA668E9);
-const logoCOLOR2 = Color(0x410096);
+const logoCOLOR1 = Color(
+    0xFFA668E9); // Asegúrate de que el canal alfa está en FF para máxima opacidad
+const logoCOLOR2 = Color(
+    0xFF410096); // Asegúrate de que el canal alfa está en FF para máxima opacidad
+
 const defaultPadding = 16.0;
