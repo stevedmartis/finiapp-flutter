@@ -1,5 +1,7 @@
 import 'package:finia_app/responsive.dart';
 import 'package:finia_app/screens/credit_card/credit_card_widget.dart';
+import 'package:finia_app/screens/dashboard/components/charts/balance_summary.widget.dart';
+import 'package:finia_app/screens/dashboard/components/charts/financial_categories.chat.dart';
 import 'package:finia_app/screens/dashboard/components/credit_card_horizontal.dart';
 
 import 'package:finia_app/screens/dashboard/floid_widget.dart';
@@ -38,6 +40,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           children: [
             Header(),
             SizedBox(height: defaultPadding),
+            BalanceSummary(),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -66,8 +69,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
               ],
             ),
+            SizedBox(height: 10),
             CreditCardHorizontalList(cards: myProducts),
             SizedBox(height: defaultPadding),
+            BudgetedExpensesChart(),
+
             /*  Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

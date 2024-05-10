@@ -30,7 +30,8 @@ class _CreditCardHorizontalListState extends State<CreditCardHorizontalList> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 800,
+      height: MediaQuery.of(context).size.height *
+          0.5, // Ajusta esto según tu necesidad,
       child: PageView.builder(
         controller: _pageController,
         itemCount: widget.cards.length,
@@ -38,7 +39,7 @@ class _CreditCardHorizontalListState extends State<CreditCardHorizontalList> {
           return Column(
             children: [
               Expanded(
-                flex: 1,
+                flex: 3,
                 child: GestureDetector(
                   onTap: () => _handleCardTap(context, widget.cards[index]),
                   child: Hero(
@@ -60,13 +61,16 @@ class _CreditCardHorizontalListState extends State<CreditCardHorizontalList> {
                 ),
               ),
               Expanded(
-                flex: 3,
+                flex: 2,
                 child: GestureDetector(
                   onTap: () => _handleCardTap(context, widget.cards[index]),
                   child: TransactionsDashBoardList(
                     transactions: widget.cards[index].transactions,
                   ),
                 ),
+              ),
+              SizedBox(
+                height: defaultPadding,
               ),
             ],
           );

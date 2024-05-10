@@ -84,7 +84,10 @@ List<CreditCard> myProducts = [
       transactions: myTransactions,
       cardBackground: GradientCardBackground(
         LinearGradient(
-          colors: [Colors.blue, Colors.green],
+          colors: [
+            const Color.fromARGB(255, 60, 78, 87),
+            const Color.fromARGB(255, 45, 58, 65)
+          ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -120,7 +123,16 @@ List<CreditCard> myProducts = [
         ),
       ],
       transactions: myTransactions,
-      cardBackground: SolidColorCardBackground(Colors.orange),
+      cardBackground: GradientCardBackground(
+        LinearGradient(
+          colors: [
+            const Color.fromARGB(255, 60, 78, 87),
+            const Color.fromARGB(255, 45, 58, 65)
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+      ),
       cardNumber: '3456 7896 7896 5678',
       cardHolderName: 'Jane Doe',
       validity: Validity(validThruMonth: 11, validThruYear: 24),
@@ -162,7 +174,10 @@ List<CreditCard> myProducts = [
       transactions: myTransactions,
       cardBackground: GradientCardBackground(
         LinearGradient(
-          colors: [Colors.blue, Colors.green],
+          colors: [
+            const Color.fromARGB(255, 60, 78, 87),
+            const Color.fromARGB(255, 45, 58, 65)
+          ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
