@@ -33,7 +33,7 @@ class _BalanceSummaryState extends State<BalanceSummary> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Saldo Total: \$5000',
+                    '\$5000',
                     style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
@@ -58,10 +58,10 @@ class _BalanceSummaryState extends State<BalanceSummary> {
               width:
                   MediaQuery.of(context).size.width * (isExpanded ? 0.9 : 0.8),
               height: isExpanded ? 340 : 0,
-              decoration: BoxDecoration(
+              /* decoration: BoxDecoration(
                 color: secondaryColor,
                 borderRadius: BorderRadius.circular(20),
-              ),
+              ), */
               child: isExpanded
                   ? SingleChildScrollView(child: _buildExpandedChart())
                   : null,

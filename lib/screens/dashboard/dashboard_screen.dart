@@ -38,9 +38,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
         padding: EdgeInsets.all(defaultPadding),
         child: Column(
           children: [
-            Header(),
-            SizedBox(height: defaultPadding),
-            BalanceSummary(),
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(colors: [logoCOLOR1, logoCOLOR2]),
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Header(),
+                  SizedBox(height: defaultPadding),
+                  BalanceSummary(),
+                ],
+              ),
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

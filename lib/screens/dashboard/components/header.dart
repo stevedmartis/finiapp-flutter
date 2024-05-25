@@ -14,23 +14,26 @@ class Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        if (!Responsive.isDesktop(context))
-          IconButton(
-            icon: Icon(Icons.menu),
-            onPressed: context.read<MenuAppController>().controlMenu,
-          ),
-        if (!Responsive.isMobile(context))
-          Text(
-            "Dashboard",
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
-        if (!Responsive.isMobile(context))
-          Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
-        Expanded(child: SearchField()),
-        ProfileCard()
-      ],
+    return Container(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          if (!Responsive.isDesktop(context))
+            IconButton(
+              icon: Icon(Icons.menu),
+              onPressed: context.read<MenuAppController>().controlMenu,
+            ),
+          if (!Responsive.isMobile(context))
+            Text(
+              "Dashboard",
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+          if (!Responsive.isMobile(context))
+            Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
+          //Expanded(child: SearchField()),
+          ProfileCard()
+        ],
+      ),
     );
   }
 }
@@ -51,8 +54,8 @@ class ProfileCard extends StatelessWidget {
         vertical: defaultPadding / 2,
       ),
       decoration: BoxDecoration(
-        color: secondaryColor,
-        borderRadius: const BorderRadius.all(Radius.circular(10)),
+        color: Colors.transparent,
+        borderRadius: const BorderRadius.all(Radius.circular(100)),
         border: Border.all(color: Colors.white10),
       ),
       child: Row(
