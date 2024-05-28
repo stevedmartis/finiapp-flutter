@@ -26,7 +26,7 @@ class _BalanceSummaryState extends State<BalanceSummary> {
               width: MediaQuery.of(context).size.width * 0.8,
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
               decoration: BoxDecoration(
-                color: secondaryColor, // Usar el color secundario como fondo
+                color: backgroundDark, // Usar el color secundario como fondo
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Row(

@@ -65,7 +65,7 @@ List<PieChartSectionData> paiChartSelectionData = [
     radius: 19,
   ),
   PieChartSectionData(
-    color: Color(0xFFEE2727),
+    color: Colors.blue,
     value: 15,
     showTitle: false,
     radius: 16,

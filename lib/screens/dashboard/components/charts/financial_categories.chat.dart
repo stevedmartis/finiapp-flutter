@@ -24,7 +24,7 @@ class _BudgetedExpensesChartState extends State<BudgetedExpensesChart> {
 
     return Container(
       decoration: BoxDecoration(
-        color: secondaryColor,
+        color: backgroundDark,
         borderRadius: BorderRadius.circular(20),
       ),
       child: SingleChildScrollView(
@@ -43,6 +43,8 @@ class _BudgetedExpensesChartState extends State<BudgetedExpensesChart> {
                     dataSource: budgetItems,
                     xValueMapper: (BudgetItem data, _) => data.category,
                     yValueMapper: (BudgetItem data, _) => data.spent,
+                    pointColorMapper: (BudgetItem data, _) =>
+                        getColorForCategory(data.category),
                     dataLabelSettings: DataLabelSettings(isVisible: true),
                     enableTooltip: true,
                     name: 'Gastos',
@@ -107,7 +109,7 @@ class _BudgetedExpensesChartState extends State<BudgetedExpensesChart> {
       case 'Salud':
         return Colors.orange;
       case 'Entretenimiento':
-        return Colors.purple;
+        return Colors.blue;
       default:
         return Colors.grey;
     }

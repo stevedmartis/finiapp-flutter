@@ -1,6 +1,7 @@
 import 'package:finia_app/firebase_options.dart';
 import 'package:finia_app/helper/lifecycle_event.dart';
 import 'package:finia_app/screens/credit_card/credit_cards_page.dart';
+import 'package:finia_app/screens/providers/theme_provider.dart';
 import 'package:finia_app/services/auth_service.dart';
 import 'package:finia_app/services/finance_summary_service.dart';
 import 'package:flutter/material.dart';
@@ -46,36 +47,39 @@ class MyApp extends StatelessWidget {
     );
 
     return MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (context) => MenuAppController()),
-          ChangeNotifierProvider(create: (context) => FinancialDataService()),
-          ChangeNotifierProvider.value(value: authService),
-        ],
-        child: MaterialApp(
-          key: navigatorKey,
-          locale: Locale('es', 'ES'),
-          debugShowCheckedModeBanner: false,
-          title: 'finIA',
-          theme: AppTheme.theme.copyWith(
-            scaffoldBackgroundColor: bgColor,
-            textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme)
-                .apply(bodyColor: Colors.white),
-            canvasColor: secondaryColor,
-          ),
-          routes: {
-            '/mainScreen': (context) => MainScreen(),
-            '/signIn': (context) => SignIn(),
-            '/cards': (context) => CreditCardDemo()
-          },
-          home: Consumer<AuthService>(
-            builder: (context, auth, _) {
-              if (auth.isLoading) {
-                return CircularProgressIndicator();
-              } else {
-                return auth.isAuthenticated ? MainScreen() : SignIn();
-              }
+      providers: [
+        ChangeNotifierProvider(create: (context) => MenuAppController()),
+        ChangeNotifierProvider(create: (context) => FinancialDataService()),
+        ChangeNotifierProvider.value(value: authService),
+        ChangeNotifierProvider(create: (context) => ThemeProvider()),
+      ],
+      child: Consumer<ThemeProvider>(
+        builder: (context, themeNotifier, _) {
+          return MaterialApp(
+            key: navigatorKey,
+            locale: Locale('es', 'ES'),
+            debugShowCheckedModeBanner: false,
+            title: 'finIA',
+            themeMode: themeNotifier.themeMode, // Usa el tema actual
+            theme: AppTheme.lightTheme, // Usa el tema claro
+            darkTheme: AppTheme.darkTheme, // Usa el tema oscuro
+            routes: {
+              '/mainScreen': (context) => MainScreen(),
+              '/signIn': (context) => SignIn(),
+              '/cards': (context) => CreditCardDemo(),
             },
-          ),
-        ));
+            home: Consumer<AuthService>(
+              builder: (context, auth, _) {
+                if (auth.isLoading) {
+                  return CircularProgressIndicator();
+                } else {
+                  return auth.isAuthenticated ? MainScreen() : SignIn();
+                }
+              },
+            ),
+          );
+        },
+      ),
+    );
   }
 }

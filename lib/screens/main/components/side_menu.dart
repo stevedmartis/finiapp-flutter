@@ -1,3 +1,4 @@
+import 'package:finia_app/screens/providers/theme_provider.dart';
 import 'package:finia_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -15,6 +16,8 @@ class SideMenu extends StatefulWidget {
 class _SideMenuState extends State<SideMenu> {
   @override
   Widget build(BuildContext context) {
+    final themeNotifier = Provider.of<ThemeProvider>(context);
+
     return Drawer(
       child: ListView(
         children: [
@@ -57,6 +60,27 @@ class _SideMenuState extends State<SideMenu> {
             press: () {
               context.read<AuthService>().signOut();
             },
+          ),
+          Divider(),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Icon(
+                  themeNotifier.themeMode == ThemeMode.dark
+                      ? Icons.dark_mode
+                      : Icons.light_mode,
+                  color: Colors.white54,
+                ),
+                Switch(
+                  value: themeNotifier.themeMode == ThemeMode.dark,
+                  onChanged: (value) {
+                    themeNotifier.toggleTheme();
+                  },
+                ),
+              ],
+            ),
           ),
         ],
       ),
