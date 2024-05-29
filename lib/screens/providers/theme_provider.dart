@@ -1,3 +1,4 @@
+import 'package:finia_app/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -41,10 +42,21 @@ class ThemeProvider extends ChangeNotifier {
   );
 
   void toggleTheme() {
-    _themeMode =
-        _themeMode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
+    _themeMode = _themeMode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
     _saveThemeMode(_themeMode);
     notifyListeners();
+  }
+
+  Color getCardColor() {
+    return _themeMode == ThemeMode.dark ? primaryColor : Colors.white;
+  }
+
+  Color getTitleColor() {
+    return _themeMode == ThemeMode.dark ? Colors.grey[300]! : Colors.black;
+  }
+
+  Color getContainerBackgroundColor() {
+    return _themeMode == ThemeMode.dark ? backgroundDark : Colors.white;
   }
 
   void _loadThemeMode() async {
@@ -58,7 +70,6 @@ class ThemeProvider extends ChangeNotifier {
 
   void _saveThemeMode(ThemeMode themeMode) async {
     final prefs = await SharedPreferences.getInstance();
-    prefs.setString(
-        themePrefKey, themeMode == ThemeMode.dark ? 'dark' : 'light');
+    prefs.setString(themePrefKey, themeMode == ThemeMode.dark ? 'dark' : 'light');
   }
 }

@@ -28,6 +28,7 @@ class _SideMenuState extends State<SideMenu> {
             title: "Dashboard",
             svgSrc: "assets/icons/menu_dashboard.svg",
             press: () {},
+            themeNotifier:themeNotifier
           ),
           DrawerListTile(
             title: "Credit Cards",
@@ -37,22 +38,26 @@ class _SideMenuState extends State<SideMenu> {
                   Provider.of<AuthService>(context, listen: false);
               authService.cardsHero = 'cardsMenu';
               Navigator.pushNamed(context, '/cards');
-            },
+            }, 
+            themeNotifier:themeNotifier
           ),
           DrawerListTile(
             title: "Notification",
             svgSrc: "assets/icons/menu_notification.svg",
             press: () {},
+            themeNotifier:themeNotifier
           ),
           DrawerListTile(
             title: "Profile",
             svgSrc: "assets/icons/menu_profile.svg",
             press: () {},
+            themeNotifier:themeNotifier
           ),
           DrawerListTile(
             title: "Settings",
             svgSrc: "assets/icons/menu_setting.svg",
             press: () {},
+            themeNotifier:themeNotifier
           ),
           DrawerListTile(
             title: "SignOut",
@@ -60,6 +65,7 @@ class _SideMenuState extends State<SideMenu> {
             press: () {
               context.read<AuthService>().signOut();
             },
+            themeNotifier:themeNotifier
           ),
           Divider(),
           Padding(
@@ -68,9 +74,7 @@ class _SideMenuState extends State<SideMenu> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Icon(
-                  themeNotifier.themeMode == ThemeMode.dark
-                      ? Icons.dark_mode
-                      : Icons.light_mode,
+                  themeNotifier.themeMode == ThemeMode.dark ? Icons.dark_mode : Icons.light_mode,
                   color: Colors.white54,
                 ),
                 Switch(
@@ -91,17 +95,20 @@ class _SideMenuState extends State<SideMenu> {
 class DrawerListTile extends StatelessWidget {
   const DrawerListTile({
     Key? key,
-    // For selecting those three line once press "Command+D"
+    // For selecting those three lines once press "Command+D"
     required this.title,
     required this.svgSrc,
     required this.press,
+    required this.themeNotifier
   }) : super(key: key);
 
   final String title, svgSrc;
   final VoidCallback press;
+  final ThemeProvider themeNotifier;
 
   @override
   Widget build(BuildContext context) {
+
     return ListTile(
       onTap: press,
       horizontalTitleGap: 0.0,
@@ -112,7 +119,9 @@ class DrawerListTile extends StatelessWidget {
       ),
       title: Text(
         title,
-        style: TextStyle(color: Colors.white54),
+        style: TextStyle(
+          color: themeNotifier.getTitleColor()
+        ),
       ),
     );
   }

@@ -9,8 +9,8 @@ class AppTheme {
     scaffoldBackgroundColor: ColorSys.kBackgroundColor,
     fontFamily: 'NetflixSans',
     textTheme: TextTheme(
-      bodyText1: TextStyle(color: ColorSys.kTextColor),
-      bodyText2: TextStyle(color: ColorSys.kTextColor),
+      bodyLarge: TextStyle(color: ColorSys.kTextColor),
+      bodyMedium: TextStyle(color: ColorSys.kTextColor),
     ),
   );
 
@@ -21,8 +21,8 @@ class AppTheme {
     scaffoldBackgroundColor: ColorSys.kBackgroundColor,
     fontFamily: 'NetflixSans',
     textTheme: TextTheme(
-      bodyText1: TextStyle(color: ColorSys.kTextColor),
-      bodyText2: TextStyle(color: ColorSys.kTextColor),
+      bodyLarge: TextStyle(color: ColorSys.kTextColor),
+      bodyMedium: TextStyle(color: ColorSys.kTextColor),
     ),
   );
 }

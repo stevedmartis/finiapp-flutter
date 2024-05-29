@@ -115,6 +115,7 @@ class _DashBoardScreen2 extends State<DashBoardScreen2> {
                             amount: 12000,
                             context: context,
                             isPositive: true,
+                            themeProvider: themeProvider,
                           ),
                           SizedBox(width: 16),
                           buildIndicator(
@@ -123,6 +124,7 @@ class _DashBoardScreen2 extends State<DashBoardScreen2> {
                             amount: 6000,
                             context: context,
                             isPositive: false,
+                            themeProvider: themeProvider,
                           ),
                         ],
                       ),
@@ -133,9 +135,7 @@ class _DashBoardScreen2 extends State<DashBoardScreen2> {
                 Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: themeProvider.themeMode == ThemeMode.dark
-                        ? backgroundDark
-                        : Colors.white,
+                    color: themeProvider.getContainerBackgroundColor(),
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(30),
                       topRight: Radius.circular(30),
@@ -156,10 +156,7 @@ class _DashBoardScreen2 extends State<DashBoardScreen2> {
                                 'Mis Productos',
                                 style: TextStyle(
                                   fontSize: 20,
-                                  color:
-                                      themeProvider.themeMode == ThemeMode.dark
-                                          ? Colors.grey[300]
-                                          : Colors.white,
+                                  color:themeProvider.getTitleColor(),
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -173,8 +170,6 @@ class _DashBoardScreen2 extends State<DashBoardScreen2> {
                         CreditCardHorizontalList(cards: myProducts),
                         SizedBox(height: defaultPadding),
                         BudgetedExpensesChart(),
-
-                        // Aquí puedes añadir más contenido
                       ],
                     ),
                   ),
@@ -193,15 +188,14 @@ class _DashBoardScreen2 extends State<DashBoardScreen2> {
     required double amount,
     required BuildContext context,
     required bool isPositive,
+    required ThemeProvider themeProvider,
   }) {
     final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Container(
       padding: EdgeInsets.all(6),
       decoration: BoxDecoration(
-        color: themeProvider.themeMode == ThemeMode.dark
-            ? backgroundDark
-            : Colors.white,
+        color: themeProvider.getCardColor(),
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(

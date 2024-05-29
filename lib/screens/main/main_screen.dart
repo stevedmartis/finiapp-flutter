@@ -2,7 +2,6 @@
 import 'package:finia_app/services/finance_summary_service.dart'; */
 import 'package:finia_app/screens/dashboard/dashboard_screen2.dart';
 import 'package:flutter/material.dart';
-import 'package:finia_app/screens/dashboard/dashboard_screen.dart';
 import 'package:finia_app/controllers/MenuAppController.dart';
 import 'components/side_menu.dart';
 import 'package:provider/provider.dart';

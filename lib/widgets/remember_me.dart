@@ -23,7 +23,7 @@ class _RememberMeState extends State<RememberMe> {
             activeColor: Theme.of(context).primaryColor,
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-            side: MaterialStateBorderSide.resolveWith((states) => BorderSide(
+            side: WidgetStateBorderSide.resolveWith((states) => BorderSide(
                   width: 2.0,
                   color: Theme.of(context).primaryColor,
                 )),
