@@ -3,7 +3,9 @@ import 'package:finia_app/constants.dart';
 import 'package:finia_app/models/MyFiles.dart';
 import 'package:finia_app/models/transaction.model.dart';
 import 'package:finia_app/screens/credit_card/card_company.dart';
+import 'package:finia_app/screens/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'card_background.dart';
 import 'card_network_type.dart';
@@ -323,6 +325,8 @@ class _CreditCardState extends State<CreditCard> with TickerProviderStateMixin {
   }
 
   BoxDecoration _buildBackground() {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     if (widget.cardBackground is SolidColorCardBackground) {
       SolidColorCardBackground solidColorCardBackground =
           widget.cardBackground as SolidColorCardBackground;
@@ -331,11 +335,9 @@ class _CreditCardState extends State<CreditCard> with TickerProviderStateMixin {
         color: solidColorCardBackground.backgroundColor,
       );
     } else if (widget.cardBackground is GradientCardBackground) {
-      GradientCardBackground gradientCardBackground =
-          widget.cardBackground as GradientCardBackground;
       return BoxDecoration(
         borderRadius: BorderRadius.circular(widget.roundedCornerRadius),
-        gradient: gradientCardBackground.gradient,
+        gradient: themeProvider.getGradientCard(),
       );
     } else if (widget.cardBackground is ImageCardBackground) {
       ImageCardBackground imageCardBackground =

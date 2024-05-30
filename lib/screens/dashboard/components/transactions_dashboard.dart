@@ -1,6 +1,8 @@
 import 'package:finia_app/screens/dashboard/components/storage_info_card.dart';
+import 'package:finia_app/screens/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:finia_app/models/transaction.model.dart';
+import 'package:provider/provider.dart';
 
 class TransactionsDashBoardList extends StatelessWidget {
   final List<TransactionCreditCard> transactions;
@@ -45,7 +47,7 @@ class TransactionsDashBoardList extends StatelessWidget {
                     boxShadow: [
                       // Opcional: añade sombra para mejor visibilidad
                       BoxShadow(
-                        color: Colors.black26,
+                        color: Colors.black45,
                         blurRadius: 4,
                         offset: Offset(0, 2),
                       )

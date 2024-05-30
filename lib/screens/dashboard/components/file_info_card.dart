@@ -1,5 +1,7 @@
 import 'package:finia_app/models/MyFiles.dart';
+import 'package:finia_app/screens/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../constants.dart';
 
@@ -13,10 +15,12 @@ class FileInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return Container(
       padding: EdgeInsets.all(defaultPadding),
       decoration: BoxDecoration(
-        color: backgroundDark,
+        color: themeProvider.getCardColor(),
         borderRadius: const BorderRadius.all(Radius.circular(10)),
       ),
       child: Column(

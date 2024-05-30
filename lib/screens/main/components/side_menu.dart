@@ -25,48 +25,42 @@ class _SideMenuState extends State<SideMenu> {
             child: Image.asset("assets/images/logo.png"),
           ),
           DrawerListTile(
-            title: "Dashboard",
-            svgSrc: "assets/icons/menu_dashboard.svg",
-            press: () {},
-            themeNotifier:themeNotifier
-          ),
+              title: "Dashboard",
+              svgSrc: "assets/icons/menu_dashboard.svg",
+              press: () {},
+              themeNotifier: themeNotifier),
           DrawerListTile(
-            title: "Credit Cards",
-            svgSrc: "assets/icons/menu_tran.svg",
-            press: () {
-              var authService =
-                  Provider.of<AuthService>(context, listen: false);
-              authService.cardsHero = 'cardsMenu';
-              Navigator.pushNamed(context, '/cards');
-            }, 
-            themeNotifier:themeNotifier
-          ),
+              title: "Credit Cards",
+              svgSrc: "assets/icons/menu_tran.svg",
+              press: () {
+                var authService =
+                    Provider.of<AuthService>(context, listen: false);
+                authService.cardsHero = 'cardsMenu';
+                Navigator.pushNamed(context, '/cards');
+              },
+              themeNotifier: themeNotifier),
           DrawerListTile(
-            title: "Notification",
-            svgSrc: "assets/icons/menu_notification.svg",
-            press: () {},
-            themeNotifier:themeNotifier
-          ),
+              title: "Notification",
+              svgSrc: "assets/icons/menu_notification.svg",
+              press: () {},
+              themeNotifier: themeNotifier),
           DrawerListTile(
-            title: "Profile",
-            svgSrc: "assets/icons/menu_profile.svg",
-            press: () {},
-            themeNotifier:themeNotifier
-          ),
+              title: "Profile",
+              svgSrc: "assets/icons/menu_profile.svg",
+              press: () {},
+              themeNotifier: themeNotifier),
           DrawerListTile(
-            title: "Settings",
-            svgSrc: "assets/icons/menu_setting.svg",
-            press: () {},
-            themeNotifier:themeNotifier
-          ),
+              title: "Settings",
+              svgSrc: "assets/icons/menu_setting.svg",
+              press: () {},
+              themeNotifier: themeNotifier),
           DrawerListTile(
-            title: "SignOut",
-            svgSrc: "assets/icons/menu_profile.svg",
-            press: () {
-              context.read<AuthService>().signOut();
-            },
-            themeNotifier:themeNotifier
-          ),
+              title: "SignOut",
+              svgSrc: "assets/icons/menu_profile.svg",
+              press: () {
+                context.read<AuthService>().signOut();
+              },
+              themeNotifier: themeNotifier),
           Divider(),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -74,7 +68,9 @@ class _SideMenuState extends State<SideMenu> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Icon(
-                  themeNotifier.themeMode == ThemeMode.dark ? Icons.dark_mode : Icons.light_mode,
+                  themeNotifier.themeMode == ThemeMode.dark
+                      ? Icons.dark_mode
+                      : Icons.light_mode,
                   color: Colors.white54,
                 ),
                 Switch(
@@ -93,14 +89,14 @@ class _SideMenuState extends State<SideMenu> {
 }
 
 class DrawerListTile extends StatelessWidget {
-  const DrawerListTile({
-    Key? key,
-    // For selecting those three lines once press "Command+D"
-    required this.title,
-    required this.svgSrc,
-    required this.press,
-    required this.themeNotifier
-  }) : super(key: key);
+  const DrawerListTile(
+      {Key? key,
+      // For selecting those three lines once press "Command+D"
+      required this.title,
+      required this.svgSrc,
+      required this.press,
+      required this.themeNotifier})
+      : super(key: key);
 
   final String title, svgSrc;
   final VoidCallback press;
@@ -108,7 +104,6 @@ class DrawerListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return ListTile(
       onTap: press,
       horizontalTitleGap: 0.0,
@@ -119,9 +114,7 @@ class DrawerListTile extends StatelessWidget {
       ),
       title: Text(
         title,
-        style: TextStyle(
-          color: themeNotifier.getTitleColor()
-        ),
+        style: TextStyle(color: themeNotifier.getTitleColor()),
       ),
     );
   }

@@ -1,6 +1,8 @@
 import 'package:finia_app/models/MyFiles.dart';
 import 'package:finia_app/responsive.dart';
+import 'package:finia_app/screens/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'file_info_card.dart';
 
 class InfoCardsAmounts extends StatelessWidget {

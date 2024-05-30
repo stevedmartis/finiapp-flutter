@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 const primaryColor = Color(0xFF2697FF);
 const backgroundDark = Color(0xFF2A2D3E);
+const cardDark = Color(0xFF1F222D);
 const bgColor = Color(0xFF212332);
 
 const logoCOLOR1 = Color(

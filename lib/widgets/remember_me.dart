@@ -21,12 +21,15 @@ class _RememberMeState extends State<RememberMe> {
             value: _remeemberMe,
             checkColor: Theme.of(context).textTheme.bodyLarge?.color,
             activeColor: Theme.of(context).primaryColor,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-            side: WidgetStateBorderSide.resolveWith((states) => BorderSide(
-                  width: 2.0,
-                  color: Theme.of(context).primaryColor,
-                )),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(6),
+            ),
+            side: MaterialStateBorderSide.resolveWith(
+              (states) => BorderSide(
+                width: 2.0,
+                color: Theme.of(context).primaryColor,
+              ),
+            ),
             onChanged: (value) {
               setState(() {
                 _remeemberMe = value!;

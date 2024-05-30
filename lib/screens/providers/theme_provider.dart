@@ -42,21 +42,39 @@ class ThemeProvider extends ChangeNotifier {
   );
 
   void toggleTheme() {
-    _themeMode = _themeMode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
+    _themeMode =
+        _themeMode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
     _saveThemeMode(_themeMode);
     notifyListeners();
   }
 
   Color getCardColor() {
-    return _themeMode == ThemeMode.dark ? primaryColor : Colors.white;
+    return _themeMode == ThemeMode.dark ? cardDark : Colors.white;
   }
 
   Color getTitleColor() {
-    return _themeMode == ThemeMode.dark ? Colors.grey[300]! : Colors.black;
+    return _themeMode == ThemeMode.dark ? Colors.white70 : Colors.black;
   }
 
   Color getContainerBackgroundColor() {
     return _themeMode == ThemeMode.dark ? backgroundDark : Colors.white;
+  }
+
+  LinearGradient getGradientCard() {
+    return _themeMode == ThemeMode.dark
+        ? LinearGradient(
+            colors: [const Color.fromARGB(255, 60, 78, 87), cardDark],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          )
+        : LinearGradient(
+            colors: [
+              Color.fromARGB(255, 206, 206, 206),
+              Color.fromARGB(255, 209, 221, 228)
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          );
   }
 
   void _loadThemeMode() async {
@@ -70,6 +88,7 @@ class ThemeProvider extends ChangeNotifier {
 
   void _saveThemeMode(ThemeMode themeMode) async {
     final prefs = await SharedPreferences.getInstance();
-    prefs.setString(themePrefKey, themeMode == ThemeMode.dark ? 'dark' : 'light');
+    prefs.setString(
+        themePrefKey, themeMode == ThemeMode.dark ? 'dark' : 'light');
   }
 }

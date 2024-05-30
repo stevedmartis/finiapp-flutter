@@ -1,5 +1,7 @@
 import 'package:finia_app/constants.dart';
+import 'package:finia_app/screens/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class BudgetedExpensesChart extends StatefulWidget {
@@ -21,10 +23,11 @@ class _BudgetedExpensesChartState extends State<BudgetedExpensesChart> {
     // Calculamos la altura de la lista basada en la cantidad de elementos
     double listHeight = budgetItems.length *
         72.0; // Asumiendo que cada ListTile tiene una altura de 72 pixels
+    final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Container(
       decoration: BoxDecoration(
-        color: backgroundDark,
+        color: themeProvider.getCardColor(),
         borderRadius: BorderRadius.circular(20),
       ),
       child: SingleChildScrollView(

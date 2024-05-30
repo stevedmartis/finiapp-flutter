@@ -15,6 +15,14 @@ class DashBoardScreen2 extends StatefulWidget {
 }
 
 class _DashBoardScreen2 extends State<DashBoardScreen2> {
+  late MenuAppController menuAppController;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    menuAppController = Provider.of<MenuAppController>(context);
+  }
+
   // Función para formatear números en pesos chilenos
   String formatCurrency(double amount) {
     final NumberFormat format =
@@ -156,7 +164,7 @@ class _DashBoardScreen2 extends State<DashBoardScreen2> {
                                 'Mis Productos',
                                 style: TextStyle(
                                   fontSize: 20,
-                                  color:themeProvider.getTitleColor(),
+                                  color: themeProvider.getTitleColor(),
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
