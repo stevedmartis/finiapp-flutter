@@ -18,7 +18,6 @@ class _SearchPrincipalPageState extends State<SearchPrincipalPage> {
   late ScrollController _scrollController;
   late MenuAppController menuAppController;
   bool _showTitle = false;
-  final List<CreditCard> myProducts = []; // Lista de tarjetas de crédito
 
   @override
   void initState() {
@@ -55,7 +54,7 @@ class _SearchPrincipalPageState extends State<SearchPrincipalPage> {
     formatted = formatted
         .replaceAll('\$', '')
         .replaceAll(',', ''); // Eliminar símbolo y separador de miles
-    return '\$${formatted.substring(0, formatted.length - 2)}';
+    return '\$${formatted.substring(0, formatted.length - 3)}';
   }
 
   @override
@@ -73,7 +72,7 @@ class _SearchPrincipalPageState extends State<SearchPrincipalPage> {
           controller: _scrollController,
           slivers: [
             SliverAppBar(
-              leadingWidth: 70,
+              leadingWidth: 60,
               backgroundColor: logoCOLOR2,
               leading: Container(
                 margin: EdgeInsets.only(left: 20, top: 10),
@@ -83,11 +82,8 @@ class _SearchPrincipalPageState extends State<SearchPrincipalPage> {
                     context.read<MenuAppController>().controlMenu();
                   },
                   child: CircleAvatar(
-                    backgroundColor: currentTheme.getCardColor(),
-                    child: Icon(
-                      Icons.person_2_outlined,
-                      color: currentTheme.getTitleColor(),
-                    ),
+                    backgroundColor: Colors.white,
+                    child: Icon(Icons.person_2_outlined, color: Colors.black),
                   ),
                 ),
               ),
@@ -98,22 +94,19 @@ class _SearchPrincipalPageState extends State<SearchPrincipalPage> {
                     // Navegar a la página de notificaciones
                   },
                   child: Container(
-                    padding: EdgeInsets.only(right: 10, top: 10),
+                    padding: EdgeInsets.only(
+                      right: 20,
+                      top: 10,
+                    ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Icon(
                           Icons.notifications,
-                          color: currentTheme.getCardColor(),
-                          size: 25,
-                        ),
-                        /* SizedBox(width: 16),
-                        Icon(
-                          Icons.shopping_bag_outlined,
                           color: Colors.white,
                           size: 30,
-                        ), */
+                        ),
                       ],
                     ),
                   ),
@@ -153,18 +146,6 @@ class _SearchPrincipalPageState extends State<SearchPrincipalPage> {
                   ],
                 ),
                 centerTitle: true,
-                /* title: AnimatedOpacity(
-                  duration: Duration(milliseconds: 300),
-                  opacity: _showTitle ? 1.0 : 0.0,
-                  child: Text(
-                    'Mis Catalogos',
-                    style: TextStyle(
-                      color: currentTheme.getTitleColor(),
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ), */
               ),
             ),
             SliverToBoxAdapter(
@@ -204,8 +185,11 @@ class _SearchPrincipalPageState extends State<SearchPrincipalPage> {
                         ],
                       ),
                       SizedBox(height: defaultPadding),
-                      // CreditCardHorizontalList(cards: myProducts),
-                      //SizedBox(height: defaultPadding),
+                      // Agrega un valor de altura para asegurar que se vea
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.7,
+                        child: CreditCardHorizontalList(cards: myProducts),
+                      ),
                       BudgetedExpensesChart(),
                     ],
                   ),
@@ -279,7 +263,7 @@ class _SearchPrincipalPageState extends State<SearchPrincipalPage> {
     return Container(
       padding: EdgeInsets.all(6),
       decoration: BoxDecoration(
-        color: themeProvider.getBackgroundColor(),
+        color: Colors.white.withOpacity(0.1),
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
@@ -307,18 +291,20 @@ class _SearchPrincipalPageState extends State<SearchPrincipalPage> {
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.normal,
+                      color: Colors.white70,
                     ),
                   ),
                   Text(
                     formatCurrency(amount),
                     style: TextStyle(
                       fontSize: 20,
-                      color: isPositive ? Colors.green : Colors.red,
+                      color: Colors.white,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ],
               ),
+              SizedBox(width: 8),
             ],
           ),
         ],

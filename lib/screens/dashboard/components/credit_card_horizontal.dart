@@ -23,32 +23,35 @@ class CreditCardHorizontalList extends StatelessWidget {
 
     return Container(
       padding: EdgeInsets.symmetric(vertical: defaultPadding),
-      height: MediaQuery.of(context).size.height * 0.5,
       child: PageView.builder(
         controller: _pageController,
         itemCount: cards.length,
         itemBuilder: (context, index) {
           return Column(
             children: [
-              GestureDetector(
-                onTap: () => _handleCardTap(context, cards[index]),
-                child: Hero(
-                  tag: 'cardsHome-${cards[index].cardNumber}',
-                  child: cards[index],
+              Expanded(
+                flex: 2,
+                child: GestureDetector(
+                  onTap: () => _handleCardTap(context, cards[index]),
+                  child: Hero(
+                    tag: 'cardsHome-${cards[index].cardNumber}',
+                    child: cards[index],
+                  ),
                 ),
               ),
-              SizedBox(height: 8),
               GestureDetector(
                 onTap: () => _handleCardTap(context, cards[index]),
                 child: InfoCardsAmounts(
                   fileInfo: cards[index].fileInfo,
                 ),
               ),
-              SizedBox(height: 8),
-              GestureDetector(
-                onTap: () => _handleCardTap(context, cards[index]),
-                child: TransactionsDashBoardList(
-                  transactions: cards[index].transactions,
+              Expanded(
+                flex: 2,
+                child: GestureDetector(
+                  onTap: () => _handleCardTap(context, cards[index]),
+                  child: TransactionsDashBoardList(
+                    transactions: cards[index].transactions,
+                  ),
                 ),
               ),
               SizedBox(height: 8),
