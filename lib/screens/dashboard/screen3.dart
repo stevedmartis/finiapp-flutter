@@ -80,7 +80,7 @@ class _SearchPrincipalPageState extends State<SearchPrincipalPage> {
                 child: GestureDetector(
                   onTap: () {
                     HapticFeedback.mediumImpact();
-                    Navigator.pop(context);
+                    context.read<MenuAppController>().controlMenu();
                   },
                   child: CircleAvatar(
                     backgroundColor: currentTheme.getCardColor(),
@@ -105,7 +105,7 @@ class _SearchPrincipalPageState extends State<SearchPrincipalPage> {
                       children: [
                         Icon(
                           Icons.notifications,
-                          color: Colors.white,
+                          color: currentTheme.getCardColor(),
                           size: 25,
                         ),
                         /* SizedBox(width: 16),
