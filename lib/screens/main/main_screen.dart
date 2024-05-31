@@ -1,6 +1,7 @@
 /* import 'package:finia_app/services/auth_service.dart';
 import 'package:finia_app/services/finance_summary_service.dart'; */
 import 'package:finia_app/screens/dashboard/dashboard_screen2.dart';
+import 'package:finia_app/screens/dashboard/screen3.dart';
 import 'package:flutter/material.dart';
 import 'package:finia_app/controllers/MenuAppController.dart';
 import 'components/side_menu.dart';
@@ -34,37 +35,34 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       key: menuAppController.scaffoldKey,
       drawer: SideMenu(),
-      body: SafeArea(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (MediaQuery.of(context).size.width > 600)
-              Expanded(
-                child: SideMenu(),
-              ),
+      body: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (MediaQuery.of(context).size.width > 600)
             Expanded(
-              flex: 5,
-              child: DashBoardScreen2(),
+              child: SideMenu(),
             ),
-/*             Expanded(
-              flex: 5,
-              child: Consumer<FinancialDataService>(
-                builder: (context, financialDataService, _) {
-                  final financialData = financialDataService.financialData;
-                  if (financialData != null) {
-                    // Aquí puedes utilizar los datos financieros para construir la interfaz de usuario
-                    return Text('${financialData.creditcards[0].name}');
-                  } else {
-                    // Muestra un indicador de carga u otra interfaz mientras se cargan los datos
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                },
-              ),
-            ), */
-          ],
-        ),
+          Expanded(
+            child: SearchPrincipalPage(),
+          ),
+          /*             Expanded(
+            flex: 5,
+            child: Consumer<FinancialDataService>(
+              builder: (context, financialDataService, _) {
+                final financialData = financialDataService.financialData;
+                if (financialData != null) {
+                  // Aquí puedes utilizar los datos financieros para construir la interfaz de usuario
+                  return Text('${financialData.creditcards[0].name}');
+                } else {
+                  // Muestra un indicador de carga u otra interfaz mientras se cargan los datos
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              },
+            ),
+          ), */
+        ],
       ),
     );
   }

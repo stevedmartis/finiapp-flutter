@@ -282,11 +282,13 @@ class _CreditCardState extends State<CreditCard> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 5),
       width: 300,
       height: 200,
-      decoration: _buildBackground(),
+      decoration: _buildBackground(themeProvider),
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -310,11 +312,11 @@ class _CreditCardState extends State<CreditCard> with TickerProviderStateMixin {
                   opacity: _opacityAnimation,
                   child: Column(
                     children: <Widget>[
-                      _buildCardNumber(),
+                      _buildCardNumber(themeProvider),
                       SizedBox(height: 4),
-                      _buildValidity(),
+                      _buildValidity(themeProvider),
                       SizedBox(height: 4),
-                      _buildNameAndCardNetworkType(),
+                      _buildNameAndCardNetworkType(themeProvider),
                     ],
                   ),
                 ),
@@ -324,9 +326,7 @@ class _CreditCardState extends State<CreditCard> with TickerProviderStateMixin {
     );
   }
 
-  BoxDecoration _buildBackground() {
-    final themeProvider = Provider.of<ThemeProvider>(context);
-
+  BoxDecoration _buildBackground(ThemeProvider themeProvider) {
     if (widget.cardBackground is SolidColorCardBackground) {
       SolidColorCardBackground solidColorCardBackground =
           widget.cardBackground as SolidColorCardBackground;
@@ -365,7 +365,7 @@ class _CreditCardState extends State<CreditCard> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildCardNumber() {
+  Widget _buildCardNumber(ThemeProvider themeProvider) {
     if (widget.cardNumber == null || widget.cardNumber!.trim() == "") {
       return SizedBox.shrink();
     }
@@ -375,14 +375,14 @@ class _CreditCardState extends State<CreditCard> with TickerProviderStateMixin {
         widget.cardNumber!,
         style: TextStyle(
           fontFamily: 'creditcard',
-          color: widget.numberColor,
+          color: themeProvider.getSubtitleColor(),
           fontSize: 11,
         ),
       ),
     );
   }
 
-  Widget _buildValidity() {
+  Widget _buildValidity(ThemeProvider themeProvider) {
     if (widget.validity == null) {
       return SizedBox.shrink();
     }
@@ -394,7 +394,7 @@ class _CreditCardState extends State<CreditCard> with TickerProviderStateMixin {
             Text(
               'VALID FROM',
               style: TextStyle(
-                color: widget.validityColor,
+                color: themeProvider.getSubtitleColor(),
                 fontSize: 8,
               ),
             ),
@@ -402,7 +402,7 @@ class _CreditCardState extends State<CreditCard> with TickerProviderStateMixin {
             Text(
               '${widget.validity!.validThruMonth.toString().padLeft(2, '0')}/${widget.validity!.validThruYear.toString().padLeft(2, '0')}',
               style: TextStyle(
-                color: widget.validityColor,
+                color: themeProvider.getSubtitleColor(),
                 fontSize: 10,
                 fontFamily: 'creditcard',
               ),
@@ -415,7 +415,7 @@ class _CreditCardState extends State<CreditCard> with TickerProviderStateMixin {
             Text(
               'VALID THRU',
               style: TextStyle(
-                color: widget.validityColor,
+                color: themeProvider.getSubtitleColor(),
                 fontSize: 8,
               ),
             ),
@@ -423,7 +423,7 @@ class _CreditCardState extends State<CreditCard> with TickerProviderStateMixin {
             Text(
               '${widget.validity!.validThruMonth.toString().padLeft(2, '0')}/${widget.validity!.validThruYear.toString().padLeft(2, '0')}',
               style: TextStyle(
-                color: widget.validityColor,
+                color: themeProvider.getSubtitleColor(),
                 fontSize: 10,
                 fontFamily: 'creditcard',
               ),
@@ -434,7 +434,7 @@ class _CreditCardState extends State<CreditCard> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildNameAndCardNetworkType() {
+  Widget _buildNameAndCardNetworkType(ThemeProvider themeProvider) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
@@ -447,7 +447,7 @@ class _CreditCardState extends State<CreditCard> with TickerProviderStateMixin {
               minFontSize: 8,
               style: TextStyle(
                 fontFamily: 'creditcard',
-                color: widget.cardHolderNameColor,
+                color: themeProvider.getSubtitleColor(),
               ),
             ),
           ),

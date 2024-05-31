@@ -1,8 +1,6 @@
 import 'package:finia_app/screens/dashboard/components/storage_info_card.dart';
-import 'package:finia_app/screens/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:finia_app/models/transaction.model.dart';
-import 'package:provider/provider.dart';
 
 class TransactionsDashBoardList extends StatelessWidget {
   final List<TransactionCreditCard> transactions;

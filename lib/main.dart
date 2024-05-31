@@ -10,7 +10,6 @@ import 'package:provider/provider.dart';
 import 'package:finia_app/controllers/MenuAppController.dart';
 import 'package:finia_app/screens/main/main_screen.dart';
 import 'package:finia_app/screens/login/sign_in.dart';
-import 'package:finia_app/theme/app_theme.dart';
 import 'package:http_interceptor/http_interceptor.dart';
 import 'package:finia_app/services/token_interceptor.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -52,15 +51,15 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => ThemeProvider()),
       ],
       child: Consumer<ThemeProvider>(
-        builder: (context, themeNotifier, _) {
+        builder: (context, themeProvider, _) {
           return MaterialApp(
             key: navigatorKey,
             locale: Locale('es', 'ES'),
             debugShowCheckedModeBanner: false,
             title: 'finIA',
-            themeMode: themeNotifier.themeMode, // Usa el tema actual
-            theme: AppTheme.lightTheme, // Usa el tema claro
-            darkTheme: AppTheme.darkTheme, // Usa el tema oscuro
+            theme: themeProvider.lightTheme,
+            darkTheme: themeProvider.darkTheme,
+            themeMode: themeProvider.themeMode, // Usa el tema oscuro
             routes: {
               '/mainScreen': (context) => MainScreen(),
               '/signIn': (context) => SignIn(),

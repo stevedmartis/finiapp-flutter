@@ -1,4 +1,3 @@
-import 'package:finia_app/constants.dart';
 import 'package:finia_app/screens/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -69,7 +68,8 @@ class _BudgetedExpensesChartState extends State<BudgetedExpensesChart> {
                     leading: Icon(getIconForCategory(item.category),
                         color: getColorForCategory(item.category)),
                     title: Text(item.category,
-                        style: TextStyle(color: Colors.white)),
+                        style:
+                            TextStyle(color: themeProvider.getSubtitleColor())),
                     subtitle: Text(
                         'Gastado: \$${item.spent} de \$${item.budget}',
                         style: TextStyle(color: Colors.grey[400])),

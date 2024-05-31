@@ -13,32 +13,41 @@ class ThemeProvider extends ChangeNotifier {
 
   ThemeMode get themeMode => _themeMode;
 
+  // Definición de los colores para el tema claro y oscuro
   final ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
     primarySwatch: Colors.blue,
     appBarTheme: AppBarTheme(
-      backgroundColor: Colors.blue,
+      backgroundColor: logoCOLOR1,
       foregroundColor: Colors.white,
     ),
-    scaffoldBackgroundColor: Colors.white,
+    scaffoldBackgroundColor: lightBackground,
     textTheme: TextTheme(
-      bodyLarge: TextStyle(color: Colors.black),
-      bodyMedium: TextStyle(color: Colors.black54),
+      bodyLarge: TextStyle(color: lightTitleColor),
+      bodyMedium: TextStyle(color: lightSubtitleColor),
     ),
+    iconTheme: IconThemeData(
+      color: lightIconColor,
+    ),
+    cardColor: lightCardBackground,
   );
 
   final ThemeData darkTheme = ThemeData(
     brightness: Brightness.dark,
     primarySwatch: Colors.blue,
     appBarTheme: AppBarTheme(
-      backgroundColor: Colors.black,
+      backgroundColor: logoCOLOR1,
       foregroundColor: Colors.white,
     ),
-    scaffoldBackgroundColor: Colors.black,
+    scaffoldBackgroundColor: backgroundDark,
     textTheme: TextTheme(
-      bodyLarge: TextStyle(color: Colors.white),
-      bodyMedium: TextStyle(color: Colors.white70),
+      bodyLarge: TextStyle(color: darkTitleColor),
+      bodyMedium: TextStyle(color: darkSubtitleColor),
     ),
+    iconTheme: IconThemeData(
+      color: darkIconColor,
+    ),
+    cardColor: darkCardBackground,
   );
 
   void toggleTheme() {
@@ -49,29 +58,42 @@ class ThemeProvider extends ChangeNotifier {
   }
 
   Color getCardColor() {
-    return _themeMode == ThemeMode.dark ? cardDark : Colors.white;
+    return _themeMode == ThemeMode.dark
+        ? darkCardBackground
+        : lightCardBackground;
   }
 
   Color getTitleColor() {
-    return _themeMode == ThemeMode.dark ? Colors.white70 : Colors.black;
+    return _themeMode == ThemeMode.dark ? darkTitleColor : lightTitleColor;
   }
 
-  Color getContainerBackgroundColor() {
-    return _themeMode == ThemeMode.dark ? backgroundDark : Colors.white;
+  Color getSubtitleColor() {
+    return _themeMode == ThemeMode.dark
+        ? darkSubtitleColor
+        : lightSubtitleColor;
+  }
+
+  Color getIconColor() {
+    return _themeMode == ThemeMode.dark ? darkIconColor : lightIconColor;
+  }
+
+  Color getIconModeColor() {
+    return _themeMode == ThemeMode.dark ? darkIconColor : lightModeIcon;
+  }
+
+  Color getBackgroundColor() {
+    return _themeMode == ThemeMode.dark ? backgroundDark : lightBackground;
   }
 
   LinearGradient getGradientCard() {
     return _themeMode == ThemeMode.dark
         ? LinearGradient(
-            colors: [const Color.fromARGB(255, 60, 78, 87), cardDark],
+            colors: [darkCardBackground, darkCardBackground],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           )
         : LinearGradient(
-            colors: [
-              Color.fromARGB(255, 206, 206, 206),
-              Color.fromARGB(255, 209, 221, 228)
-            ],
+            colors: [lightCardBackground, lightCardBackground],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           );

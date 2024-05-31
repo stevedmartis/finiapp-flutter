@@ -27,7 +27,7 @@ class AmmountsInfoCard extends StatelessWidget {
       padding: EdgeInsets.all(defaultPadding),
       decoration: BoxDecoration(
         color: themeProvider.getCardColor(),
-        border: Border.all(width: 2, color: Colors.white.withOpacity(0.15)),
+        //border: Border.all(width: 2, color: Colors.white.withOpacity(0.15)),
         borderRadius: const BorderRadius.all(
           Radius.circular(defaultPadding),
         ),
@@ -56,7 +56,7 @@ class AmmountsInfoCard extends StatelessWidget {
                     style: Theme.of(context)
                         .textTheme
                         .bodyMedium!
-                        .copyWith(color: Colors.white70),
+                        .copyWith(color: themeProvider.getSubtitleColor()),
                   ),
                   if (date !=
                       null) // Opcional, muestra la fecha si está disponible
@@ -65,7 +65,7 @@ class AmmountsInfoCard extends StatelessWidget {
                       style: Theme.of(context)
                           .textTheme
                           .bodySmall!
-                          .copyWith(color: Colors.white70),
+                          .copyWith(color: themeProvider.getSubtitleColor()),
                     ),
                 ],
               ),

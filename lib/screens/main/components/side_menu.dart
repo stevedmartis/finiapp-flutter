@@ -1,3 +1,4 @@
+import 'package:finia_app/constants.dart';
 import 'package:finia_app/screens/providers/theme_provider.dart';
 import 'package:finia_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
@@ -63,16 +64,15 @@ class _SideMenuState extends State<SideMenu> {
               themeNotifier: themeNotifier),
           Divider(),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Icon(
-                  themeNotifier.themeMode == ThemeMode.dark
-                      ? Icons.dark_mode
-                      : Icons.light_mode,
-                  color: Colors.white54,
-                ),
+                    themeNotifier.themeMode == ThemeMode.dark
+                        ? Icons.dark_mode
+                        : Icons.light_mode,
+                    color: logoCOLOR1),
                 Switch(
                   value: themeNotifier.themeMode == ThemeMode.dark,
                   onChanged: (value) {
@@ -109,12 +109,13 @@ class DrawerListTile extends StatelessWidget {
       horizontalTitleGap: 0.0,
       leading: SvgPicture.asset(
         svgSrc,
-        colorFilter: ColorFilter.mode(Colors.white54, BlendMode.srcIn),
+        colorFilter:
+            ColorFilter.mode(themeNotifier.getTitleColor(), BlendMode.srcIn),
         height: 16,
       ),
       title: Text(
         title,
-        style: TextStyle(color: themeNotifier.getTitleColor()),
+        style: TextStyle(color: themeNotifier.getSubtitleColor()),
       ),
     );
   }

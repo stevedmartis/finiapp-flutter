@@ -3,9 +3,11 @@ import 'package:finia_app/screens/credit_card/credit_card_detail.dart';
 import 'package:finia_app/screens/credit_card/credit_card_widget.dart';
 import 'package:finia_app/screens/dashboard/components/my_fields.dart';
 import 'package:finia_app/screens/dashboard/components/transactions_dashboard.dart';
+import 'package:finia_app/screens/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class CreditCardHorizontalList extends StatefulWidget {
+class CreditCardHorizontalList extends StatelessWidget {
   final List<CreditCard> cards;
 
   const CreditCardHorizontalList({
@@ -14,64 +16,42 @@ class CreditCardHorizontalList extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<CreditCardHorizontalList> createState() =>
-      _CreditCardHorizontalListState();
-}
-
-class _CreditCardHorizontalListState extends State<CreditCardHorizontalList> {
-  late PageController _pageController;
-
-  @override
-  void initState() {
-    super.initState();
-    _pageController = PageController(viewportFraction: 0.85);
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    final PageController _pageController =
+        PageController(viewportFraction: 0.85);
+
     return Container(
-      height: MediaQuery.of(context).size.height *
-          0.5, // Ajusta esto según tu necesidad,
+      padding: EdgeInsets.symmetric(vertical: defaultPadding),
+      height: MediaQuery.of(context).size.height * 0.5,
       child: PageView.builder(
         controller: _pageController,
-        itemCount: widget.cards.length,
+        itemCount: cards.length,
         itemBuilder: (context, index) {
           return Column(
             children: [
-              Expanded(
-                flex: 3,
-                child: GestureDetector(
-                  onTap: () => _handleCardTap(context, widget.cards[index]),
-                  child: Hero(
-                    tag: 'cardsHome-${widget.cards[index].cardNumber}',
-                    child: widget.cards[index],
-                  ),
+              GestureDetector(
+                onTap: () => _handleCardTap(context, cards[index]),
+                child: Hero(
+                  tag: 'cardsHome-${cards[index].cardNumber}',
+                  child: cards[index],
                 ),
               ),
-              SizedBox(
-                height: defaultPadding,
-              ),
-              Expanded(
-                flex: 0,
-                child: GestureDetector(
-                  onTap: () => _handleCardTap(context, widget.cards[index]),
-                  child: InfoCardsAmounts(
-                    fileInfo: widget.cards[index].fileInfo,
-                  ),
+              SizedBox(height: 8),
+              GestureDetector(
+                onTap: () => _handleCardTap(context, cards[index]),
+                child: InfoCardsAmounts(
+                  fileInfo: cards[index].fileInfo,
                 ),
               ),
-              Expanded(
-                flex: 2,
-                child: GestureDetector(
-                  onTap: () => _handleCardTap(context, widget.cards[index]),
-                  child: TransactionsDashBoardList(
-                    transactions: widget.cards[index].transactions,
-                  ),
+              SizedBox(height: 8),
+              GestureDetector(
+                onTap: () => _handleCardTap(context, cards[index]),
+                child: TransactionsDashBoardList(
+                  transactions: cards[index].transactions,
                 ),
               ),
-              SizedBox(
-                height: defaultPadding,
-              ),
+              SizedBox(height: 8),
             ],
           );
         },

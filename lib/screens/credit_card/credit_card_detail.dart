@@ -46,7 +46,7 @@ class _CreditCardDetailState extends State<CreditCardDetail> {
               sliver: SliverList(
                 delegate: SliverChildListDelegate(
                   [
-                    SizedBox(height: 5),
+                    SizedBox(height: defaultPadding),
                     InfoCardsAmounts(
                       fileInfo: widget.card.fileInfo,
                     ),
