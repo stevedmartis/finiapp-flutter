@@ -21,17 +21,38 @@ class _BudgetedExpensesChartState extends State<BudgetedExpensesChart> {
   Widget build(BuildContext context) {
     // Calculamos la altura de la lista basada en la cantidad de elementos
     double listHeight = budgetItems.length *
-        72.0; // Asumiendo que cada ListTile tiene una altura de 72 pixels
+        90.0; // Asumiendo que cada ListTile tiene una altura de 72 pixels
     final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Container(
       decoration: BoxDecoration(
-        color: themeProvider.getCardColor(),
-        borderRadius: BorderRadius.circular(20),
+        gradient: themeProvider.getGradientCard(),
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            spreadRadius: 2,
+            blurRadius: 5,
+            offset: Offset(0, 3), // changes position of shadow
+          ),
+        ],
       ),
       child: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment:
+              CrossAxisAlignment.start, // Alinea el título a la izquierda
           children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                'Gastos Presupuestados',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: themeProvider.getSubtitleColor(),
+                ),
+              ),
+            ),
             Container(
               height: 300,
               child: SfCircularChart(
@@ -75,8 +96,9 @@ class _BudgetedExpensesChartState extends State<BudgetedExpensesChart> {
                         style: TextStyle(color: Colors.grey[400])),
                     trailing: CircularProgressIndicator(
                       value: spentPercentage / 100,
-                      backgroundColor:
-                          spentPercentage > 100 ? Colors.red : Colors.green,
+                      backgroundColor: Colors.grey[200],
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                          spentPercentage > 100 ? Colors.red : Colors.green),
                     ),
                   );
                 },

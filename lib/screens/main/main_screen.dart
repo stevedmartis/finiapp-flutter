@@ -1,7 +1,8 @@
 /* import 'package:finia_app/services/auth_service.dart';
 import 'package:finia_app/services/finance_summary_service.dart'; */
-import 'package:finia_app/screens/dashboard/dashboard_screen2.dart';
-import 'package:finia_app/screens/dashboard/screen3.dart';
+import 'package:finia_app/screens/dashboard/dash4scroll.dart';
+import 'package:finia_app/screens/dashboard/dashboard4.dart';
+import 'package:finia_app/screens/dashscreenbeta2.dart';
 import 'package:flutter/material.dart';
 import 'package:finia_app/controllers/MenuAppController.dart';
 import 'components/side_menu.dart';
@@ -43,7 +44,8 @@ class _MainScreenState extends State<MainScreen> {
               child: SideMenu(),
             ),
           Expanded(
-            child: SearchPrincipalPage(),
+            flex: 5,
+            child: AdvancedScrollView2(),
           ),
           /*             Expanded(
             flex: 5,

@@ -1,22 +1,27 @@
 import 'package:finia_app/constants.dart';
+import 'package:finia_app/controllers/MenuAppController.dart';
+import 'package:finia_app/screens/credit_card/credit_card_detail.dart';
 import 'package:finia_app/screens/credit_card/credit_card_widget.dart';
 import 'package:finia_app/screens/dashboard/components/charts/financial_categories.chat.dart';
-import 'package:finia_app/screens/dashboard/components/credit_card_horizontal.dart';
+import 'package:finia_app/screens/dashboard/components/my_fields.dart';
+import 'package:finia_app/screens/dashboard/components/transactions_dashboard.dart';
+import 'package:finia_app/screens/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:finia_app/controllers/MenuAppController.dart';
-import 'package:finia_app/screens/providers/theme_provider.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
-class SearchPrincipalPage extends StatefulWidget {
+class AdvancedScrollView extends StatefulWidget {
   @override
-  _SearchPrincipalPageState createState() => _SearchPrincipalPageState();
+  State<AdvancedScrollView> createState() => _AdvancedScrollViewState();
 }
 
-class _SearchPrincipalPageState extends State<SearchPrincipalPage> {
+class _AdvancedScrollViewState extends State<AdvancedScrollView> {
   late ScrollController _scrollController;
   late MenuAppController menuAppController;
+
+  final PageController _pageController = PageController(viewportFraction: 0.85);
   bool _showTitle = false;
 
   @override
@@ -57,20 +62,28 @@ class _SearchPrincipalPageState extends State<SearchPrincipalPage> {
     return '\$${formatted.substring(0, formatted.length - 3)}';
   }
 
+  bool _handleScrollNotification(ScrollNotification notification) {
+    if (notification is ScrollUpdateNotification) {
+      _scrollController.jumpTo(
+        _scrollController.position.pixels + notification.scrollDelta!,
+      );
+      return true; // Indica que la notificación ha sido gestionada
+    }
+    return false; // Permite que otras notificaciones continúen propagándose
+  }
+
   @override
   Widget build(BuildContext context) {
     final currentTheme = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
-      backgroundColor: currentTheme.getBackgroundColor(),
       body: RefreshIndicator(
-        color: currentTheme.getBackgroundColor(),
         onRefresh: _refresh,
         child: CustomScrollView(
           physics: const BouncingScrollPhysics(
               parent: AlwaysScrollableScrollPhysics()),
           controller: _scrollController,
-          slivers: [
+          slivers: <Widget>[
             SliverAppBar(
               leadingWidth: 60,
               backgroundColor: logoCOLOR2,
@@ -94,6 +107,7 @@ class _SearchPrincipalPageState extends State<SearchPrincipalPage> {
                 GestureDetector(
                   onTap: () {
                     HapticFeedback.lightImpact();
+                    context.read<MenuAppController>().controlMenu();
                     // Navegar a la página de notificaciones
                   },
                   child: Container(
@@ -116,7 +130,7 @@ class _SearchPrincipalPageState extends State<SearchPrincipalPage> {
                 )
               ],
               stretch: true,
-              expandedHeight: 280.0, // Incrementado para más espacio
+              expandedHeight: 280.0,
               collapsedHeight: 70,
               floating: false,
               pinned: true,
@@ -151,9 +165,161 @@ class _SearchPrincipalPageState extends State<SearchPrincipalPage> {
                 centerTitle: true,
               ),
             ),
-            makeListRecomendations(),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding:
+                    const EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      'Mis productos',
+                      style:
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.add),
+                      onPressed: () {},
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: Container(
+                padding: const EdgeInsets.all(16.0),
+                height: MediaQuery.of(context).size.height, // Full height
+                child: PageView.builder(
+                  controller: _pageController,
+                  itemCount: myProducts.length,
+                  itemBuilder: (context, index) {
+                    return SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          GestureDetector(
+                            onTap: () =>
+                                _handleCardTap(context, myProducts[index]),
+                            child: Hero(
+                              tag: 'cardsHome-${myProducts[index].cardNumber}',
+                              child: myProducts[index],
+                            ),
+                          ),
+                          SizedBox(height: 16),
+                          GestureDetector(
+                            onTap: () =>
+                                _handleCardTap(context, myProducts[index]),
+                            child: InfoCardsAmounts(
+                              fileInfo: myProducts[index].fileInfo,
+                            ),
+                          ),
+                          SizedBox(height: 16),
+                          GestureDetector(
+                            onTap: () =>
+                                _handleCardTap(context, myProducts[index]),
+                            child: TransactionsDashBoardList(
+                              transactions: myProducts[index].transactions,
+                            ),
+                          ),
+                          SizedBox(height: 16),
+                          GestureDetector(
+                            onTap: () =>
+                                _handleCardTap(context, myProducts[index]),
+                            child: BudgetedExpensesChart(),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
           ],
         ),
+      ),
+    );
+  }
+
+  SliverList makeListRecomendations(bool loading) {
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (BuildContext context, int index) {
+          return Container(
+            padding: const EdgeInsets.all(16.0),
+            height: MediaQuery.of(context).size.height, // Full height
+            child: PageView.builder(
+              controller: _pageController,
+              itemCount: myProducts.length,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: NotificationListener<ScrollNotification>(
+                    onNotification: (scrollNotification) {
+                      if (scrollNotification is ScrollUpdateNotification &&
+                          scrollNotification.metrics.axis == Axis.vertical) {
+                        _scrollController.jumpTo(
+                          _scrollController.position.pixels +
+                              scrollNotification.scrollDelta!,
+                        );
+                      }
+                      return false; // Permite que otras notificaciones continúen propagándose
+                    },
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          GestureDetector(
+                            onTap: () =>
+                                _handleCardTap(context, myProducts[index]),
+                            child: Hero(
+                              tag: 'cardsHome-${myProducts[index].cardNumber}',
+                              child: myProducts[index],
+                            ),
+                          ),
+                          SizedBox(height: 16),
+                          GestureDetector(
+                            onTap: () =>
+                                _handleCardTap(context, myProducts[index]),
+                            child: InfoCardsAmounts(
+                              fileInfo: myProducts[index].fileInfo,
+                            ),
+                          ),
+                          SizedBox(height: 16),
+                          GestureDetector(
+                            onTap: () =>
+                                _handleCardTap(context, myProducts[index]),
+                            child: TransactionsDashBoardList(
+                              transactions: myProducts[index].transactions,
+                            ),
+                          ),
+                          SizedBox(height: 16),
+                          GestureDetector(
+                            onTap: () =>
+                                _handleCardTap(context, myProducts[index]),
+                            child: BudgetedExpensesChart(),
+                          ),
+                          SizedBox(
+                              height: 16), // Agrega espacio adicional al final
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          );
+        },
+        childCount: 1, // Solo un PageView en la lista
+      ),
+    );
+  }
+
+  void _handleCardTap(BuildContext context, CreditCard card) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CreditCardDetail(card: card),
       ),
     );
   }
@@ -262,64 +428,6 @@ class _SearchPrincipalPageState extends State<SearchPrincipalPage> {
               ),
               SizedBox(width: 8),
             ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  SliverList makeListRecomendations() {
-    final currentTheme = Provider.of<ThemeProvider>(context);
-
-    return SliverList(
-      delegate: SliverChildListDelegate(
-        [
-          Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: currentTheme.getBackgroundColor(),
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(30),
-                topRight: Radius.circular(30),
-              ),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                  vertical: 8.0,
-                  horizontal: 8.0), // Reducido el padding vertical
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        left: 10.0,
-                        bottom: 4.0), // Reducido el padding inferior
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Mis Productos',
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: currentTheme.getTitleColor(),
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.add),
-                          onPressed: () {},
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                      height:
-                          4.0), // Añadido un pequeño espacio entre el título y la lista
-                  CreditCardHorizontalList(cards: myProducts),
-                  BudgetedExpensesChart(),
-                ],
-              ),
-            ),
           ),
         ],
       ),

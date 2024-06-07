@@ -5,7 +5,7 @@ class TransactionCreditCard {
   final DateTime date;
   final String description;
   final int inAmount;
-  final int outAmount;
+  final double outAmount;
   final String currency;
   final Widget icon;
 
@@ -24,7 +24,7 @@ class TransactionCreditCard {
         date: DateTime.parse(json['date']),
         description: json['description'],
         inAmount: json['in'] as int,
-        outAmount: json['out'] as int,
+        outAmount: json['out'] as double,
         currency: json['currency'],
         icon: json['icon']);
   }

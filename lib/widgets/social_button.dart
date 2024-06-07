@@ -1,6 +1,8 @@
+import 'package:finia_app/screens/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:finia_app/helper/colors.dart';
+import 'package:provider/provider.dart';
 
 class SocialButton extends StatelessWidget {
   final String name;
@@ -17,6 +19,8 @@ class SocialButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
@@ -28,7 +32,7 @@ class SocialButton extends StatelessWidget {
               style: BorderStyle.solid,
             ),
           ),
-          backgroundColor: ColorSys.kSecondary,
+          backgroundColor: themeProvider.getCardColor(),
           padding: EdgeInsets.all(MediaQuery.of(context).size.width / 30)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,

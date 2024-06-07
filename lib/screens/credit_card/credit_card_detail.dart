@@ -25,6 +25,7 @@ class _CreditCardDetailState extends State<CreditCardDetail> {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: logoCOLOR2,
         title: Text('Credit Card Detail'),
       ),
       body: SafeArea(

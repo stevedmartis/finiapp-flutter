@@ -1,3 +1,4 @@
+import 'package:finia_app/screens/dashboard/components/header_custom.dart';
 import 'package:finia_app/screens/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -15,7 +16,8 @@ class AmmountsInfoCard extends StatelessWidget {
   });
 
   final Widget svgSrc;
-  final String title, amount, currency;
+  final String title, currency;
+  final double amount;
   final DateTime? date;
 
   @override
@@ -23,14 +25,18 @@ class AmmountsInfoCard extends StatelessWidget {
     final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Container(
-      margin: EdgeInsets.only(top: defaultPadding),
       padding: EdgeInsets.all(defaultPadding),
       decoration: BoxDecoration(
-        color: themeProvider.getCardColor(),
-        //border: Border.all(width: 2, color: Colors.white.withOpacity(0.15)),
-        borderRadius: const BorderRadius.all(
-          Radius.circular(defaultPadding),
-        ),
+        gradient: themeProvider.getGradientCard(),
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            spreadRadius: 2,
+            blurRadius: 5,
+            offset: Offset(0, 3), // changes position of shadow
+          ),
+        ],
       ),
       child: Row(
         children: [
@@ -52,7 +58,7 @@ class AmmountsInfoCard extends StatelessWidget {
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    amount + " " + currency,
+                    formatCurrency(this.amount),
                     style: Theme.of(context)
                         .textTheme
                         .bodyMedium!

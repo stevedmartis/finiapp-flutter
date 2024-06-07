@@ -2,6 +2,7 @@ import 'package:finia_app/constants.dart';
 import 'package:finia_app/controllers/MenuAppController.dart';
 import 'package:finia_app/screens/credit_card/credit_card_detail.dart';
 import 'package:finia_app/screens/credit_card/credit_card_widget.dart';
+import 'package:finia_app/screens/dashboard/components/charts/financial_categories.chat.dart';
 import 'package:finia_app/screens/dashboard/components/my_fields.dart';
 import 'package:finia_app/screens/dashboard/components/transactions_dashboard.dart';
 import 'package:finia_app/screens/providers/theme_provider.dart';
@@ -10,6 +11,10 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class AdvancedScrollView extends StatefulWidget {
   @override
@@ -19,9 +24,9 @@ class AdvancedScrollView extends StatefulWidget {
 class _AdvancedScrollViewState extends State<AdvancedScrollView> {
   late ScrollController _scrollController;
   late MenuAppController menuAppController;
-
   final PageController _pageController = PageController(viewportFraction: 0.85);
   bool _showTitle = false;
+  bool _enableVerticalScroll = false;
 
   @override
   void initState() {
@@ -31,6 +36,8 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView> {
         setState(() {
           _showTitle =
               _scrollController.hasClients && _scrollController.offset > 150;
+          _enableVerticalScroll = _scrollController.hasClients &&
+              _scrollController.offset >= (280 - 70);
         });
       });
   }
@@ -68,11 +75,9 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView> {
     return Scaffold(
       body: RefreshIndicator(
         onRefresh: _refresh,
-        child: CustomScrollView(
-          physics: const BouncingScrollPhysics(
-              parent: AlwaysScrollableScrollPhysics()),
+        child: NestedScrollView(
           controller: _scrollController,
-          slivers: <Widget>[
+          headerSliverBuilder: (context, innerBoxIsScrolled) => <Widget>[
             SliverAppBar(
               leadingWidth: 60,
               backgroundColor: logoCOLOR2,
@@ -84,8 +89,11 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView> {
                     context.read<MenuAppController>().controlMenu();
                   },
                   child: CircleAvatar(
-                    backgroundColor: Colors.white,
-                    child: Icon(Icons.person_2_outlined, color: Colors.black),
+                    radius: 20,
+                    backgroundImage: AssetImage(
+                        'assets/images/profile_pic.png'), // Ruta a tu imagen
+                    backgroundColor: Colors
+                        .transparent, // Para asegurar que no haya un color de fondo
                   ),
                 ),
               ),
@@ -93,6 +101,7 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView> {
                 GestureDetector(
                   onTap: () {
                     HapticFeedback.lightImpact();
+                    context.read<MenuAppController>().controlMenu();
                     // Navegar a la página de notificaciones
                   },
                   child: Container(
@@ -115,7 +124,7 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView> {
                 )
               ],
               stretch: true,
-              expandedHeight: 280.0, // Incrementado para más espacio
+              expandedHeight: 280.0,
               collapsedHeight: 70,
               floating: false,
               pinned: true,
@@ -152,76 +161,62 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView> {
             ),
             SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding:
+                    const EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Text(
-                      'Title',
+                      'Mis productos',
                       style:
                           TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
-                    ElevatedButton(
+                    IconButton(
+                      icon: Icon(Icons.add),
                       onPressed: () {},
-                      child: Text('Button'),
                     ),
                   ],
                 ),
               ),
             ),
-            SliverToBoxAdapter(
-              child: Container(
-                height: 400,
-                child: PageView.builder(
-                  controller: _pageController,
-                  itemCount: myProducts.length,
-                  itemBuilder: (context, index) {
-                    return Column(
-                      children: [
-                        Expanded(
-                          flex: 2,
-                          child: GestureDetector(
-                            onTap: () =>
-                                _handleCardTap(context, myProducts[index]),
-                            child: Hero(
-                              tag: 'cardsHome-${myProducts[index].cardNumber}',
-                              child: myProducts[index],
-                            ),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () =>
-                              _handleCardTap(context, myProducts[index]),
-                          child: InfoCardsAmounts(
-                            fileInfo: myProducts[index].fileInfo,
-                          ),
-                        ),
-                        Expanded(
-                          flex: 2,
-                          child: GestureDetector(
-                            onTap: () =>
-                                _handleCardTap(context, myProducts[index]),
-                            child: TransactionsDashBoardList(
-                              transactions: myProducts[index].transactions,
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 8),
-                      ],
-                    );
-                  },
-                ),
-              ),
-            ),
-
-              SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: BudgetedExpensesChart(), // Implementación del widget BudgetedExpensesChart
-              ),
-            ),
-          
           ],
+          body: PageView.builder(
+            controller: _pageController,
+            itemCount: myProducts.length,
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (context, index) {
+              return ListView.builder(
+                itemCount: 4,
+                itemBuilder: (context, itemIndex) {
+                  if (itemIndex == 0) {
+                    return GestureDetector(
+                      onTap: () => _handleCardTap(context, myProducts[index]),
+                      child: Hero(
+                        tag: 'cardsHome-${myProducts[index].cardNumber}',
+                        child: myProducts[index],
+                      ),
+                    );
+                  } else if (itemIndex == 1) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16.0),
+                      child: InfoCardsAmounts(
+                        fileInfo: myProducts[index].fileInfo,
+                      ),
+                    );
+                  } else if (itemIndex == 2) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16.0),
+                      child: TransactionsDashBoardList(
+                        transactions: myProducts[index].transactions,
+                      ),
+                    );
+                  } else {
+                    return BudgetedExpensesChart();
+                  }
+                },
+              );
+            },
+          ),
         ),
       ),
     );
@@ -345,136 +340,4 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView> {
       ),
     );
   }
-}
-
-class BudgetedExpensesChart extends StatefulWidget {
-  @override
-  _BudgetedExpensesChartState createState() => _BudgetedExpensesChartState();
-}
-
-class _BudgetedExpensesChartState extends State<BudgetedExpensesChart> {
-  late List<BudgetItem> budgetItems;
-
-  @override
-  void initState() {
-    super.initState();
-    budgetItems = getBudgetItems();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // Calculamos la altura de la lista basada en la cantidad de elementos
-    double listHeight = budgetItems.length *
-        72.0; // Asumiendo que cada ListTile tiene una altura de 72 pixels
-    final themeProvider = Provider.of<ThemeProvider>(context);
-
-    return Container(
-      decoration: BoxDecoration(
-        color: themeProvider.getCardColor(),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Column(
-        children: [
-          Container(
-            height: 300,
-            child: SfCircularChart(
-              legend: Legend(
-                isVisible: true,
-                overflowMode: LegendItemOverflowMode.wrap,
-              ),
-              tooltipBehavior: TooltipBehavior(enable: true),
-              series: <CircularSeries>[
-                PieSeries<BudgetItem, String>(
-                  dataSource: budgetItems,
-                  xValueMapper: (BudgetItem data, _) => data.category,
-                  yValueMapper: (BudgetItem data, _) => data.spent,
-                  pointColorMapper: (BudgetItem data, _) =>
-                      getColorForCategory(data.category),
-                  dataLabelSettings: DataLabelSettings(isVisible: true),
-                  enableTooltip: true,
-                  name: 'Gastos',
-                )
-              ],
-            ),
-          ),
-          // Usamos un tamaño fijo para la lista basado en la cantidad de elementos
-          Container(
-            height:
-                listHeight, // Altura dinámica basada en la cantidad de elementos
-            child: ListView.builder(
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: budgetItems.length,
-              itemBuilder: (context, index) {
-                final item = budgetItems[index];
-                double spentPercentage = (item.spent / item.budget) * 100;
-                return ListTile(
-                  leading: Icon(getIconForCategory(item.category),
-                      color: getColorForCategory(item.category)),
-                  title: Text(item.category,
-                      style:
-                          TextStyle(color: themeProvider.getSubtitleColor())),
-                  subtitle: Text(
-                      'Gastado: \$${item.spent} de \$${item.budget}',
-                      style: TextStyle(color: Colors.grey[400])),
-                  trailing: CircularProgressIndicator(
-                    value: spentPercentage / 100,
-                    backgroundColor:
-                        spentPercentage > 100 ? Colors.red : Colors.green,
-                  ),
-                );
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  IconData getIconForCategory(String category) {
-    switch (category) {
-      case 'Alimentación':
-        return Icons.restaurant;
-      case 'Transporte':
-        return Icons.train;
-      case 'Salud':
-        return Icons.favorite;
-      case 'Entretenimiento':
-        return Icons.sports_esports;
-      default:
-        return Icons.category;
-    }
-  }
-
-  Color getColorForCategory(String category) {
-    switch (category) {
-      case 'Alimentación':
-        return Colors.yellow;
-      case 'Transporte':
-        return Colors.green;
-      case 'Salud':
-        return Colors.orange;
-      case 'Entretenimiento':
-        return Colors.blue;
-      default:
-        return Colors.grey;
-    }
-  }
-
-  List<BudgetItem> getBudgetItems() {
-    return [
-      BudgetItem(category: 'Alimentación', budget: 200, spent: 150),
-      BudgetItem(category: 'Transporte', budget: 100, spent: 75),
-      BudgetItem(category: 'Salud', budget: 300, spent: 250),
-      BudgetItem(category: 'Entretenimiento', budget: 120, spent: 90),
-    ];
-  }
-}
-
-class BudgetItem {
-  final String category;
-  final double budget;
-  final double spent;
-
-  BudgetItem(
-      {required this.category, required this.budget, required this.spent});
 }

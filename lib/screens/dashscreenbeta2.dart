@@ -1,23 +1,38 @@
 import 'package:finia_app/constants.dart';
+import 'package:finia_app/controllers/MenuAppController.dart';
+import 'package:finia_app/screens/credit_card/credit_card_detail.dart';
 import 'package:finia_app/screens/credit_card/credit_card_widget.dart';
 import 'package:finia_app/screens/dashboard/components/charts/financial_categories.chat.dart';
-import 'package:finia_app/screens/dashboard/components/credit_card_horizontal.dart';
+import 'package:finia_app/screens/dashboard/components/header_custom.dart';
+import 'package:finia_app/screens/dashboard/components/my_fields.dart';
+import 'package:finia_app/screens/dashboard/components/transactions_dashboard.dart';
+import 'package:finia_app/screens/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:finia_app/controllers/MenuAppController.dart';
-import 'package:finia_app/screens/providers/theme_provider.dart';
 
-class SearchPrincipalPage extends StatefulWidget {
-  @override
-  _SearchPrincipalPageState createState() => _SearchPrincipalPageState();
+String formatCurrency(double amount) {
+  final NumberFormat format =
+      NumberFormat.currency(locale: 'es_CL', symbol: '');
+  String formatted = format.format(amount);
+  formatted = formatted
+      .replaceAll('\$', '')
+      .replaceAll(',', ''); // Eliminar símbolo y separador de miles
+  return '\$${formatted.substring(0, formatted.length - 3)}';
 }
 
-class _SearchPrincipalPageState extends State<SearchPrincipalPage> {
+class AdvancedScrollView2 extends StatefulWidget {
+  @override
+  State<AdvancedScrollView2> createState() => _AdvancedScrollViewState();
+}
+
+class _AdvancedScrollViewState extends State<AdvancedScrollView2> {
   late ScrollController _scrollController;
   late MenuAppController menuAppController;
+  final PageController _pageController = PageController(viewportFraction: 0.85);
   bool _showTitle = false;
+  bool _enableVerticalScroll = false;
 
   @override
   void initState() {
@@ -27,6 +42,8 @@ class _SearchPrincipalPageState extends State<SearchPrincipalPage> {
         setState(() {
           _showTitle =
               _scrollController.hasClients && _scrollController.offset > 150;
+          _enableVerticalScroll = _scrollController.hasClients &&
+              _scrollController.offset >= (280 - 70);
         });
       });
   }
@@ -47,30 +64,18 @@ class _SearchPrincipalPageState extends State<SearchPrincipalPage> {
     await Future.delayed(Duration(seconds: 2));
   }
 
-  String formatCurrency(double amount) {
-    final NumberFormat format =
-        NumberFormat.currency(locale: 'es_CL', symbol: '');
-    String formatted = format.format(amount);
-    formatted = formatted
-        .replaceAll('\$', '')
-        .replaceAll(',', ''); // Eliminar símbolo y separador de miles
-    return '\$${formatted.substring(0, formatted.length - 3)}';
-  }
-
   @override
   Widget build(BuildContext context) {
     final currentTheme = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
-      backgroundColor: currentTheme.getBackgroundColor(),
       body: RefreshIndicator(
-        color: currentTheme.getBackgroundColor(),
+        color: logoCOLOR1,
+        backgroundColor: currentTheme.getBackgroundColor(),
         onRefresh: _refresh,
         child: CustomScrollView(
-          physics: const BouncingScrollPhysics(
-              parent: AlwaysScrollableScrollPhysics()),
           controller: _scrollController,
-          slivers: [
+          slivers: <Widget>[
             SliverAppBar(
               leadingWidth: 60,
               backgroundColor: logoCOLOR2,
@@ -94,6 +99,7 @@ class _SearchPrincipalPageState extends State<SearchPrincipalPage> {
                 GestureDetector(
                   onTap: () {
                     HapticFeedback.lightImpact();
+                    context.read<MenuAppController>().controlMenu();
                     // Navegar a la página de notificaciones
                   },
                   child: Container(
@@ -116,7 +122,7 @@ class _SearchPrincipalPageState extends State<SearchPrincipalPage> {
                 )
               ],
               stretch: true,
-              expandedHeight: 280.0, // Incrementado para más espacio
+              expandedHeight: 280.0,
               collapsedHeight: 70,
               floating: false,
               pinned: true,
@@ -151,8 +157,115 @@ class _SearchPrincipalPageState extends State<SearchPrincipalPage> {
                 centerTitle: true,
               ),
             ),
-            makeListRecomendations(),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding:
+                    const EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      'Mi Cuenta',
+                      style: TextStyle(
+                          fontSize: defaultTitle, fontWeight: FontWeight.bold),
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.add),
+                      onPressed: () {},
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            //makeHeaderTitle(),
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index) {
+                  return Container(
+                    height: MediaQuery.of(context).size.width *
+                        1.3, // Ajusta la altura según tu diseño
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: 1,
+                      itemBuilder: (context, pageIndex) {
+                        return Container(
+                          width: MediaQuery.of(context).size.width * 0.95,
+                          margin: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Column(
+                            children: [
+                              GestureDetector(
+                                onTap: () => _handleCardTap(
+                                    context, myProducts[pageIndex]),
+                                child: Hero(
+                                  tag:
+                                      'cardsHome-${myProducts[pageIndex].cardNumber}',
+                                  child: myProducts[pageIndex],
+                                ),
+                              ),
+
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 16.0,
+                                ),
+                                child: TransactionsDashBoardList(
+                                  transactions:
+                                      myProducts[pageIndex].transactions,
+                                ),
+                              ),
+                              // BudgetedExpensesChart(),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
+                childCount: 1,
+              ),
+            ),
+
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index) {
+                  return Container(
+                    padding: EdgeInsets.all(defaultPadding),
+                    height: MediaQuery.of(context).size.width *
+                        2, // Ajusta la altura según tu diseño
+                    child: BudgetedExpensesChart(),
+                  );
+                },
+                childCount: 1,
+              ),
+            ),
           ],
+        ),
+      ),
+    );
+  }
+
+  void _handleCardTap(BuildContext context, CreditCard card) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CreditCardDetail(card: card),
+      ),
+    );
+  }
+
+  Widget makeHeaderTitle() {
+    return SliverPersistentHeader(
+      pinned: true,
+      delegate: SliverCustomHeaderTitleDelegate(
+        minHeight: 50.0,
+        maxHeight: 50.0,
+        child: Container(
+          color: Colors.white,
+          child: Center(
+            child: Text(
+              'Título Personalizado',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+          ),
         ),
       ),
     );
@@ -168,7 +281,7 @@ class _SearchPrincipalPageState extends State<SearchPrincipalPage> {
             'Balance Total:',
             style: TextStyle(
               color: Colors.white70,
-              fontSize: 16,
+              fontSize: defaultSubTitle,
             ),
           ),
           SizedBox(height: 10),
@@ -267,62 +380,35 @@ class _SearchPrincipalPageState extends State<SearchPrincipalPage> {
       ),
     );
   }
+}
 
-  SliverList makeListRecomendations() {
-    final currentTheme = Provider.of<ThemeProvider>(context);
+class SliverCustomHeaderTitleDelegate extends SliverPersistentHeaderDelegate {
+  final double minHeight;
+  final double maxHeight;
+  final Widget child;
 
-    return SliverList(
-      delegate: SliverChildListDelegate(
-        [
-          Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: currentTheme.getBackgroundColor(),
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(30),
-                topRight: Radius.circular(30),
-              ),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                  vertical: 8.0,
-                  horizontal: 8.0), // Reducido el padding vertical
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        left: 10.0,
-                        bottom: 4.0), // Reducido el padding inferior
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Mis Productos',
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: currentTheme.getTitleColor(),
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.add),
-                          onPressed: () {},
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                      height:
-                          4.0), // Añadido un pequeño espacio entre el título y la lista
-                  CreditCardHorizontalList(cards: myProducts),
-                  BudgetedExpensesChart(),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
+  SliverCustomHeaderTitleDelegate({
+    required this.minHeight,
+    required this.maxHeight,
+    required this.child,
+  });
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return SizedBox.expand(child: child);
+  }
+
+  @override
+  double get maxExtent => maxHeight;
+
+  @override
+  double get minExtent => minHeight;
+
+  @override
+  bool shouldRebuild(covariant SliverCustomHeaderTitleDelegate oldDelegate) {
+    return maxHeight != oldDelegate.maxHeight ||
+        minHeight != oldDelegate.minHeight ||
+        child != oldDelegate.child;
   }
 }

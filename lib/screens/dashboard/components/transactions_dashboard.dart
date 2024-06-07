@@ -1,6 +1,9 @@
+import 'package:finia_app/constants.dart';
 import 'package:finia_app/screens/dashboard/components/storage_info_card.dart';
+import 'package:finia_app/screens/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:finia_app/models/transaction.model.dart';
+import 'package:provider/provider.dart';
 
 class TransactionsDashBoardList extends StatelessWidget {
   final List<TransactionCreditCard> transactions;
@@ -11,35 +14,47 @@ class TransactionsDashBoardList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TransactionCreditCard lastTransaction = _getLastTransaction();
+    final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          child: Text(
+            'Última Transacción',
+            style: TextStyle(
+              fontSize: defaultPadding,
+              fontWeight: FontWeight.bold,
+              color: themeProvider.getSubtitleColor(),
+            ),
+          ),
+        ),
         Stack(
           clipBehavior: Clip
               .none, // Permite que los elementos del Stack se extiendan fuera de su vista
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 5.0),
+              padding: const EdgeInsets.only(left: 30.0, right: 30),
               child: AmmountsInfoCard(
                 key: lastTransaction.id,
                 title: lastTransaction.description,
                 svgSrc: lastTransaction.icon,
-                amount: lastTransaction.outAmount.toString(),
+                amount: lastTransaction.outAmount.toDouble(),
                 currency: lastTransaction.currency,
                 date: lastTransaction.date,
               ),
             ),
             Positioned(
-              right: 10, // Ajusta según la necesidad para alineación lateral
+              right: 0, // Ajusta según la necesidad para alineación lateral
               bottom:
-                  -12, // Posición negativa para poner el botón debajo de la tarjeta
+                  -5, // Posición negativa para poner el botón debajo de la tarjeta
               child: Container(
                 width: 90, // Anchura ajustada para el texto "Ver más..."
                 height: 30, // Altura adecuada para el contenido
                 decoration: BoxDecoration(
-                    color: Colors.blue,
+                    color: logoCOLOR1,
                     borderRadius:
                         BorderRadius.circular(20), // Bordes redondeados
                     boxShadow: [

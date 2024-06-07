@@ -1,3 +1,4 @@
+import 'package:finia_app/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -89,19 +90,16 @@ class SignupWithPhone extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(24.0),
-          ),
-          minimumSize: const Size.fromHeight(40),
-          padding: const EdgeInsets.all(16.0),
-          backgroundColor: Theme.of(context).primaryColor,
-        ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(24.0),
+            ),
+            minimumSize: const Size.fromHeight(40),
+            padding: const EdgeInsets.all(16.0),
+            backgroundColor: logoCOLOR1),
         child: Text(
           name,
-          style: Theme.of(context)
-              .textTheme
-              .bodyLarge
-              ?.copyWith(fontSize: 16.0, fontWeight: FontWeight.bold),
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+              fontSize: 16.0, fontWeight: FontWeight.bold, color: Colors.white),
         ),
       ),
     );

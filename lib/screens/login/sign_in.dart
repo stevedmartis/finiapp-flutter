@@ -1,3 +1,4 @@
+import 'package:finia_app/constants.dart';
 import 'package:finia_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -101,7 +102,7 @@ class SignIn extends StatelessWidget {
           HorizontalLine(name: "Or", height: 0.1),
           SizedBox(height: buttonSpacing), // Espacio después de la línea
           SignupWithPhone(
-            name: "Sign in with Phone Number",
+            name: defaultSignPhoneTitle,
             onPressed: () {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => const PhoneLogin()));

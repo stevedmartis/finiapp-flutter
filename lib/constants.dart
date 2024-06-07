@@ -11,6 +11,9 @@ const logoCOLOR2 = Color(
     0xFF410096); // Asegúrate de que el canal alfa está en FF para máxima opacidad
 
 const defaultPadding = 16.0;
+const defaultTitle = 20.0;
+const defaultSubTitle = 16.0;
+const defaultSignPhoneTitle = "Entrar con número de telefono";
 
 const lightBackground = Color(0xFFF5F5F5); // Light Mode Background
 const lightTitleColor = Color(0xFF333333); // Light Mode Titles

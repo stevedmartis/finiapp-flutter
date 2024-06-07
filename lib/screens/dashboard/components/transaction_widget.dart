@@ -64,7 +64,7 @@ class TransactionsWidget extends StatelessWidget {
                     key: transaction.id,
                     title: transaction.description,
                     svgSrc: transaction.icon,
-                    amount: transaction.outAmount.toString(),
+                    amount: transaction.outAmount.toDouble(),
                     currency: transaction.currency,
                     date: transaction.date,
                   ))
