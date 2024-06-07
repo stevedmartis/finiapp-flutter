@@ -17,6 +17,7 @@ List<TransactionCreditCard> myTransactions = [
       id: '0',
       date: DateTime.now(),
       description: "Compra Galletas",
+      category: "Alimentación",
       inAmount: 0,
       outAmount: 50000,
       currency: "CLP",
@@ -25,6 +26,7 @@ List<TransactionCreditCard> myTransactions = [
       id: '1',
       date: DateTime.now(),
       description: "Compra en Supermercado",
+      category: "Alimentación",
       inAmount: 0,
       outAmount: 50000,
       currency: "CLP",
@@ -33,6 +35,7 @@ List<TransactionCreditCard> myTransactions = [
       id: '2',
       date: DateTime.now().subtract(Duration(days: 1)),
       description: "Compra en Librería",
+      category: "Ocio",
       inAmount: 0,
       outAmount: 30000,
       currency: "CLP",
@@ -41,6 +44,7 @@ List<TransactionCreditCard> myTransactions = [
       id: '3',
       date: DateTime.now().subtract(Duration(days: 1)),
       description: "Compra en Librería",
+      category: "Ocio",
       inAmount: 0,
       outAmount: 30000,
       currency: "CLP",
@@ -49,6 +53,7 @@ List<TransactionCreditCard> myTransactions = [
       id: '4',
       date: DateTime.now().subtract(Duration(days: 3)),
       description: "Compra Galletas",
+      category: "Alimentación",
       inAmount: 0,
       outAmount: 50000,
       currency: "CLP",
@@ -284,92 +289,58 @@ class _CreditCardState extends State<CreditCard> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-          width: 350,
-          height: 200, // Ajusta la altura para la tarjeta de crédito
-          decoration: _buildBackground(themeProvider),
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-          child: Column(
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      height: 180,
+      decoration: _buildGlassBackground(),
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  if (widget.showChip) _buildChip(),
-                  if (widget.company != null)
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: widget.company!.widget,
-                    ),
-                ],
-              ),
-              _isDataLoading
-                  ? Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  : FadeTransition(
-                      opacity: _opacityAnimation,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          _buildCardNumber(themeProvider),
-                          SizedBox(height: 10),
-                          _buildValidity(themeProvider),
-                          SizedBox(height: 10),
-                          _buildNameAndCardNetworkType(themeProvider),
-                        ],
-                      ),
-                    ),
+            children: [
+              if (widget.showChip) _buildChip(),
+              if (widget.company != null)
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: widget.company!.widget,
+                ),
             ],
           ),
-        ),
-        _buildCurrentBalance(
-            themeProvider), // Añadido el saldo actual fuera de la tarjeta
-      ],
+          _isDataLoading
+              ? Center(
+                  child: CircularProgressIndicator(),
+                )
+              : FadeTransition(
+                  opacity: _opacityAnimation,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      _buildCardNumber(themeProvider),
+                      SizedBox(height: 10),
+                      _buildValidity(themeProvider),
+                      SizedBox(height: 10),
+                      _buildNameAndCardNetworkType(themeProvider),
+                    ],
+                  ),
+                ),
+        ],
+      ),
     );
   }
 
-  BoxDecoration _buildBackground(ThemeProvider themeProvider) {
-    BoxDecoration decoration;
-
-    if (widget.cardBackground is SolidColorCardBackground) {
-      SolidColorCardBackground solidColorCardBackground =
-          widget.cardBackground as SolidColorCardBackground;
-      decoration = BoxDecoration(
-        borderRadius: BorderRadius.circular(widget.roundedCornerRadius),
-        color: solidColorCardBackground.backgroundColor,
-      );
-    } else if (widget.cardBackground is GradientCardBackground) {
-      decoration = BoxDecoration(
-        borderRadius: BorderRadius.circular(widget.roundedCornerRadius),
-        gradient: themeProvider.getGradientCard(),
-      );
-    } else if (widget.cardBackground is ImageCardBackground) {
-      ImageCardBackground imageCardBackground =
-          widget.cardBackground as ImageCardBackground;
-      decoration = BoxDecoration(
-        borderRadius: BorderRadius.circular(widget.roundedCornerRadius),
-        image: imageCardBackground.build(),
-      );
-    } else {
-      decoration = BoxDecoration(
-        borderRadius: BorderRadius.circular(widget.roundedCornerRadius),
-        color: Colors.black,
-      );
-    }
-
-    return decoration.copyWith(
+  BoxDecoration _buildGlassBackground() {
+    return BoxDecoration(
+      borderRadius: BorderRadius.circular(widget.roundedCornerRadius),
+      color: Colors.white.withOpacity(0.1),
       boxShadow: [
         BoxShadow(
           color: Colors.black.withOpacity(0.2),
           spreadRadius: 2,
           blurRadius: 5,
-          offset: Offset(0, 3), // changes position of shadow
+          offset: Offset(0, 3),
         ),
       ],
     );
@@ -396,7 +367,7 @@ class _CreditCardState extends State<CreditCard> with TickerProviderStateMixin {
         widget.cardNumber!,
         style: TextStyle(
           fontFamily: 'creditcard',
-          color: themeProvider.getSubtitleColor(),
+          color: themeProvider.getColorBasedOnThemeAndPage(),
           fontSize: 18,
           letterSpacing: 2,
         ),
@@ -417,7 +388,7 @@ class _CreditCardState extends State<CreditCard> with TickerProviderStateMixin {
             Text(
               'VALID FROM',
               style: TextStyle(
-                color: themeProvider.getSubtitleColor(),
+                color: themeProvider.getColorBasedOnThemeAndPage(),
                 fontSize: 8,
               ),
             ),
@@ -425,7 +396,7 @@ class _CreditCardState extends State<CreditCard> with TickerProviderStateMixin {
             Text(
               '${widget.validity!.validThruMonth.toString().padLeft(2, '0')}/${widget.validity!.validThruYear.toString().padLeft(2, '0')}',
               style: TextStyle(
-                color: themeProvider.getSubtitleColor(),
+                color: themeProvider.getColorBasedOnThemeAndPage(),
                 fontSize: 12,
                 fontFamily: 'creditcard',
               ),
@@ -438,7 +409,7 @@ class _CreditCardState extends State<CreditCard> with TickerProviderStateMixin {
             Text(
               'VALID THRU',
               style: TextStyle(
-                color: themeProvider.getSubtitleColor(),
+                color: themeProvider.getColorBasedOnThemeAndPage(),
                 fontSize: 8,
               ),
             ),
@@ -446,7 +417,7 @@ class _CreditCardState extends State<CreditCard> with TickerProviderStateMixin {
             Text(
               '${widget.validity!.validThruMonth.toString().padLeft(2, '0')}/${widget.validity!.validThruYear.toString().padLeft(2, '0')}',
               style: TextStyle(
-                color: themeProvider.getSubtitleColor(),
+                color: themeProvider.getColorBasedOnThemeAndPage(),
                 fontSize: 12,
                 fontFamily: 'creditcard',
               ),
@@ -470,7 +441,7 @@ class _CreditCardState extends State<CreditCard> with TickerProviderStateMixin {
               minFontSize: 10,
               style: TextStyle(
                 fontFamily: 'creditcard',
-                color: themeProvider.getSubtitleColor(),
+                color: themeProvider.getColorBasedOnThemeAndPage(),
                 fontSize: 14,
               ),
             ),
@@ -481,68 +452,6 @@ class _CreditCardState extends State<CreditCard> with TickerProviderStateMixin {
             child: widget.cardNetworkType!.widget,
           ),
       ],
-    );
-  }
-
-  Widget _buildCurrentBalance(ThemeProvider themeProvider) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Saldo Total',
-            style: TextStyle(
-              fontSize: defaultSubTitle,
-              fontWeight: FontWeight.bold,
-              color: themeProvider.getSubtitleColor(),
-            ),
-          ),
-          SizedBox(height: 10),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-            decoration: BoxDecoration(
-              gradient: themeProvider.getGradientCard(),
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  spreadRadius: 2,
-                  blurRadius: 5,
-                  offset: Offset(0, 3), // changes position of shadow
-                ),
-              ],
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Icon(
-                      Icons.account_balance_wallet,
-                      color: logoCOLOR1,
-                      size: 40,
-                    ),
-                    SizedBox(width: 10),
-                    Text(
-                      formatCurrency(widget.available),
-                      style: TextStyle(
-                        color: themeProvider.getSubtitleColor(),
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-                Icon(
-                  Icons.arrow_forward,
-                  color: logoCOLOR1,
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

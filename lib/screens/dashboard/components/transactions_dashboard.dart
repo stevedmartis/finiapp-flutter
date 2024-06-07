@@ -1,8 +1,10 @@
 import 'package:finia_app/constants.dart';
+import 'package:finia_app/screens/dashboard/components/header_custom.dart';
 import 'package:finia_app/screens/dashboard/components/storage_info_card.dart';
 import 'package:finia_app/screens/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:finia_app/models/transaction.model.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class TransactionsDashBoardList extends StatelessWidget {
@@ -15,12 +17,12 @@ class TransactionsDashBoardList extends StatelessWidget {
   Widget build(BuildContext context) {
     TransactionCreditCard lastTransaction = _getLastTransaction();
     final themeProvider = Provider.of<ThemeProvider>(context);
-
+    final dateFormat = DateFormat('dd-MM-yyyy');
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
+        /*  Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
           child: Text(
             'Última Transacción',
@@ -30,52 +32,69 @@ class TransactionsDashBoardList extends StatelessWidget {
               color: themeProvider.getSubtitleColor(),
             ),
           ),
-        ),
-        Stack(
-          clipBehavior: Clip
-              .none, // Permite que los elementos del Stack se extiendan fuera de su vista
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 30.0, right: 30),
-              child: AmmountsInfoCard(
-                key: lastTransaction.id,
-                title: lastTransaction.description,
-                svgSrc: lastTransaction.icon,
-                amount: lastTransaction.outAmount.toDouble(),
-                currency: lastTransaction.currency,
-                date: lastTransaction.date,
+        ), */
+        Container(
+          margin: const EdgeInsets.symmetric(horizontal: 16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+          decoration: BoxDecoration(
+            gradient: themeProvider.getGradientCard(),
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                spreadRadius: 2,
+                blurRadius: 5,
+                offset: Offset(0, 3),
               ),
-            ),
-            Positioned(
-              right: 0, // Ajusta según la necesidad para alineación lateral
-              bottom:
-                  -5, // Posición negativa para poner el botón debajo de la tarjeta
-              child: Container(
-                width: 90, // Anchura ajustada para el texto "Ver más..."
-                height: 30, // Altura adecuada para el contenido
-                decoration: BoxDecoration(
-                    color: logoCOLOR1,
-                    borderRadius:
-                        BorderRadius.circular(20), // Bordes redondeados
-                    boxShadow: [
-                      // Opcional: añade sombra para mejor visibilidad
-                      BoxShadow(
-                        color: Colors.black45,
-                        blurRadius: 4,
-                        offset: Offset(0, 2),
-                      )
-                    ]),
-                alignment: Alignment.center,
-                child: Text(
-                  'Ver más',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
+            ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Icon(
+                    Icons.cookie,
+                    color: Colors.yellow,
+                    size: 40,
                   ),
-                ),
+                  SizedBox(width: 10),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        lastTransaction.category,
+                        style: TextStyle(
+                          color: themeProvider.getSubtitleColor(),
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        formatCurrency(lastTransaction.outAmount.toDouble()),
+                        style: TextStyle(
+                          color: themeProvider.getSubtitleColor(),
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        dateFormat.format(lastTransaction.date),
+                        style: TextStyle(
+                          color: themeProvider.getSubtitleColor(),
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-            ),
-          ],
+              Icon(
+                Icons.arrow_forward,
+                color: logoCOLOR1,
+              ),
+            ],
+          ),
         ),
       ],
     );
@@ -85,7 +104,6 @@ class TransactionsDashBoardList extends StatelessWidget {
     if (transactions.isEmpty) {
       throw Exception('No transactions available');
     }
-    // Ordena las transacciones por fecha y selecciona la última
     transactions.sort((a, b) => b.date.compareTo(a.date));
     return transactions.first;
   }

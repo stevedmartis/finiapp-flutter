@@ -6,7 +6,7 @@ class ThemeProvider extends ChangeNotifier {
   static const String themePrefKey = 'theme_mode';
 
   ThemeMode _themeMode = ThemeMode.light;
-
+  bool _isDetailPage = false;
   ThemeProvider() {
     _loadThemeMode();
   }
@@ -55,6 +55,35 @@ class ThemeProvider extends ChangeNotifier {
         _themeMode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
     _saveThemeMode(_themeMode);
     notifyListeners();
+  }
+
+  void changePageDetail(bool isDetailPage) {
+    _isDetailPage = isDetailPage;
+    notifyListeners();
+  }
+
+  bool getThemeCurrent() {
+    return _themeMode == ThemeMode.dark ? true : false;
+  }
+
+  bool geIsPageDetail() {
+    return _isDetailPage;
+  }
+
+  Color getColorBasedOnThemeAndPage() {
+    if (getThemeCurrent() && geIsPageDetail()) {
+      // Si el tema es oscuro y es la página de detalle
+      return getSubtitleColor();
+    } else if (getThemeCurrent() && !geIsPageDetail()) {
+      // Si el tema es oscuro y no es la página de detalle
+      return getSubtitleColor(); // Reemplaza con el color deseado para esta condición
+    } else if (!getThemeCurrent() && !geIsPageDetail()) {
+      // Si el tema no es oscuro y no es la página de detalle
+      return darkSubtitleColor; // Reemplaza con el color deseado para esta condición
+    } else {
+      // Si el tema no es oscuro y es la página de detalle
+      return Colors.white; // Reemplaza con el color deseado para esta condición
+    }
   }
 
   Color getCardColor() {

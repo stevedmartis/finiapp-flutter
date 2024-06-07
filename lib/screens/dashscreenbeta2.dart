@@ -9,6 +9,7 @@ import 'package:finia_app/screens/dashboard/components/transactions_dashboard.da
 import 'package:finia_app/screens/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -146,39 +147,91 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView2> {
                         ),
                       ),
                     ),
-                    Positioned(
+                    /*  Positioned(
                       bottom: 16.0, // Posiciona el contenido más abajo
                       left: 16.0,
                       right: 16.0,
                       child: buildHeaderContent(context, currentTheme),
+                    ), */
+                    Positioned(
+                      bottom: 10.0, // Posiciona el contenido más abajo
+                      left: 16.0,
+                      right: 16.0,
+                      child: GestureDetector(
+                        onTap: () => _handleCardTap(context, myProducts[0]),
+                        child: Hero(
+                          tag: 'cardsHome-${myProducts[0].cardNumber}',
+                          child: myProducts[0],
+                        ),
+                      ),
                     ),
                   ],
                 ),
-                centerTitle: true,
+                centerTitle: false,
+                collapseMode: CollapseMode.parallax,
+                title: Opacity(
+                  opacity: _showTitle
+                      ? 1.0
+                      : 0.0, // Hacer el título invisible cuando está expandido
+                  child: Text(
+                    myProducts[0].cardHolderName!.toUpperCase(),
+                  ),
+                ),
               ),
             ),
+
             SliverToBoxAdapter(
               child: Padding(
                 padding:
                     const EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(
-                      'Mi Cuenta',
-                      style: TextStyle(
-                          fontSize: defaultTitle, fontWeight: FontWeight.bold),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          'Mis Lucas',
+                          style: TextStyle(
+                              fontSize: defaultTitle,
+                              fontWeight: FontWeight.bold,
+                              color: currentTheme.getSubtitleColor()),
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.add),
+                          onPressed: () {},
+                        ),
+                      ],
                     ),
-                    IconButton(
-                      icon: Icon(Icons.add),
-                      onPressed: () {},
+                    SizedBox(height: 10),
+                    _buildCurrentBalance(currentTheme, myProducts[0].available),
+                    buildHeaderContent(context, currentTheme),
+                    Text(
+                      'Ultima Transacción',
+                      style: TextStyle(
+                          fontSize: defaultSubTitle,
+                          fontWeight: FontWeight.bold,
+                          color: currentTheme.getSubtitleColor()),
+                    ),
+                    SizedBox(height: 10),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 8.0,
+                      ),
+                      child: GestureDetector(
+                        onTap: () => _handleCardTap(context, myProducts[0]),
+                        child: TransactionsDashBoardList(
+                          transactions: myProducts[0].transactions,
+                        ),
+                      ),
                     ),
                   ],
                 ),
               ),
             ),
+
             //makeHeaderTitle(),
-            SliverList(
+            /* SliverList(
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
                   return Container(
@@ -193,7 +246,7 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView2> {
                           margin: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: Column(
                             children: [
-                              GestureDetector(
+                              /*  GestureDetector(
                                 onTap: () => _handleCardTap(
                                     context, myProducts[pageIndex]),
                                 child: Hero(
@@ -201,7 +254,7 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView2> {
                                       'cardsHome-${myProducts[pageIndex].cardNumber}',
                                   child: myProducts[pageIndex],
                                 ),
-                              ),
+                              ), */
 
                               Padding(
                                 padding: const EdgeInsets.symmetric(
@@ -223,7 +276,7 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView2> {
                 childCount: 1,
               ),
             ),
-
+ */
             SliverList(
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
@@ -244,12 +297,17 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView2> {
   }
 
   void _handleCardTap(BuildContext context, CreditCard card) {
+    Provider.of<ThemeProvider>(context, listen: false).changePageDetail(true);
+
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => CreditCardDetail(card: card),
       ),
-    );
+    ).then((_) {
+      Provider.of<ThemeProvider>(context, listen: false)
+          .changePageDetail(false);
+    });
   }
 
   Widget makeHeaderTitle() {
@@ -271,115 +329,172 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView2> {
     );
   }
 
-  Widget buildHeaderContent(BuildContext context, ThemeProvider themeProvider) {
-    return Container(
-      padding: const EdgeInsets.all(16.0),
+  Widget _buildCurrentBalance(ThemeProvider themeProvider, double available) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 10.0, top: 0.0, right: 30),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Balance Total:',
-            style: TextStyle(
-              color: Colors.white70,
-              fontSize: defaultSubTitle,
-            ),
-          ),
-          SizedBox(height: 10),
-          Text(
-            formatCurrency(1842081),
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 32,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              buildIndicator(
-                icon: Icons.arrow_upward,
-                title: 'Ingresado',
-                amount: 12000,
-                context: context,
-                isPositive: true,
-                themeProvider: themeProvider,
-              ),
-              SizedBox(width: 16),
-              buildIndicator(
-                icon: Icons.arrow_downward,
-                title: 'Gastado',
-                amount: 6000,
-                context: context,
-                isPositive: false,
-                themeProvider: themeProvider,
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget buildIndicator({
-    required IconData icon,
-    required String title,
-    required double amount,
-    required BuildContext context,
-    required bool isPositive,
-    required ThemeProvider themeProvider,
-  }) {
-    return Container(
-      padding: EdgeInsets.all(6),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 10,
-            offset: Offset(0, 5),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Icon(
-                icon,
-                color: isPositive ? Colors.green : Colors.red,
-                size: 30,
-              ),
-              SizedBox(width: 8),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.normal,
-                      color: Colors.white70,
-                    ),
-                  ),
-                  Text(
-                    formatCurrency(amount),
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
+          GestureDetector(
+            onTap: () => _handleCardTap(context, myProducts[0]),
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+              decoration: BoxDecoration(
+                gradient: themeProvider.getGradientCard(),
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    spreadRadius: 2,
+                    blurRadius: 5,
+                    offset: Offset(0, 3), // changes position of shadow
                   ),
                 ],
               ),
-              SizedBox(width: 8),
-            ],
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.account_balance_wallet,
+                        color: logoCOLOR1,
+                        size: 40,
+                      ),
+                      SizedBox(width: 10),
+                      Text(
+                        formatCurrency(available),
+                        style: TextStyle(
+                          color: themeProvider.getSubtitleColor(),
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Icon(
+                    Icons.arrow_forward,
+                    color: logoCOLOR1,
+                  ),
+                ],
+              ),
+            ),
           ),
         ],
       ),
     );
   }
+}
+
+Widget buildHeaderContent(BuildContext context, ThemeProvider themeProvider) {
+  return Container(
+    padding: const EdgeInsets.all(16.0),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        /* Text(
+          'Plata Total:',
+          style: TextStyle(
+            color: Colors.white70,
+            fontSize: defaultSubTitle,
+          ),
+        ),
+        SizedBox(height: 10), */
+        /*  Text(
+          formatCurrency(1842081),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 32,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        SizedBox(height: 20), */
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            buildIndicator(
+              icon: Icons.arrow_upward,
+              title: 'Ingresado',
+              amount: 12000,
+              context: context,
+              isPositive: true,
+              themeProvider: themeProvider,
+            ),
+            SizedBox(width: 16),
+            buildIndicator(
+              icon: Icons.arrow_downward,
+              title: 'Gastado',
+              amount: 6000,
+              context: context,
+              isPositive: false,
+              themeProvider: themeProvider,
+            ),
+          ],
+        ),
+      ],
+    ),
+  );
+}
+
+Widget buildIndicator({
+  required IconData icon,
+  required String title,
+  required double amount,
+  required BuildContext context,
+  required bool isPositive,
+  required ThemeProvider themeProvider,
+}) {
+  return Container(
+    padding: EdgeInsets.all(6),
+    decoration: BoxDecoration(
+      gradient: themeProvider.getGradientCard(),
+      borderRadius: BorderRadius.circular(10),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.1),
+          spreadRadius: 2,
+          blurRadius: 5,
+          offset: Offset(0, 3),
+        ),
+      ],
+    ),
+    child: Column(
+      children: [
+        Row(
+          children: [
+            Icon(
+              icon,
+              color: isPositive ? Colors.green : Colors.red,
+              size: 30,
+            ),
+            SizedBox(width: 8),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.normal,
+                    color: themeProvider.getSubtitleColor(),
+                  ),
+                ),
+                Text(
+                  formatCurrency(amount),
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: themeProvider.getSubtitleColor(),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(width: 20),
+          ],
+        ),
+      ],
+    ),
+  );
 }
 
 class SliverCustomHeaderTitleDelegate extends SliverPersistentHeaderDelegate {

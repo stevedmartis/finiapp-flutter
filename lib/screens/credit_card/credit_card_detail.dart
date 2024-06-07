@@ -28,51 +28,34 @@ class _CreditCardDetailState extends State<CreditCardDetail> {
         backgroundColor: logoCOLOR2,
         title: Text('Credit Card Detail'),
       ),
-      body: SafeArea(
-        child: CustomScrollView(
-          slivers: <Widget>[
-            SliverToBoxAdapter(
-              child: Hero(
-                tag: heroTag,
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  child: widget.card,
-                ), // El Hero widget no tiene padding adicional.
+      body: CustomScrollView(
+        slivers: <Widget>[
+          SliverToBoxAdapter(
+            child: Hero(
+              tag: heroTag,
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: widget.card,
               ),
             ),
-
-            SliverPadding(
-              padding: EdgeInsets.symmetric(horizontal: defaultPadding),
-              sliver: SliverList(
-                delegate: SliverChildListDelegate(
-                  [
-                    SizedBox(height: defaultPadding),
-                    InfoCardsAmounts(
-                      fileInfo: widget.card.fileInfo,
-                    ),
-                    // SizedBox(height: defaultPadding),
-                    /*     Text(
-                      textAlign: TextAlign.center,
-                      'Total: \$${widget.card.total}',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ), */
-                    //  InfoCardsAmounts(files: demoMyFiles),
-                    SizedBox(height: defaultPadding),
-                    // Agrega más widgets si necesitas aquí, cada uno tendrá el padding horizontal.
-                    if (Responsive.isMobile(context))
-                      TransactionHistorialPage(),
-                  ],
-                ),
+          ),
+          SliverPadding(
+            padding: EdgeInsets.symmetric(horizontal: defaultPadding),
+            sliver: SliverList(
+              delegate: SliverChildListDelegate(
+                [
+                  SizedBox(height: defaultPadding),
+                  InfoCardsAmounts(
+                    fileInfo: widget.card.fileInfo,
+                  ),
+                  SizedBox(height: defaultPadding),
+                  if (Responsive.isMobile(context)) TransactionHistorialPage(),
+                ],
               ),
             ),
-
-            // Agregar más Slivers si es necesario
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
