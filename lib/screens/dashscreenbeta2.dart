@@ -79,7 +79,7 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView2> {
           slivers: <Widget>[
             SliverAppBar(
               leadingWidth: 60,
-              backgroundColor: logoCOLOR2,
+              backgroundColor: logoAppBarCOLOR,
               leading: Container(
                 margin: EdgeInsets.only(left: 20, top: 10),
                 child: GestureDetector(
@@ -153,7 +153,7 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView2> {
                       right: 16.0,
                       child: buildHeaderContent(context, currentTheme),
                     ), */
-                    Positioned(
+                    /*  Positioned(
                       bottom: 10.0, // Posiciona el contenido más abajo
                       left: 16.0,
                       right: 16.0,
@@ -164,6 +164,21 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView2> {
                           child: myProducts[0],
                         ),
                       ),
+                    ), */
+                    Positioned(
+                      bottom: 10.0, // Posiciona el contenido más abajo
+                      left: 16.0,
+                      right: 16.0,
+                      child: SizedBox(
+                          height:
+                              200.0, // Ajusta el tamaño del contenedor según tus necesidades
+                          child: GestureDetector(
+                            onTap: () => _handleCardTap(context, myProducts[0]),
+                            child: Hero(
+                              tag: 'cardsHome-${myProducts[0].toString()}',
+                              child: myProducts[0],
+                            ),
+                          )),
                     ),
                   ],
                 ),

@@ -5,12 +5,15 @@ import 'package:finia_app/screens/credit_card/credit_card_widget.dart';
 import 'package:finia_app/screens/dashboard/components/charts/financial_categories.chat.dart';
 import 'package:finia_app/screens/dashboard/components/my_fields.dart';
 import 'package:finia_app/screens/dashboard/components/transactions_dashboard.dart';
+import 'package:finia_app/screens/dashboard/floid_widget.dart';
 import 'package:finia_app/screens/providers/theme_provider.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AdvancedScrollView extends StatefulWidget {
   @override
@@ -62,14 +65,12 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView> {
     return '\$${formatted.substring(0, formatted.length - 3)}';
   }
 
-  bool _handleScrollNotification(ScrollNotification notification) {
-    if (notification is ScrollUpdateNotification) {
-      _scrollController.jumpTo(
-        _scrollController.position.pixels + notification.scrollDelta!,
-      );
-      return true; // Indica que la notificación ha sido gestionada
+  Future<void> _launchUrl() async {
+    final Uri url = Uri.parse(
+        'https://admin.floid.app/finia_app/widget/80c2083bbc755fa3548e55c627c78006?sandbox');
+    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+      throw 'Could not launch $url';
     }
-    return false; // Permite que otras notificaciones continúen propagándose
   }
 
   @override
@@ -86,7 +87,7 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView> {
           slivers: <Widget>[
             SliverAppBar(
               leadingWidth: 60,
-              backgroundColor: logoCOLOR2,
+              backgroundColor: logoAppBarCOLOR,
               leading: Container(
                 margin: EdgeInsets.only(left: 20, top: 10),
                 child: GestureDetector(
@@ -173,13 +174,22 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Text(
-                      'Mis productos',
-                      style:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      'Mis Cuentas',
+                      style: TextStyle(
+                          fontSize: defaultTitle,
+                          fontWeight: FontWeight.bold,
+                          color: currentTheme.getSubtitleColor()),
                     ),
                     IconButton(
                       icon: Icon(Icons.add),
-                      onPressed: () {},
+                      onPressed: () {
+                        (!kIsWeb)
+                            ? Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => FloidWidgetScreen()))
+                            : _launchUrl();
+                      },
                     ),
                   ],
                 ),
@@ -187,51 +197,71 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView> {
             ),
             SliverToBoxAdapter(
               child: Container(
-                padding: const EdgeInsets.all(16.0),
-                height: MediaQuery.of(context).size.height, // Full height
+                padding: const EdgeInsets.all(0.0),
+                height:
+                    MediaQuery.of(context).size.height * 0.235, // Full height
                 child: PageView.builder(
                   controller: _pageController,
                   itemCount: myProducts.length,
                   itemBuilder: (context, index) {
-                    return SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          GestureDetector(
-                            onTap: () =>
-                                _handleCardTap(context, myProducts[index]),
-                            child: Hero(
-                              tag: 'cardsHome-${myProducts[index].cardNumber}',
-                              child: myProducts[index],
-                            ),
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        GestureDetector(
+                          onTap: () =>
+                              _handleCardTap(context, myProducts[index]),
+                          child: Hero(
+                            tag: 'cardsHome-${myProducts[index].cardNumber}',
+                            child: myProducts[index],
                           ),
-                          SizedBox(height: 16),
-                          GestureDetector(
-                            onTap: () =>
-                                _handleCardTap(context, myProducts[index]),
-                            child: InfoCardsAmounts(
-                              fileInfo: myProducts[index].fileInfo,
-                            ),
-                          ),
-                          SizedBox(height: 16),
-                          GestureDetector(
-                            onTap: () =>
-                                _handleCardTap(context, myProducts[index]),
-                            child: TransactionsDashBoardList(
-                              transactions: myProducts[index].transactions,
-                            ),
-                          ),
-                          SizedBox(height: 16),
-                          GestureDetector(
-                            onTap: () =>
-                                _handleCardTap(context, myProducts[index]),
-                            child: BudgetedExpensesChart(),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     );
                   },
                 ),
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding:
+                    const EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Ultima Transacción',
+                      style: TextStyle(
+                          fontSize: defaultSubTitle,
+                          fontWeight: FontWeight.bold,
+                          color: currentTheme.getSubtitleColor()),
+                    ),
+                    SizedBox(height: 10),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 8.0,
+                      ),
+                      child: GestureDetector(
+                        onTap: () => _handleCardTap(context, myProducts[0]),
+                        child: TransactionsDashBoardList(
+                          transactions: myProducts[0].transactions,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index) {
+                  return Container(
+                    padding: EdgeInsets.all(defaultPadding),
+                    height: MediaQuery.of(context).size.width *
+                        2, // Ajusta la altura según tu diseño
+                    child: BudgetedExpensesChart(),
+                  );
+                },
+                childCount: 1,
               ),
             ),
           ],

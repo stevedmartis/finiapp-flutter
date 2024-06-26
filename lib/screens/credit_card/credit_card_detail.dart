@@ -1,4 +1,6 @@
+import 'package:finia_app/screens/dashboard/components/header_custom.dart';
 import 'package:finia_app/screens/dashboard/components/my_fields.dart';
+import 'package:finia_app/screens/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:finia_app/constants.dart';
@@ -22,11 +24,12 @@ class _CreditCardDetailState extends State<CreditCardDetail> {
     var authService = Provider.of<AuthService>(context, listen: false);
     var tagActual = authService.cardsHero;
     final heroTag = '${tagActual}-${widget.card.cardNumber}';
+    final currentTheme = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: logoCOLOR2,
-        title: Text('Credit Card Detail'),
+        backgroundColor: logoAppBarCOLOR,
+        title: Text('Cuenta ${widget.card.cardHolderName}'),
       ),
       body: CustomScrollView(
         slivers: <Widget>[
@@ -45,14 +48,67 @@ class _CreditCardDetailState extends State<CreditCardDetail> {
             sliver: SliverList(
               delegate: SliverChildListDelegate(
                 [
+                  _buildCurrentBalance(currentTheme, widget.card.available),
                   SizedBox(height: defaultPadding),
                   InfoCardsAmounts(
                     fileInfo: widget.card.fileInfo,
                   ),
-                  SizedBox(height: defaultPadding),
                   if (Responsive.isMobile(context)) TransactionHistorialPage(),
                 ],
               ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCurrentBalance(ThemeProvider themeProvider, double available) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 10.0, top: 0.0, right: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+            decoration: BoxDecoration(
+              gradient: themeProvider.getGradientCard(),
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  spreadRadius: 2,
+                  blurRadius: 5,
+                  offset: Offset(0, 3), // changes position of shadow
+                ),
+              ],
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Icon(
+                      Icons.account_balance_wallet,
+                      color: logoCOLOR1,
+                      size: 40,
+                    ),
+                    SizedBox(width: 10),
+                    Text(
+                      formatCurrency(available),
+                      style: TextStyle(
+                        color: themeProvider.getSubtitleColor(),
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                Icon(
+                  Icons.arrow_forward,
+                  color: logoCOLOR1,
+                ),
+              ],
             ),
           ),
         ],

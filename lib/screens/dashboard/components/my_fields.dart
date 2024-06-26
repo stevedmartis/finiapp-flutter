@@ -59,7 +59,7 @@ class FileInfoCardGridView extends StatelessWidget {
         childAspectRatio: childAspectRatio,
       ),
       itemBuilder: (context, index) => Container(
-          padding: EdgeInsets.only(left: 5),
+          padding: EdgeInsets.only(left: 5, right: 16),
           child: FileInfoCard(info: files[index])),
     );
   }

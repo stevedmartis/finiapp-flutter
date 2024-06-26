@@ -1,3 +1,4 @@
+import 'package:finia_app/constants.dart';
 import 'package:flutter/material.dart';
 
 import 'package:webview_flutter/webview_flutter.dart';
@@ -97,7 +98,9 @@ class _FloidWidgetScreenState extends State<FloidWidgetScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Screen 2')),
+      appBar: AppBar(
+        backgroundColor: logoAppBarCOLOR,
+      ),
       body: WebViewWidget(controller: _controller),
     );
   }

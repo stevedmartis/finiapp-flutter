@@ -58,8 +58,9 @@ class _SideMenuState extends State<SideMenu> {
           DrawerListTile(
               title: "SignOut",
               svgSrc: "assets/icons/menu_profile.svg",
-              press: () {
-                context.read<AuthService>().signOut();
+              press: () async {
+                await context.read<AuthService>().signOut();
+                Navigator.of(context).pushReplacementNamed('/signIn');
               },
               themeNotifier: themeNotifier),
           Divider(),

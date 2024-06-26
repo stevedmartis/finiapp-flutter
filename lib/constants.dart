@@ -10,6 +10,7 @@ const logoCOLOR1 = Color(
 const logoCOLOR2 = Color(
     0xFF410096); // Asegúrate de que el canal alfa está en FF para máxima opacidad
 
+const logoAppBarCOLOR = Color(0xff641EB6);
 const defaultPadding = 16.0;
 const defaultTitle = 20.0;
 const defaultSubTitle = 16.0;

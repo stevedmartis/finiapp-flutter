@@ -37,75 +37,71 @@ class _BudgetedExpensesChartState extends State<BudgetedExpensesChart> {
           ),
         ],
       ),
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment:
-              CrossAxisAlignment.start, // Alinea el título a la izquierda
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
-                'Gastos Presupuestados',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: themeProvider.getSubtitleColor(),
-                ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        // Alinea el título a la izquierda
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              'Gastos Presupuestados',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: themeProvider.getSubtitleColor(),
               ),
             ),
-            Container(
-              height: 300,
-              child: SfCircularChart(
-                legend: Legend(
-                  isVisible: true,
-                  overflowMode: LegendItemOverflowMode.wrap,
-                ),
-                tooltipBehavior: TooltipBehavior(enable: true),
-                series: <CircularSeries>[
-                  PieSeries<BudgetItem, String>(
-                    dataSource: budgetItems,
-                    xValueMapper: (BudgetItem data, _) => data.category,
-                    yValueMapper: (BudgetItem data, _) => data.spent,
-                    pointColorMapper: (BudgetItem data, _) =>
-                        getColorForCategory(data.category),
-                    dataLabelSettings: DataLabelSettings(isVisible: true),
-                    enableTooltip: true,
-                    name: 'Gastos',
-                  )
-                ],
+          ),
+          Container(
+            child: SfCircularChart(
+              legend: Legend(
+                isVisible: true,
+                overflowMode: LegendItemOverflowMode.scroll,
               ),
+              tooltipBehavior: TooltipBehavior(enable: true),
+              series: <CircularSeries>[
+                PieSeries<BudgetItem, String>(
+                  dataSource: budgetItems,
+                  xValueMapper: (BudgetItem data, _) => data.category,
+                  yValueMapper: (BudgetItem data, _) => data.spent,
+                  pointColorMapper: (BudgetItem data, _) =>
+                      getColorForCategory(data.category),
+                  dataLabelSettings: DataLabelSettings(isVisible: true),
+                  enableTooltip: true,
+                  name: 'Gastos',
+                )
+              ],
             ),
-            // Usamos un tamaño fijo para la lista basado en la cantidad de elementos
-            Container(
-              height:
-                  listHeight, // Altura dinámica basada en la cantidad de elementos
-              child: ListView.builder(
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: budgetItems.length,
-                itemBuilder: (context, index) {
-                  final item = budgetItems[index];
-                  double spentPercentage = (item.spent / item.budget) * 100;
-                  return ListTile(
-                    leading: Icon(getIconForCategory(item.category),
-                        color: getColorForCategory(item.category)),
-                    title: Text(item.category,
-                        style:
-                            TextStyle(color: themeProvider.getSubtitleColor())),
-                    subtitle: Text(
-                        'Gastado: \$${item.spent} de \$${item.budget}',
-                        style: TextStyle(color: Colors.grey[400])),
-                    trailing: CircularProgressIndicator(
-                      value: spentPercentage / 100,
-                      backgroundColor: Colors.grey[200],
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                          spentPercentage > 100 ? Colors.red : Colors.green),
-                    ),
-                  );
-                },
-              ),
+          ),
+          // Usamos un tamaño fijo para la lista basado en la cantidad de elementos
+          Container(
+            height:
+                listHeight, // Altura dinámica basada en la cantidad de elementos
+            child: ListView.builder(
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: budgetItems.length,
+              itemBuilder: (context, index) {
+                final item = budgetItems[index];
+                double spentPercentage = (item.spent / item.budget) * 100;
+                return ListTile(
+                  leading: Icon(getIconForCategory(item.category),
+                      color: getColorForCategory(item.category)),
+                  title: Text(item.category,
+                      style:
+                          TextStyle(color: themeProvider.getSubtitleColor())),
+                  subtitle: Text('Gastado: \$${item.spent} de \$${item.budget}',
+                      style: TextStyle(color: Colors.grey[400])),
+                  trailing: CircularProgressIndicator(
+                    value: spentPercentage / 100,
+                    backgroundColor: Colors.grey[200],
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                        spentPercentage > 100 ? Colors.red : Colors.green),
+                  ),
+                );
+              },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -118,7 +114,7 @@ class _BudgetedExpensesChartState extends State<BudgetedExpensesChart> {
         return Icons.train;
       case 'Salud':
         return Icons.favorite;
-      case 'Entretenimiento':
+      case 'Ocio':
         return Icons.sports_esports;
       default:
         return Icons.category;
@@ -133,7 +129,7 @@ class _BudgetedExpensesChartState extends State<BudgetedExpensesChart> {
         return Colors.green;
       case 'Salud':
         return Colors.orange;
-      case 'Entretenimiento':
+      case 'Ocio':
         return Colors.blue;
       default:
         return Colors.grey;
@@ -145,7 +141,7 @@ class _BudgetedExpensesChartState extends State<BudgetedExpensesChart> {
       BudgetItem(category: 'Alimentación', budget: 200, spent: 150),
       BudgetItem(category: 'Transporte', budget: 100, spent: 75),
       BudgetItem(category: 'Salud', budget: 300, spent: 250),
-      BudgetItem(category: 'Entretenimiento', budget: 120, spent: 90),
+      BudgetItem(category: 'Ocio', budget: 120, spent: 90),
     ];
   }
 }

@@ -1,5 +1,6 @@
 /* import 'package:finia_app/services/auth_service.dart';
 import 'package:finia_app/services/finance_summary_service.dart'; */
+import 'package:finia_app/screens/dashboard/dash4.beta.dart';
 import 'package:finia_app/screens/dashboard/dash4scroll.dart';
 import 'package:finia_app/screens/dashboard/dashboard4.dart';
 import 'package:finia_app/screens/dashscreenbeta2.dart';
@@ -45,7 +46,7 @@ class _MainScreenState extends State<MainScreen> {
             ),
           Expanded(
             flex: 5,
-            child: AdvancedScrollView2(),
+            child: AdvancedScrollView(),
           ),
           /*             Expanded(
             flex: 5,

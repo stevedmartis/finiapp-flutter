@@ -156,6 +156,7 @@ class AuthService with ChangeNotifier {
                 data['accessToken'], data['refreshToken']);
 
             currentUser = UserAuth.fromJson(data);
+
             if (currentUser != null) {
               await tokenStorage.saveUser(currentUser!);
               notifyListeners();
@@ -186,7 +187,6 @@ class AuthService with ChangeNotifier {
       await _firebaseAuth.signOut();
       await tokenStorage.deleteAllTokens();
       currentUser = null;
-      isLogin = false;
       notifyListeners();
     } catch (error) {
       print('Failed to sign out: $error');

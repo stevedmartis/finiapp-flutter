@@ -16,12 +16,12 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-class AdvancedScrollView extends StatefulWidget {
+class AdvancedScrollView1 extends StatefulWidget {
   @override
-  State<AdvancedScrollView> createState() => _AdvancedScrollViewState();
+  State<AdvancedScrollView1> createState() => _AdvancedScrollViewState();
 }
 
-class _AdvancedScrollViewState extends State<AdvancedScrollView> {
+class _AdvancedScrollViewState extends State<AdvancedScrollView1> {
   late ScrollController _scrollController;
   late MenuAppController menuAppController;
   final PageController _pageController = PageController(viewportFraction: 0.85);

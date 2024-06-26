@@ -292,7 +292,7 @@ class _CreditCardState extends State<CreditCard> with TickerProviderStateMixin {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       height: 180,
-      decoration: _buildGlassBackground(),
+      decoration: _buildGlassBackground(themeProvider),
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -331,10 +331,10 @@ class _CreditCardState extends State<CreditCard> with TickerProviderStateMixin {
     );
   }
 
-  BoxDecoration _buildGlassBackground() {
+  BoxDecoration _buildGlassBackground(ThemeProvider themeProvider) {
     return BoxDecoration(
       borderRadius: BorderRadius.circular(widget.roundedCornerRadius),
-      color: Colors.white.withOpacity(0.1),
+      gradient: themeProvider.getGradientCard(),
       boxShadow: [
         BoxShadow(
           color: Colors.black.withOpacity(0.2),
@@ -367,7 +367,7 @@ class _CreditCardState extends State<CreditCard> with TickerProviderStateMixin {
         widget.cardNumber!,
         style: TextStyle(
           fontFamily: 'creditcard',
-          color: themeProvider.getColorBasedOnThemeAndPage(),
+          color: themeProvider.getSubtitleColor(),
           fontSize: 18,
           letterSpacing: 2,
         ),
@@ -388,7 +388,7 @@ class _CreditCardState extends State<CreditCard> with TickerProviderStateMixin {
             Text(
               'VALID FROM',
               style: TextStyle(
-                color: themeProvider.getColorBasedOnThemeAndPage(),
+                color: themeProvider.getSubtitleColor(),
                 fontSize: 8,
               ),
             ),
@@ -396,7 +396,7 @@ class _CreditCardState extends State<CreditCard> with TickerProviderStateMixin {
             Text(
               '${widget.validity!.validThruMonth.toString().padLeft(2, '0')}/${widget.validity!.validThruYear.toString().padLeft(2, '0')}',
               style: TextStyle(
-                color: themeProvider.getColorBasedOnThemeAndPage(),
+                color: themeProvider.getSubtitleColor(),
                 fontSize: 12,
                 fontFamily: 'creditcard',
               ),
@@ -409,7 +409,7 @@ class _CreditCardState extends State<CreditCard> with TickerProviderStateMixin {
             Text(
               'VALID THRU',
               style: TextStyle(
-                color: themeProvider.getColorBasedOnThemeAndPage(),
+                color: themeProvider.getSubtitleColor(),
                 fontSize: 8,
               ),
             ),
@@ -417,7 +417,7 @@ class _CreditCardState extends State<CreditCard> with TickerProviderStateMixin {
             Text(
               '${widget.validity!.validThruMonth.toString().padLeft(2, '0')}/${widget.validity!.validThruYear.toString().padLeft(2, '0')}',
               style: TextStyle(
-                color: themeProvider.getColorBasedOnThemeAndPage(),
+                color: themeProvider.getSubtitleColor(),
                 fontSize: 12,
                 fontFamily: 'creditcard',
               ),
@@ -441,7 +441,7 @@ class _CreditCardState extends State<CreditCard> with TickerProviderStateMixin {
               minFontSize: 10,
               style: TextStyle(
                 fontFamily: 'creditcard',
-                color: themeProvider.getColorBasedOnThemeAndPage(),
+                color: themeProvider.getSubtitleColor(),
                 fontSize: 14,
               ),
             ),

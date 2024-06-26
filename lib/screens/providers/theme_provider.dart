@@ -118,16 +118,16 @@ class ThemeProvider extends ChangeNotifier {
     return _themeMode == ThemeMode.dark
         ? LinearGradient(
             colors: [darkCardBackground, darkCardBackground],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+            begin: Alignment.bottomRight,
+            end: Alignment.topLeft,
           )
         : LinearGradient(
             colors: [
               lightCardBackground,
               Colors.white,
             ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+            begin: Alignment.bottomRight,
+            end: Alignment.topLeft,
           );
   }
 

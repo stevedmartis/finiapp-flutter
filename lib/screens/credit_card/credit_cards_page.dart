@@ -1,3 +1,4 @@
+import 'package:finia_app/constants.dart';
 import 'package:finia_app/screens/credit_card/credit_card_slider.dart';
 import 'package:finia_app/screens/credit_card/credit_card_widget.dart';
 
@@ -59,6 +60,7 @@ class _CreditCardDemoState extends State<CreditCardDemo> {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: logoAppBarCOLOR,
         title: Text('Credit Cards'),
       ),
       body: isScreenWide
