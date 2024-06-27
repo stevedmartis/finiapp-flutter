@@ -56,9 +56,9 @@ class SocialButton extends StatelessWidget {
           Text(
             name,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.w400,
-                ),
+                fontSize: 16.0,
+                fontWeight: FontWeight.w400,
+                color: themeProvider.getSubtitleColor()),
           )
         ],
       ),

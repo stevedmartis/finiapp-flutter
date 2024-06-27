@@ -3,10 +3,7 @@ import 'package:finia_app/screens/credit_card/credit_card_widget.dart';
 import 'package:finia_app/screens/login/bubles_animation_page.dart';
 import 'package:finia_app/screens/login/success_chck.1.2.dart';
 import 'package:finia_app/screens/login/success_initial.dart';
-import 'package:finia_app/screens/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
-
-import 'package:provider/provider.dart';
 
 //import 'data_backup_completed_page.dart';
 //import 'data_backup_initial_page.dart';
@@ -35,7 +32,7 @@ class _BublesSuccesPageState extends State<BublesSuccesPage>
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(
-        seconds: 4,
+        seconds: 3,
       ),
     );
     _progressAnimation = CurvedAnimation(

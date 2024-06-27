@@ -1,11 +1,8 @@
 import 'package:finia_app/constants.dart';
 import 'package:finia_app/screens/credit_card/credit_card_widget.dart';
-import 'package:finia_app/screens/login/success_animation_widget.dart';
-import 'package:finia_app/screens/main/main_screen.dart';
 import 'package:finia_app/widgets/reouter_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:finia_app/screens/login/success_animation_widget.dart';
 
 class OnboardingScreen extends StatefulWidget {
   @override
@@ -15,6 +12,7 @@ class OnboardingScreen extends StatefulWidget {
 class _OnboardingScreenState extends State<OnboardingScreen> {
   PageController _pageController = PageController();
   int _currentIndex = 0;
+  bool _showButton = false;
 
   List<Map<String, String>> _onboardingData = [
     {
@@ -40,6 +38,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   void _onPageChanged(int index) {
     setState(() {
       _currentIndex = index;
+      if (index == _onboardingData.length - 1) {
+        Future.delayed(Duration(milliseconds: 800), () {
+          setState(() {
+            _showButton = true;
+          });
+        });
+      } else {
+        _showButton = false;
+      }
     });
   }
 
@@ -80,9 +87,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   ),
                   SizedBox(height: 20),
                   AnimatedOpacity(
-                    opacity:
-                        _currentIndex == _onboardingData.length - 1 ? 1.0 : 0.0,
-                    duration: Duration(milliseconds: 300),
+                    opacity: _showButton ? 1.0 : 0.0,
+                    duration: Duration(milliseconds: 900),
                     child: Container(
                       width: 60,
                       height: 60,

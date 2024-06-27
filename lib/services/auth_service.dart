@@ -160,7 +160,7 @@ class AuthService with ChangeNotifier {
             if (currentUser != null) {
               await tokenStorage.saveUser(currentUser!);
               isLoading = false;
-              notifyListeners();
+              //notifyListeners();
             } else {
               print('Error: Failed to create user object from data');
             }

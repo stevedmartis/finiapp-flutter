@@ -17,7 +17,6 @@ class SuccessCompletePage extends AnimatedWidget {
 
   @override
   Widget build(BuildContext context) {
-    final currentTheme = Provider.of<ThemeProvider>(context);
     return animation.value > 0
         ? Positioned.fill(
             child: Container(
@@ -65,9 +64,7 @@ class SuccessCompletePage extends AnimatedWidget {
                         children: [
                           Text(
                             'Todo Listo!',
-                            style: TextStyle(
-                              fontSize: 17,
-                            ),
+                            style: TextStyle(fontSize: 17, color: Colors.white),
                             textAlign: TextAlign.center,
                           ),
                           Spacer(),
@@ -78,7 +75,7 @@ class SuccessCompletePage extends AnimatedWidget {
                               child: Text(
                                 'Comenzar',
                                 style: TextStyle(
-                                  color: currentTheme.getTitleColor(),
+                                  color: Colors.white,
                                 ),
                               ),
                             ),
@@ -110,9 +107,9 @@ class _DataBackupCompletedPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = logoCOLOR1
+      ..color = Colors.white
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.0;
+      ..strokeWidth = 2.0;
 
     final circlePath = Path();
     circlePath.addArc(

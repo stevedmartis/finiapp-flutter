@@ -81,7 +81,7 @@ class SignIn extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SocialButton(
-            name: "Continue with Facebook",
+            name: "Entrar con Facebook",
             icon: "assets/icons/facebook.svg",
             onPressed: () {
               // Aquí manejarías el inicio de sesión con Facebook
@@ -89,13 +89,13 @@ class SignIn extends StatelessWidget {
           ),
           SizedBox(height: buttonSpacing), // Espacio entre botones
           SocialButton(
-            name: "Continue with Google",
+            name: "Entrar con Google",
             icon: "assets/icons/google.svg",
             onPressed: () => _signInWithGoogle(context),
           ),
           SizedBox(height: buttonSpacing), // Espacio entre botones
           SocialButton(
-            name: "Continue with Apple",
+            name: "Entrar con Apple",
             icon: "assets/icons/apple-logo.svg",
             onPressed: () {
               // Aquí manejarías el inicio de sesión con Apple
@@ -105,7 +105,7 @@ class SignIn extends StatelessWidget {
           SizedBox(
               height:
                   buttonSpacing * 2), // Espacio más grande antes de la línea
-          HorizontalLine(name: "Or", height: 0.1),
+          HorizontalLine(name: "O", height: 0.1),
           SizedBox(height: buttonSpacing), // Espacio después de la línea
           SignupWithPhone(
             name: defaultSignPhoneTitle,
@@ -113,28 +113,6 @@ class SignIn extends StatelessWidget {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => const PhoneLogin()));
             },
-          ),
-
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 20), // Ajustar el padding
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text("Don't have an account? "),
-                TextButton(
-                  onPressed: () {
-                    // Aquí manejarías la navegación al registro de usuarios
-                  },
-                  child: Text(
-                    "Sign up",
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium
-                        ?.copyWith(color: Theme.of(context).primaryColor),
-                  ),
-                ),
-              ],
-            ),
           ),
 
           if (authProvider.isLoading)
@@ -152,7 +130,7 @@ class SignIn extends StatelessWidget {
     await authProvider.signInWithGoogle();
 
     // Verifica si el usuario está autenticado
-    if (authProvider.isAuthenticated) {
+    if (!authProvider.isLoading) {
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (context) => OnboardingScreen()),
         (route) => false,

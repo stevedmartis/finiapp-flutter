@@ -1,6 +1,8 @@
 import 'package:finia_app/constants.dart';
+import 'package:finia_app/screens/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
 class SignupWithPhonePage extends StatelessWidget {
   const SignupWithPhonePage({super.key});
@@ -63,7 +65,7 @@ class SignupWithPhonePage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SignupWithPhone(
-            name: "Sign in with Phone Number",
+            name: "Entrar con mi número de celular",
             onPressed: () {
               // Define la lógica al presionar aquí
             },
@@ -84,22 +86,27 @@ class SignupWithPhone extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return SizedBox(
       width: double
           .infinity, // Asegura que el botón se extienda en el ancho disponible
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(24.0),
-            ),
-            minimumSize: const Size.fromHeight(40),
-            padding: const EdgeInsets.all(16.0),
-            backgroundColor: logoCOLOR1),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24.0),
+          ),
+          minimumSize: const Size.fromHeight(40),
+          padding: const EdgeInsets.all(16.0),
+          backgroundColor: themeProvider.getCardColor(),
+        ),
         child: Text(
           name,
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-              fontSize: 16.0, fontWeight: FontWeight.bold, color: Colors.white),
+              fontSize: 16.0,
+              fontWeight: FontWeight.bold,
+              color: themeProvider.getSubtitleColor()),
         ),
       ),
     );
