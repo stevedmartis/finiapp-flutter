@@ -159,6 +159,7 @@ class AuthService with ChangeNotifier {
 
             if (currentUser != null) {
               await tokenStorage.saveUser(currentUser!);
+              isLoading = false;
               notifyListeners();
             } else {
               print('Error: Failed to create user object from data');
@@ -187,6 +188,7 @@ class AuthService with ChangeNotifier {
       await _firebaseAuth.signOut();
       await tokenStorage.deleteAllTokens();
       currentUser = null;
+      isLoading = false;
       notifyListeners();
     } catch (error) {
       print('Failed to sign out: $error');

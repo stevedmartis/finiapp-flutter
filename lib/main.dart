@@ -1,7 +1,7 @@
 import 'package:finia_app/firebase_options.dart';
 import 'package:finia_app/helper/lifecycle_event.dart';
 import 'package:finia_app/screens/credit_card/credit_cards_page.dart';
-import 'package:finia_app/screens/onboarding_page.dart';
+import 'package:finia_app/screens/login/onboarding_page.dart';
 import 'package:finia_app/screens/providers/theme_provider.dart';
 import 'package:finia_app/services/auth_service.dart';
 import 'package:finia_app/services/finance_summary_service.dart';
@@ -69,11 +69,7 @@ class MyApp extends StatelessWidget {
             },
             home: Consumer<AuthService>(
               builder: (context, auth, _) {
-                if (auth.isLoading) {
-                  return Text('');
-                } else {
-                  return auth.isAuthenticated ? OnboardingScreen() : SignIn();
-                }
+                return auth.isAuthenticated ? OnboardingScreen() : SignIn();
               },
             ),
           );

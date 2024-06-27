@@ -1,7 +1,11 @@
 import 'package:finia_app/constants.dart';
+import 'package:finia_app/screens/credit_card/credit_card_widget.dart';
+import 'package:finia_app/screens/login/success_animation_widget.dart';
 import 'package:finia_app/screens/main/main_screen.dart';
+import 'package:finia_app/widgets/reouter_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:finia_app/screens/login/success_animation_widget.dart';
 
 class OnboardingScreen extends StatefulWidget {
   @override
@@ -44,12 +48,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [logoCOLOR1, logoCOLOR2],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
+            gradient: LinearGradient(
+          colors: [darkCardBackground, darkCardBackground],
+          begin: Alignment.bottomRight,
+          end: Alignment.topLeft,
+        )),
         child: Stack(
           children: [
             PageView.builder(
@@ -85,11 +88,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       height: 60,
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
-                          colors: [logoCOLOR1, logoCOLOR1],
+                          colors: [logoCOLOR1, logoCOLOR2],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                         ),
                         shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            spreadRadius: 2,
+                            blurRadius: 5,
+                            offset: Offset(0, 3),
+                          ),
+                        ],
                       ),
                       child: IconButton(
                         icon: Icon(
@@ -99,8 +110,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         ),
                         onPressed: () {
                           if (_currentIndex == _onboardingData.length - 1) {
-                            Navigator.of(context)
-                                .pushReplacementNamed('/mainScreen');
+                            /*                       Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => BublesSuccesPage(
+                                          orders: myProducts,
+                                        )));
+ */
+                            Navigator.push(
+                                context, bubleSuccessRouter(myProducts));
                           } else {
                             _pageController.nextPage(
                               duration: Duration(milliseconds: 300),
@@ -127,7 +145,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       width: 12,
       margin: EdgeInsets.symmetric(horizontal: 5),
       decoration: BoxDecoration(
-        color: _currentIndex == index ? Colors.white : Colors.grey,
+        color: _currentIndex == index ? logoCOLOR1 : Colors.grey,
         shape: BoxShape.circle,
       ),
     );

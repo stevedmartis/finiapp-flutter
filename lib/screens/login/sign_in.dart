@@ -1,5 +1,9 @@
 import 'package:finia_app/constants.dart';
+import 'package:finia_app/screens/credit_card/credit_card_widget.dart';
+import 'package:finia_app/screens/login/onboarding_page.dart';
+import 'package:finia_app/screens/login/success_animation_widget.dart';
 import 'package:finia_app/services/auth_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:finia_app/screens/login/phone_login.dart';
@@ -13,6 +17,8 @@ class SignIn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthService>(context);
+
     // Usar MediaQuery para determinar el tamaño de la pantalla
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
@@ -35,8 +41,8 @@ class SignIn extends StatelessWidget {
                     ),
                   ),
                   Expanded(
-                    child: _buildButtons(
-                        context), // Botones a la derecha para escritorio
+                    child: _buildButtons(context,
+                        authProvider), // Botones a la derecha para escritorio
                   ),
                 ],
               );
@@ -51,8 +57,8 @@ class SignIn extends StatelessWidget {
                       width: screenWidth *
                           0.8, // Ajusta este valor según sea necesario
                     ),
-                    _buildButtons(
-                        context), // Botones debajo de la imagen para móviles
+                    _buildButtons(context,
+                        authProvider), // Botones debajo de la imagen para móviles
                   ],
                 ),
               );
@@ -63,7 +69,7 @@ class SignIn extends StatelessWidget {
     );
   }
 
-  Widget _buildButtons(BuildContext context) {
+  Widget _buildButtons(BuildContext context, AuthService authProvider) {
     // Determinar el tamaño de la pantalla
     double screenWidth = MediaQuery.of(context).size.width;
     double buttonSpacing =
@@ -108,6 +114,7 @@ class SignIn extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => const PhoneLogin()));
             },
           ),
+
           Padding(
             padding: EdgeInsets.symmetric(vertical: 20), // Ajustar el padding
             child: Row(
@@ -129,6 +136,9 @@ class SignIn extends StatelessWidget {
               ],
             ),
           ),
+
+          if (authProvider.isLoading)
+            Center(child: CircularProgressIndicator()),
         ],
       ),
     );
@@ -143,6 +153,10 @@ class SignIn extends StatelessWidget {
 
     // Verifica si el usuario está autenticado
     if (authProvider.isAuthenticated) {
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => OnboardingScreen()),
+        (route) => false,
+      );
       print("Inicio de sesión exitoso");
     } else {
       print("Error de inicio de sesión");

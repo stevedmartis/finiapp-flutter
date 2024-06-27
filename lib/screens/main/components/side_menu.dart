@@ -1,4 +1,5 @@
 import 'package:finia_app/constants.dart';
+import 'package:finia_app/screens/login/sign_in.dart';
 import 'package:finia_app/screens/providers/theme_provider.dart';
 import 'package:finia_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
@@ -60,7 +61,10 @@ class _SideMenuState extends State<SideMenu> {
               svgSrc: "assets/icons/menu_profile.svg",
               press: () async {
                 await context.read<AuthService>().signOut();
-                Navigator.of(context).pushReplacementNamed('/signIn');
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (context) => SignIn()),
+                  (route) => false,
+                );
               },
               themeNotifier: themeNotifier),
           Divider(),
