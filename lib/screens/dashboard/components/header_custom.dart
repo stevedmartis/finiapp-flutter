@@ -1,9 +1,6 @@
 import 'package:finia_app/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
-import 'package:finia_app/controllers/MenuAppController.dart';
 import 'package:finia_app/screens/providers/theme_provider.dart';
 
 Widget buildHeaderContent(BuildContext context, ThemeProvider themeProvider) {
@@ -12,23 +9,16 @@ Widget buildHeaderContent(BuildContext context, ThemeProvider themeProvider) {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Balance Total:',
-          style: TextStyle(
-            color: Colors.white70,
-            fontSize: 16,
-          ),
-        ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Text(
           formatCurrency(1842081),
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.white,
             fontSize: 32,
             fontWeight: FontWeight.bold,
           ),
         ),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -40,7 +30,7 @@ Widget buildHeaderContent(BuildContext context, ThemeProvider themeProvider) {
               isPositive: true,
               themeProvider: themeProvider,
             ),
-            SizedBox(width: 16),
+            const SizedBox(width: 16),
             buildIndicator(
               icon: Icons.arrow_downward,
               title: 'Gastado',
@@ -65,11 +55,11 @@ Widget buildIndicator({
   required ThemeProvider themeProvider,
 }) {
   return Container(
-    padding: EdgeInsets.all(6),
+    padding: const EdgeInsets.all(6),
     decoration: BoxDecoration(
       color: themeProvider.getBackgroundColor(),
       borderRadius: BorderRadius.circular(10),
-      boxShadow: [
+      boxShadow: const [
         BoxShadow(
           color: Colors.black12,
           blurRadius: 10,
@@ -90,7 +80,7 @@ Widget buildIndicator({
               children: [
                 Text(
                   title,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.normal,
                   ),
@@ -105,7 +95,7 @@ Widget buildIndicator({
                 ),
               ],
             ),
-            SizedBox(width: 8),
+            const SizedBox(width: 8),
           ],
         ),
       ],
@@ -156,7 +146,7 @@ class SliverCustomHeaderDelegate extends SliverPersistentHeaderDelegate {
       fit: StackFit.expand,
       children: [
         Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment(0.0, -1.0),
               end: Alignment.bottomCenter,

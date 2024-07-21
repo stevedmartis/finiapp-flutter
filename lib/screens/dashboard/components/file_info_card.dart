@@ -1,4 +1,4 @@
-import 'package:finia_app/models/MyFiles.dart';
+import 'package:finia_app/models/my_files.dart';
 import 'package:finia_app/screens/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -7,9 +7,9 @@ import '../../../constants.dart';
 
 class FileInfoCard extends StatelessWidget {
   const FileInfoCard({
-    Key? key,
+    super.key,
     required this.info,
-  }) : super(key: key);
+  });
 
   final CloudStorageInfo info;
 
@@ -18,7 +18,7 @@ class FileInfoCard extends StatelessWidget {
     final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Container(
-      padding: EdgeInsets.all(defaultPadding),
+      padding: const EdgeInsets.all(defaultPadding),
       decoration: BoxDecoration(
         gradient: themeProvider.getGradientCard(),
         borderRadius: BorderRadius.circular(10),
@@ -27,7 +27,7 @@ class FileInfoCard extends StatelessWidget {
             color: Colors.black.withOpacity(0.1),
             spreadRadius: 2,
             blurRadius: 5,
-            offset: Offset(0, 3), // changes position of shadow
+            offset: const Offset(0, 3), // changes position of shadow
           ),
         ],
       ),
@@ -39,7 +39,7 @@ class FileInfoCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                padding: EdgeInsets.all(defaultPadding * 0.10),
+                padding: const EdgeInsets.all(defaultPadding * 0.10),
                 height: 30,
                 width: 30,
                 decoration: BoxDecoration(
@@ -55,7 +55,7 @@ class FileInfoCard extends StatelessWidget {
             ],
           ),
           Text(
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 14.0, // Tamaño del texto en puntos
             ),
             info.title!,
@@ -93,10 +93,10 @@ class FileInfoCard extends StatelessWidget {
 
 class ProgressLine extends StatelessWidget {
   const ProgressLine({
-    Key? key,
+    super.key,
     this.color = primaryColor,
     required this.percentage,
-  }) : super(key: key);
+  });
 
   final Color? color;
   final int? percentage;
@@ -110,7 +110,7 @@ class ProgressLine extends StatelessWidget {
           height: 5,
           decoration: BoxDecoration(
             color: color!.withOpacity(0.1),
-            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
           ),
         ),
         LayoutBuilder(
@@ -119,7 +119,7 @@ class ProgressLine extends StatelessWidget {
             height: 5,
             decoration: BoxDecoration(
               color: color,
-              borderRadius: BorderRadius.all(Radius.circular(10)),
+              borderRadius: const BorderRadius.all(Radius.circular(10)),
             ),
           ),
         ),

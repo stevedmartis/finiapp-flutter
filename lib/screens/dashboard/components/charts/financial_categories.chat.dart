@@ -33,7 +33,7 @@ class _BudgetedExpensesChartState extends State<BudgetedExpensesChart> {
             color: Colors.black.withOpacity(0.1),
             spreadRadius: 2,
             blurRadius: 5,
-            offset: Offset(0, 3), // changes position of shadow
+            offset: const Offset(0, 3), // changes position of shadow
           ),
         ],
       ),
@@ -52,33 +52,31 @@ class _BudgetedExpensesChartState extends State<BudgetedExpensesChart> {
               ),
             ),
           ),
-          Container(
-            child: SfCircularChart(
-              legend: Legend(
-                isVisible: true,
-                overflowMode: LegendItemOverflowMode.scroll,
-              ),
-              tooltipBehavior: TooltipBehavior(enable: true),
-              series: <CircularSeries>[
-                PieSeries<BudgetItem, String>(
-                  dataSource: budgetItems,
-                  xValueMapper: (BudgetItem data, _) => data.category,
-                  yValueMapper: (BudgetItem data, _) => data.spent,
-                  pointColorMapper: (BudgetItem data, _) =>
-                      getColorForCategory(data.category),
-                  dataLabelSettings: DataLabelSettings(isVisible: true),
-                  enableTooltip: true,
-                  name: 'Gastos',
-                )
-              ],
+          SfCircularChart(
+            legend: const Legend(
+              isVisible: true,
+              overflowMode: LegendItemOverflowMode.scroll,
             ),
+            tooltipBehavior: TooltipBehavior(enable: true),
+            series: <CircularSeries>[
+              PieSeries<BudgetItem, String>(
+                dataSource: budgetItems,
+                xValueMapper: (BudgetItem data, _) => data.category,
+                yValueMapper: (BudgetItem data, _) => data.spent,
+                pointColorMapper: (BudgetItem data, _) =>
+                    getColorForCategory(data.category),
+                dataLabelSettings: const DataLabelSettings(isVisible: true),
+                enableTooltip: true,
+                name: 'Gastos',
+              )
+            ],
           ),
           // Usamos un tamaño fijo para la lista basado en la cantidad de elementos
-          Container(
+          SizedBox(
             height:
                 listHeight, // Altura dinámica basada en la cantidad de elementos
             child: ListView.builder(
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               itemCount: budgetItems.length,
               itemBuilder: (context, index) {
                 final item = budgetItems[index];

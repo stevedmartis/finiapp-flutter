@@ -1,4 +1,4 @@
-import 'package:finia_app/models/createUserDTO.dart';
+import 'package:finia_app/models/create_user_dto.dart';
 import 'package:finia_app/responses/userResponse.dart';
 import 'package:finia_app/storage/auth_secure_storage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -161,20 +161,12 @@ class AuthService with ChangeNotifier {
               await tokenStorage.saveUser(currentUser!);
               isLoading = false;
               //notifyListeners();
-            } else {
-              print('Error: Failed to create user object from data');
-            }
-          } else {
-            print('Error: Missing tokens in response');
-          }
-        } else {
-          print('Error: Response format is incorrect');
-        }
-      } else {
-        print('Registration failed with status: ${response.statusCode}');
-      }
+            } else {}
+          } else {}
+        } else {}
+      } else {}
     } catch (e) {
-      print('Error making the registration request: $e');
+      return;
     } finally {
       isLoading =
           false; // Establecer isLoading como false después de completar la solicitud de registro
@@ -191,7 +183,7 @@ class AuthService with ChangeNotifier {
       isLoading = false;
       notifyListeners();
     } catch (error) {
-      print('Failed to sign out: $error');
+      return;
     }
   }
 }

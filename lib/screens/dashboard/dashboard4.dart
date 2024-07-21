@@ -1,5 +1,5 @@
 import 'package:finia_app/constants.dart';
-import 'package:finia_app/controllers/MenuAppController.dart';
+import 'package:finia_app/controllers/menu_app_controller.dart';
 import 'package:finia_app/screens/credit_card/credit_card_detail.dart';
 import 'package:finia_app/screens/credit_card/credit_card_widget.dart';
 import 'package:finia_app/screens/dashboard/components/charts/financial_categories.chat.dart';
@@ -10,23 +10,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
 class AdvancedScrollView1 extends StatefulWidget {
   @override
   State<AdvancedScrollView1> createState() => _AdvancedScrollViewState();
+
+  const AdvancedScrollView1({super.key});
 }
 
 class _AdvancedScrollViewState extends State<AdvancedScrollView1> {
   late ScrollController _scrollController;
   late MenuAppController menuAppController;
   final PageController _pageController = PageController(viewportFraction: 0.85);
-  bool _showTitle = false;
-  bool _enableVerticalScroll = false;
+  bool showTitle = false;
+  bool enableVerticalScroll = false;
 
   @override
   void initState() {
@@ -34,9 +31,9 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView1> {
     _scrollController = ScrollController()
       ..addListener(() {
         setState(() {
-          _showTitle =
+          showTitle =
               _scrollController.hasClients && _scrollController.offset > 150;
-          _enableVerticalScroll = _scrollController.hasClients &&
+          enableVerticalScroll = _scrollController.hasClients &&
               _scrollController.offset >= (280 - 70);
         });
       });
@@ -55,7 +52,7 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView1> {
   }
 
   Future<void> _refresh() async {
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 2));
   }
 
   String formatCurrency(double amount) {
@@ -82,13 +79,13 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView1> {
               leadingWidth: 60,
               backgroundColor: logoCOLOR2,
               leading: Container(
-                margin: EdgeInsets.only(left: 20, top: 10),
+                margin: const EdgeInsets.only(left: 20, top: 10),
                 child: GestureDetector(
                   onTap: () {
                     HapticFeedback.mediumImpact();
                     context.read<MenuAppController>().controlMenu();
                   },
-                  child: CircleAvatar(
+                  child: const CircleAvatar(
                     radius: 20,
                     backgroundImage: AssetImage(
                         'assets/images/profile_pic.png'), // Ruta a tu imagen
@@ -105,11 +102,11 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView1> {
                     // Navegar a la página de notificaciones
                   },
                   child: Container(
-                    padding: EdgeInsets.only(
+                    padding: const EdgeInsets.only(
                       right: 20,
                       top: 10,
                     ),
-                    child: Row(
+                    child: const Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
@@ -129,7 +126,7 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView1> {
               floating: false,
               pinned: true,
               flexibleSpace: FlexibleSpaceBar(
-                stretchModes: [
+                stretchModes: const [
                   StretchMode.zoomBackground,
                   StretchMode.fadeTitle,
                 ],
@@ -137,7 +134,7 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView1> {
                   fit: StackFit.expand,
                   children: [
                     Container(
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         gradient: LinearGradient(
                           begin: Alignment(0.0, -2.0),
                           end: Alignment.bottomCenter,
@@ -166,13 +163,13 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView1> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text(
+                    const Text(
                       'Mis productos',
                       style:
                           TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
                     IconButton(
-                      icon: Icon(Icons.add),
+                      icon: const Icon(Icons.add),
                       onPressed: () {},
                     ),
                   ],
@@ -237,23 +234,23 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView1> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          const Text(
             'Balance Total:',
             style: TextStyle(
               color: Colors.white70,
               fontSize: 16,
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Text(
             formatCurrency(1842081),
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 32,
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -265,7 +262,7 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView1> {
                 isPositive: true,
                 themeProvider: themeProvider,
               ),
-              SizedBox(width: 16),
+              const SizedBox(width: 16),
               buildIndicator(
                 icon: Icons.arrow_downward,
                 title: 'Gastado',
@@ -290,11 +287,11 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView1> {
     required ThemeProvider themeProvider,
   }) {
     return Container(
-      padding: EdgeInsets.all(6),
+      padding: const EdgeInsets.all(6),
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.1),
         borderRadius: BorderRadius.circular(10),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             color: Colors.black12,
             blurRadius: 10,
@@ -311,13 +308,13 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView1> {
                 color: isPositive ? Colors.green : Colors.red,
                 size: 30,
               ),
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     title,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.normal,
                       color: Colors.white70,
@@ -325,7 +322,7 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView1> {
                   ),
                   Text(
                     formatCurrency(amount),
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 20,
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -333,7 +330,7 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView1> {
                   ),
                 ],
               ),
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
             ],
           ),
         ],

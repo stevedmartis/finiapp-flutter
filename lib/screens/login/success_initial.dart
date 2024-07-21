@@ -10,19 +10,19 @@ enum DataBackupState {
 
 class SuccessInitialPage extends StatefulWidget {
   const SuccessInitialPage({
-    Key? key,
+    super.key,
     required this.onAnimationStarted,
     required this.progressAnimation,
-  }) : super(key: key);
+  });
   final VoidCallback onAnimationStarted;
   final Animation<double> progressAnimation;
 
   @override
-  _DataBackupInitialPageState createState() => _DataBackupInitialPageState();
+  DataBackupInitialPageState createState() => DataBackupInitialPageState();
 }
 
-class _DataBackupInitialPageState extends State<SuccessInitialPage> {
-  DataBackupState _currentState = DataBackupState.initial;
+class DataBackupInitialPageState extends State<SuccessInitialPage> {
+  final DataBackupState _currentState = DataBackupState.initial;
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +52,7 @@ class _DataBackupInitialPageState extends State<SuccessInitialPage> {
                         child: Padding(
                           padding: const EdgeInsets.only(bottom: 20.0),
                           child: ProgressCounter(
-                            widget.progressAnimation,
+                            animation: widget.progressAnimation,
                           ),
                         ),
                       ),
@@ -68,11 +68,13 @@ class _DataBackupInitialPageState extends State<SuccessInitialPage> {
   }
 }
 
-//ignore: must_be_immutable
 class ProgressCounter extends AnimatedWidget {
-  ProgressCounter(Animation<double> animation) : super(listenable: animation);
+  const ProgressCounter({
+    super.key,
+    required Animation<double> animation,
+  }) : super(listenable: animation);
 
-  double get value => (listenable as Animation).value;
+  double get value => (listenable as Animation<double>).value;
 
   @override
   Widget build(BuildContext context) {

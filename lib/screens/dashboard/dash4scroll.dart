@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
 class AdvancedScrollView3 extends StatefulWidget {
   @override
@@ -75,13 +74,13 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView3> {
                   leadingWidth: 60,
                   backgroundColor: Colors.blue,
                   leading: Container(
-                    margin: EdgeInsets.only(left: 20, top: 10),
+                    margin: const EdgeInsets.only(left: 20, top: 10),
                     child: GestureDetector(
                       onTap: () {
                         HapticFeedback.mediumImpact();
                         // Acciones adicionales aquí
                       },
-                      child: CircleAvatar(
+                      child: const CircleAvatar(
                         radius: 20,
                         backgroundImage: AssetImage(
                             'assets/images/profile_pic.png'), // Ruta a tu imagen
@@ -96,8 +95,8 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView3> {
                         // Acciones adicionales aquí
                       },
                       child: Container(
-                        padding: EdgeInsets.only(right: 20, top: 10),
-                        child: Icon(Icons.notifications,
+                        padding: const EdgeInsets.only(right: 20, top: 10),
+                        child: const Icon(Icons.notifications,
                             color: Colors.white, size: 30),
                       ),
                     )
@@ -116,7 +115,7 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView3> {
                       fit: StackFit.expand,
                       children: [
                         Container(
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             gradient: LinearGradient(
                               begin: Alignment(0.0, -2.0),
                               end: Alignment.bottomCenter,
@@ -145,10 +144,11 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView3> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Text('Mis productos',
+                        const Text('Mis productos',
                             style: TextStyle(
                                 fontSize: 24, fontWeight: FontWeight.bold)),
-                        IconButton(icon: Icon(Icons.add), onPressed: () {}),
+                        IconButton(
+                            icon: const Icon(Icons.add), onPressed: () {}),
                       ],
                     ),
                   ),
@@ -174,7 +174,7 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView3> {
                             child: Center(child: Text('Card $index')),
                           ),
                         ),
-                        SizedBox(height: 16),
+                        const SizedBox(height: 16),
                         GestureDetector(
                           onTap: () {},
                           child: Container(
@@ -183,14 +183,14 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView3> {
                             child: Center(child: Text('Info Card $index')),
                           ),
                         ),
-                        SizedBox(height: 16),
+                        const SizedBox(height: 16),
                         Container(
                           height: 2000,
                           color: Colors.grey,
                           child:
                               Center(child: Text('Transactions List $index')),
                         ),
-                        SizedBox(height: 16),
+                        const SizedBox(height: 16),
                       ],
                     ),
                   ),
@@ -209,15 +209,15 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView3> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Balance Total:',
+          const Text('Balance Total:',
               style: TextStyle(color: Colors.white70, fontSize: 16)),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Text(formatCurrency(1842081),
-              style: TextStyle(
+              style: const TextStyle(
                   color: Colors.white,
                   fontSize: 32,
                   fontWeight: FontWeight.bold)),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -228,7 +228,7 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView3> {
                 context: context,
                 isPositive: true,
               ),
-              SizedBox(width: 16),
+              const SizedBox(width: 16),
               buildIndicator(
                 icon: Icons.arrow_downward,
                 title: 'Gastado',
@@ -269,23 +269,23 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView3> {
             children: [
               Icon(icon,
                   color: isPositive ? Colors.green : Colors.red, size: 30),
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(title,
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.normal,
                           color: Colors.white70)),
                   Text(formatCurrency(amount),
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontSize: 20,
                           color: Colors.white,
                           fontWeight: FontWeight.bold)),
                 ],
               ),
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
             ],
           ),
         ],

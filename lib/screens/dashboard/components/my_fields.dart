@@ -1,4 +1,4 @@
-import 'package:finia_app/models/MyFiles.dart';
+import 'package:finia_app/models/my_files.dart';
 import 'package:finia_app/responsive.dart';
 
 import 'package:flutter/material.dart';
@@ -8,9 +8,9 @@ class InfoCardsAmounts extends StatelessWidget {
   final List<CloudStorageInfo> fileInfo;
 
   const InfoCardsAmounts({
-    Key? key,
+    super.key,
     required this.fileInfo,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -40,16 +40,16 @@ class FileInfoCardGridView extends StatelessWidget {
   final double childAspectRatio;
 
   const FileInfoCardGridView({
-    Key? key,
+    super.key,
     required this.files,
     this.crossAxisCount = 4,
     this.childAspectRatio = 1,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
-      physics: NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       itemCount: files.length,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -59,7 +59,7 @@ class FileInfoCardGridView extends StatelessWidget {
         childAspectRatio: childAspectRatio,
       ),
       itemBuilder: (context, index) => Container(
-          padding: EdgeInsets.only(left: 5, right: 16),
+          padding: const EdgeInsets.only(left: 5, right: 16),
           child: FileInfoCard(info: files[index])),
     );
   }

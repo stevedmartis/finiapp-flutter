@@ -1,14 +1,13 @@
 import 'package:finia_app/constants.dart';
 import 'package:finia_app/screens/credit_card/credit_card_widget.dart';
-import 'package:finia_app/screens/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:vector_math/vector_math_64.dart' as vector;
 
 class SuccessCompletePage extends AnimatedWidget {
   final List<CreditCard> ordersCreate;
 
-  SuccessCompletePage({
+  const SuccessCompletePage({
+    super.key,
     required Animation<double> endingAnimation,
     required this.ordersCreate,
   }) : super(listenable: endingAnimation);
@@ -20,7 +19,7 @@ class SuccessCompletePage extends AnimatedWidget {
     return animation.value > 0
         ? Positioned.fill(
             child: Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 gradient: LinearGradient(
                   colors: [logoCOLOR1, logoCOLOR2],
                   begin: Alignment.topLeft,
@@ -36,7 +35,7 @@ class SuccessCompletePage extends AnimatedWidget {
                       child: CustomPaint(
                         foregroundPainter:
                             _DataBackupCompletedPainter(animation),
-                        child: Container(
+                        child: const SizedBox(
                           height: 100,
                           width: 100,
                         ),
@@ -62,15 +61,15 @@ class SuccessCompletePage extends AnimatedWidget {
                       },
                       child: Column(
                         children: [
-                          Text(
+                          const Text(
                             'Todo Listo!',
                             style: TextStyle(fontSize: 17, color: Colors.white),
                             textAlign: TextAlign.center,
                           ),
-                          Spacer(),
+                          const Spacer(),
                           OutlinedButton(
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
+                            child: const Padding(
+                              padding: EdgeInsets.symmetric(
                                   vertical: 20.0, horizontal: 40),
                               child: Text(
                                 'Comenzar',

@@ -17,16 +17,16 @@ class ThemeProvider extends ChangeNotifier {
   final ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
     primarySwatch: Colors.blue,
-    appBarTheme: AppBarTheme(
+    appBarTheme: const AppBarTheme(
       backgroundColor: logoCOLOR1,
       foregroundColor: Colors.white,
     ),
     scaffoldBackgroundColor: lightBackground,
-    textTheme: TextTheme(
+    textTheme: const TextTheme(
       bodyLarge: TextStyle(color: lightTitleColor),
       bodyMedium: TextStyle(color: lightSubtitleColor),
     ),
-    iconTheme: IconThemeData(
+    iconTheme: const IconThemeData(
       color: lightIconColor,
     ),
     cardColor: lightCardBackground,
@@ -35,16 +35,16 @@ class ThemeProvider extends ChangeNotifier {
   final ThemeData darkTheme = ThemeData(
     brightness: Brightness.dark,
     primarySwatch: Colors.blue,
-    appBarTheme: AppBarTheme(
+    appBarTheme: const AppBarTheme(
       backgroundColor: logoCOLOR1,
       foregroundColor: Colors.white,
     ),
     scaffoldBackgroundColor: backgroundDark,
-    textTheme: TextTheme(
+    textTheme: const TextTheme(
       bodyLarge: TextStyle(color: darkTitleColor),
       bodyMedium: TextStyle(color: darkSubtitleColor),
     ),
-    iconTheme: IconThemeData(
+    iconTheme: const IconThemeData(
       color: darkIconColor,
     ),
     cardColor: darkCardBackground,
@@ -116,12 +116,12 @@ class ThemeProvider extends ChangeNotifier {
 
   LinearGradient getGradientCard() {
     return _themeMode == ThemeMode.dark
-        ? LinearGradient(
+        ? const LinearGradient(
             colors: [darkCardBackground, darkCardBackground],
             begin: Alignment.bottomRight,
             end: Alignment.topLeft,
           )
-        : LinearGradient(
+        : const LinearGradient(
             colors: [
               lightCardBackground,
               Colors.white,

@@ -1,6 +1,6 @@
 import 'package:finia_app/models/transaction.model.dart';
 import 'package:finia_app/screens/dashboard/components/storage_info_card.dart';
-import 'package:finia_app/widgets/custom_expansionTile.dart';
+import 'package:finia_app/widgets/custom_expansion_tile.dart';
 import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
@@ -43,14 +43,14 @@ Map<String, List<TransactionCreditCard>> groupTransactionsByDate(
 class TransactionsWidget extends StatelessWidget {
   final List<TransactionCreditCard> transactions;
 
-  TransactionsWidget({Key? key, required this.transactions}) : super(key: key);
+  const TransactionsWidget({super.key, required this.transactions});
 
   @override
   Widget build(BuildContext context) {
     var groupedTransactions = groupTransactionsByDate(transactions);
 
     return ListView.builder(
-      physics: NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       itemCount: groupedTransactions.keys.length,
       itemBuilder: (context, index) {
@@ -61,7 +61,7 @@ class TransactionsWidget extends StatelessWidget {
           title: key,
           children: tList
               .map((transaction) => AmmountsInfoCard(
-                    key: transaction.id,
+                    transactionId: transaction.id,
                     title: transaction.description,
                     svgSrc: transaction.icon,
                     amount: transaction.outAmount.toDouble(),

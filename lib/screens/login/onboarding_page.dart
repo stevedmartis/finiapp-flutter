@@ -5,33 +5,35 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class OnboardingScreen extends StatefulWidget {
+  const OnboardingScreen({super.key});
+
   @override
-  _OnboardingScreenState createState() => _OnboardingScreenState();
+  OnboardingScreenState createState() => OnboardingScreenState();
 }
 
-class _OnboardingScreenState extends State<OnboardingScreen> {
-  PageController _pageController = PageController();
+class OnboardingScreenState extends State<OnboardingScreen> {
+  final PageController _pageController = PageController();
   int _currentIndex = 0;
   bool _showButton = false;
 
-  List<Map<String, String>> _onboardingData = [
+  final List<Map<String, String>> _onboardingData = [
     {
-      "image": "assets/images/signup-vector.svg",
-      "title": "Choose Your Product",
+      "image": "assets/images/projections.svg",
+      "title": "¡Todas tus cuentas, \na tu pinta! 😎",
       "description":
-          "Welcome to a World of Limitless Choices - Your Perfect Product Awaits!"
+          "Olvídate del desorden. FinIA junta tus cuentas y tarjetas en un solo lugar. ¡Maneja tu plata fácil y rápido! 😉"
     },
     {
-      "image": "assets/images/signup-vector.svg",
-      "title": "Easy Payment",
+      "image": "assets/images/vault.svg",
+      "title": "¡Tu dinero seguro, \ntus metas claras! 😉",
       "description":
-          "Fast and Secure Payment Options Available at Your Fingertips."
+          "FinIA protege tu información con seguridad de nivel bancario. ¡Controla tus gastos y ahorra para tus sueños sin preocupaciones! 🔐"
     },
     {
-      "image": "assets/images/signup-vector.svg",
-      "title": "Quick Delivery",
+      "image": "assets/images/investor_update.svg",
+      "title": "¡Invierte como un experto! 🚀",
       "description":
-          "Get Your Products Delivered Quickly and Safely to Your Doorstep."
+          "Obtén recomendaciones personalizadas y claras para hacer crecer tu dinero. ¡Con FinIA, invertir es Izi Pizi! 💪"
     }
   ];
 
@@ -39,7 +41,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     setState(() {
       _currentIndex = index;
       if (index == _onboardingData.length - 1) {
-        Future.delayed(Duration(milliseconds: 800), () {
+        Future.delayed(const Duration(milliseconds: 800), () {
           setState(() {
             _showButton = true;
           });
@@ -54,7 +56,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
             gradient: LinearGradient(
           colors: [darkCardBackground, darkCardBackground],
           begin: Alignment.bottomRight,
@@ -85,15 +87,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       (index) => buildDot(index, context),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   AnimatedOpacity(
                     opacity: _showButton ? 1.0 : 0.0,
-                    duration: Duration(milliseconds: 900),
+                    duration: const Duration(milliseconds: 900),
                     child: Container(
                       width: 60,
                       height: 60,
                       decoration: BoxDecoration(
-                        gradient: LinearGradient(
+                        gradient: const LinearGradient(
                           colors: [logoCOLOR1, logoCOLOR2],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
@@ -104,12 +106,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             color: Colors.black.withOpacity(0.2),
                             spreadRadius: 2,
                             blurRadius: 5,
-                            offset: Offset(0, 3),
+                            offset: const Offset(0, 3),
                           ),
                         ],
                       ),
                       child: IconButton(
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.arrow_forward,
                           color: Colors.white,
                           size: 30,
@@ -127,7 +129,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                 context, bubleSuccessRouter(myProducts));
                           } else {
                             _pageController.nextPage(
-                              duration: Duration(milliseconds: 300),
+                              duration: const Duration(milliseconds: 300),
                               curve: Curves.ease,
                             );
                           }
@@ -146,10 +148,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   AnimatedContainer buildDot(int index, BuildContext context) {
     return AnimatedContainer(
-      duration: Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 300),
       height: 12,
       width: 12,
-      margin: EdgeInsets.symmetric(horizontal: 5),
+      margin: const EdgeInsets.symmetric(horizontal: 5),
       decoration: BoxDecoration(
         color: _currentIndex == index ? logoCOLOR1 : Colors.grey,
         shape: BoxShape.circle,
@@ -163,7 +165,8 @@ class OnboardingPage extends StatelessWidget {
   final String title;
   final String description;
 
-  OnboardingPage({
+  const OnboardingPage({
+    super.key,
     required this.image,
     required this.title,
     required this.description,
@@ -178,22 +181,22 @@ class OnboardingPage extends StatelessWidget {
         children: [
           Text(
             title,
-            style: TextStyle(
-              fontSize: 28,
+            style: const TextStyle(
+              fontSize: 24,
               fontWeight: FontWeight.bold,
               color: Colors.white,
             ),
           ),
-          SizedBox(height: 30),
+          const SizedBox(height: 30),
           SvgPicture.asset(
             image,
             height: 300,
           ),
-          SizedBox(height: 30),
+          const SizedBox(height: 30),
           Text(
             description,
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 18,
               color: Colors.white70,
             ),

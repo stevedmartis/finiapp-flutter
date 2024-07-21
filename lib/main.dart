@@ -8,7 +8,7 @@ import 'package:finia_app/services/finance_summary_service.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
-import 'package:finia_app/controllers/MenuAppController.dart';
+import 'package:finia_app/controllers/menu_app_controller.dart';
 import 'package:finia_app/screens/main/main_screen.dart';
 import 'package:finia_app/screens/login/sign_in.dart';
 import 'package:http_interceptor/http_interceptor.dart';
@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
   final InterceptedClient client;
   final AuthService authService;
 
-  MyApp({required this.client, required this.authService});
+  const MyApp({super.key, required this.client, required this.authService});
 
   @override
   Widget build(BuildContext context) {
@@ -55,21 +55,23 @@ class MyApp extends StatelessWidget {
         builder: (context, themeProvider, _) {
           return MaterialApp(
             key: navigatorKey,
-            locale: Locale('es', 'ES'),
+            locale: const Locale('es', 'ES'),
             debugShowCheckedModeBanner: false,
             title: 'finIA',
             theme: themeProvider.lightTheme,
             darkTheme: themeProvider.darkTheme,
             themeMode: themeProvider.themeMode, // Usa el tema oscuro
             routes: {
-              '/mainScreen': (context) => MainScreen(),
-              '/signIn': (context) => SignIn(),
+              '/mainScreen': (context) => const MainScreen(),
+              '/signIn': (context) => const SignIn(),
               '/cards': (context) => CreditCardDemo(),
-              '/onB': (context) => OnboardingScreen(),
+              '/onB': (context) => const OnboardingScreen(),
             },
             home: Consumer<AuthService>(
               builder: (context, auth, _) {
-                return auth.isAuthenticated ? OnboardingScreen() : SignIn();
+                return auth.isAuthenticated
+                    ? const OnboardingScreen()
+                    : const SignIn();
               },
             ),
           );

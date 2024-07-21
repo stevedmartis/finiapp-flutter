@@ -7,7 +7,8 @@ import '../../../constants.dart';
 
 class AmmountsInfoCard extends StatelessWidget {
   const AmmountsInfoCard({
-    String? key,
+    super.key,
+    required transactionId,
     required this.title,
     required this.svgSrc,
     required this.amount,
@@ -25,7 +26,7 @@ class AmmountsInfoCard extends StatelessWidget {
     final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Container(
-      padding: EdgeInsets.all(defaultPadding),
+      padding: const EdgeInsets.all(defaultPadding),
       color: Colors.transparent,
       child: Row(
         children: [
@@ -44,10 +45,10 @@ class AmmountsInfoCard extends StatelessWidget {
                     title,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    formatCurrency(this.amount),
+                    formatCurrency(amount),
                     style: Theme.of(context)
                         .textTheme
                         .bodyMedium!

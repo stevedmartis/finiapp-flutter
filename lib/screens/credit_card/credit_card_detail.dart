@@ -12,7 +12,7 @@ import 'credit_card_widget.dart';
 class CreditCardDetail extends StatefulWidget {
   final CreditCard card;
 
-  const CreditCardDetail({Key? key, required this.card}) : super(key: key);
+  const CreditCardDetail({super.key, required this.card});
 
   @override
   _CreditCardDetailState createState() => _CreditCardDetailState();
@@ -44,16 +44,17 @@ class _CreditCardDetailState extends State<CreditCardDetail> {
             ),
           ),
           SliverPadding(
-            padding: EdgeInsets.symmetric(horizontal: defaultPadding),
+            padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
             sliver: SliverList(
               delegate: SliverChildListDelegate(
                 [
                   _buildCurrentBalance(currentTheme, widget.card.available),
-                  SizedBox(height: defaultPadding),
+                  const SizedBox(height: defaultPadding),
                   InfoCardsAmounts(
                     fileInfo: widget.card.fileInfo,
                   ),
-                  if (Responsive.isMobile(context)) TransactionHistorialPage(),
+                  if (Responsive.isMobile(context))
+                    const TransactionHistorialPage(),
                 ],
               ),
             ),
@@ -70,7 +71,7 @@ class _CreditCardDetailState extends State<CreditCardDetail> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
             decoration: BoxDecoration(
               gradient: themeProvider.getGradientCard(),
               borderRadius: BorderRadius.circular(10),
@@ -79,7 +80,7 @@ class _CreditCardDetailState extends State<CreditCardDetail> {
                   color: Colors.black.withOpacity(0.1),
                   spreadRadius: 2,
                   blurRadius: 5,
-                  offset: Offset(0, 3), // changes position of shadow
+                  offset: const Offset(0, 3), // changes position of shadow
                 ),
               ],
             ),
@@ -88,12 +89,12 @@ class _CreditCardDetailState extends State<CreditCardDetail> {
               children: [
                 Row(
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.account_balance_wallet,
                       color: logoCOLOR1,
                       size: 40,
                     ),
-                    SizedBox(width: 10),
+                    const SizedBox(width: 10),
                     Text(
                       formatCurrency(available),
                       style: TextStyle(
@@ -104,7 +105,7 @@ class _CreditCardDetailState extends State<CreditCardDetail> {
                     ),
                   ],
                 ),
-                Icon(
+                const Icon(
                   Icons.arrow_forward,
                   color: logoCOLOR1,
                 ),

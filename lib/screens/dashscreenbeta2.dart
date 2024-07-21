@@ -1,10 +1,8 @@
 import 'package:finia_app/constants.dart';
-import 'package:finia_app/controllers/MenuAppController.dart';
+import 'package:finia_app/controllers/menu_app_controller.dart';
 import 'package:finia_app/screens/credit_card/credit_card_detail.dart';
 import 'package:finia_app/screens/credit_card/credit_card_widget.dart';
 import 'package:finia_app/screens/dashboard/components/charts/financial_categories.chat.dart';
-import 'package:finia_app/screens/dashboard/components/header_custom.dart';
-import 'package:finia_app/screens/dashboard/components/my_fields.dart';
 import 'package:finia_app/screens/dashboard/components/transactions_dashboard.dart';
 import 'package:finia_app/screens/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
@@ -62,7 +60,7 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView2> {
   }
 
   Future<void> _refresh() async {
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 2));
   }
 
   @override
@@ -81,13 +79,13 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView2> {
               leadingWidth: 60,
               backgroundColor: logoAppBarCOLOR,
               leading: Container(
-                margin: EdgeInsets.only(left: 20, top: 10),
+                margin: const EdgeInsets.only(left: 20, top: 10),
                 child: GestureDetector(
                   onTap: () {
                     HapticFeedback.mediumImpact();
                     context.read<MenuAppController>().controlMenu();
                   },
-                  child: CircleAvatar(
+                  child: const CircleAvatar(
                     radius: 20,
                     backgroundImage: AssetImage(
                         'assets/images/profile_pic.png'), // Ruta a tu imagen
@@ -104,11 +102,11 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView2> {
                     // Navegar a la página de notificaciones
                   },
                   child: Container(
-                    padding: EdgeInsets.only(
+                    padding: const EdgeInsets.only(
                       right: 20,
                       top: 10,
                     ),
-                    child: Row(
+                    child: const Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
@@ -128,7 +126,7 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView2> {
               floating: false,
               pinned: true,
               flexibleSpace: FlexibleSpaceBar(
-                stretchModes: [
+                stretchModes: const [
                   StretchMode.zoomBackground,
                   StretchMode.fadeTitle,
                 ],
@@ -136,7 +134,7 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView2> {
                   fit: StackFit.expand,
                   children: [
                     Container(
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         gradient: LinearGradient(
                           begin: Alignment(0.0, -2.0),
                           end: Alignment.bottomCenter,
@@ -213,12 +211,12 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView2> {
                               color: currentTheme.getSubtitleColor()),
                         ),
                         IconButton(
-                          icon: Icon(Icons.add),
+                          icon: const Icon(Icons.add),
                           onPressed: () {},
                         ),
                       ],
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     _buildCurrentBalance(currentTheme, myProducts[0].available),
                     buildHeaderContent(context, currentTheme),
                     Text(
@@ -228,7 +226,7 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView2> {
                           fontWeight: FontWeight.bold,
                           color: currentTheme.getSubtitleColor()),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Padding(
                       padding: const EdgeInsets.symmetric(
                         vertical: 8.0,
@@ -296,7 +294,7 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView2> {
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
                   return Container(
-                    padding: EdgeInsets.all(defaultPadding),
+                    padding: const EdgeInsets.all(defaultPadding),
                     height: MediaQuery.of(context).size.width *
                         2, // Ajusta la altura según tu diseño
                     child: BudgetedExpensesChart(),
@@ -333,7 +331,7 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView2> {
         maxHeight: 50.0,
         child: Container(
           color: Colors.white,
-          child: Center(
+          child: const Center(
             child: Text(
               'Título Personalizado',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
@@ -353,7 +351,7 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView2> {
           GestureDetector(
             onTap: () => _handleCardTap(context, myProducts[0]),
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
               decoration: BoxDecoration(
                 gradient: themeProvider.getGradientCard(),
                 borderRadius: BorderRadius.circular(20),
@@ -362,7 +360,7 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView2> {
                     color: Colors.black.withOpacity(0.1),
                     spreadRadius: 2,
                     blurRadius: 5,
-                    offset: Offset(0, 3), // changes position of shadow
+                    offset: const Offset(0, 3), // changes position of shadow
                   ),
                 ],
               ),
@@ -371,12 +369,12 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView2> {
                 children: [
                   Row(
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.account_balance_wallet,
                         color: logoCOLOR1,
                         size: 40,
                       ),
-                      SizedBox(width: 10),
+                      const SizedBox(width: 10),
                       Text(
                         formatCurrency(available),
                         style: TextStyle(
@@ -387,7 +385,7 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView2> {
                       ),
                     ],
                   ),
-                  Icon(
+                  const Icon(
                     Icons.arrow_forward,
                     color: logoCOLOR1,
                   ),
@@ -435,7 +433,7 @@ Widget buildHeaderContent(BuildContext context, ThemeProvider themeProvider) {
               isPositive: true,
               themeProvider: themeProvider,
             ),
-            SizedBox(width: 16),
+            const SizedBox(width: 16),
             buildIndicator(
               icon: Icons.arrow_downward,
               title: 'Gastado',
@@ -460,7 +458,7 @@ Widget buildIndicator({
   required ThemeProvider themeProvider,
 }) {
   return Container(
-    padding: EdgeInsets.all(6),
+    padding: const EdgeInsets.all(6),
     decoration: BoxDecoration(
       gradient: themeProvider.getGradientCard(),
       borderRadius: BorderRadius.circular(10),
@@ -469,7 +467,7 @@ Widget buildIndicator({
           color: Colors.black.withOpacity(0.1),
           spreadRadius: 2,
           blurRadius: 5,
-          offset: Offset(0, 3),
+          offset: const Offset(0, 3),
         ),
       ],
     ),
@@ -482,7 +480,7 @@ Widget buildIndicator({
               color: isPositive ? Colors.green : Colors.red,
               size: 30,
             ),
-            SizedBox(width: 8),
+            const SizedBox(width: 8),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -504,7 +502,7 @@ Widget buildIndicator({
                 ),
               ],
             ),
-            SizedBox(width: 20),
+            const SizedBox(width: 20),
           ],
         ),
       ],

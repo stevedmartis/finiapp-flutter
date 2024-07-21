@@ -24,12 +24,8 @@ class TokenInterceptor implements InterceptorContract {
         // Asegúrate de que data.request no es nulo antes de reenviar
         if (data.request != null) {
           return await _retryRequest(data.request!, authService);
-        } else {
-          print("Request data is null, cannot retry the request.");
-        }
-      } else {
-        print("Failed to refresh token");
-      }
+        } else {}
+      } else {}
     }
     return data;
   }

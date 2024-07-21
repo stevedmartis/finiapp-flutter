@@ -7,7 +7,7 @@ import 'package:finia_app/widgets/signup_with_phone.dart';
 import 'package:pinput/pinput.dart';
 
 class Verification extends StatefulWidget {
-  const Verification({Key? key}) : super(key: key);
+  const Verification({super.key});
 
   @override
   State<Verification> createState() => _VerificationState();
@@ -72,7 +72,7 @@ class _VerificationState extends State<Verification> {
                   "Code has been sent to +91 *********1245",
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(height: 40),
+                const SizedBox(height: 40),
                 Pinput(
                   length: 6,
                   showCursor: true,
@@ -82,7 +82,7 @@ class _VerificationState extends State<Verification> {
                     // Implement verification logic here
                   },
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -102,13 +102,14 @@ class _VerificationState extends State<Verification> {
                     ),
                   ],
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 SignupWithPhone(
                   name: "Verify",
                   onPressed: () {
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => MainScreen()),
+                      MaterialPageRoute(
+                          builder: (context) => const MainScreen()),
                     );
                   },
                 ),

@@ -6,17 +6,17 @@ class CustomExpansionTile extends StatefulWidget {
   final bool isInitiallyExpanded;
 
   const CustomExpansionTile({
-    Key? key,
+    super.key,
     required this.title,
     required this.children,
     this.isInitiallyExpanded = true,
-  }) : super(key: key);
+  });
 
   @override
-  _CustomExpansionTileState createState() => _CustomExpansionTileState();
+  CustomExpansionTileState createState() => CustomExpansionTileState();
 }
 
-class _CustomExpansionTileState extends State<CustomExpansionTile>
+class CustomExpansionTileState extends State<CustomExpansionTile>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
@@ -65,7 +65,7 @@ class _CustomExpansionTileState extends State<CustomExpansionTile>
           title: Text(widget.title),
           trailing: RotationTransition(
             turns: _iconTurns,
-            child: Icon(Icons.expand_more),
+            child: const Icon(Icons.expand_more),
           ),
         ),
         SizeTransition(

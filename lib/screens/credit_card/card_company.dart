@@ -8,7 +8,7 @@ class CardCompany {
     ),
   );
 
-  static CardCompany americanExpress = CardCompany(
+  static CardCompany americanExpress = const CardCompany(
     Text(
       'AMERICAN \nEXPRESS',
       textAlign: TextAlign.right,

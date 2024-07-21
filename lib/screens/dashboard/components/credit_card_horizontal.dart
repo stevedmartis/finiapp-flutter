@@ -1,26 +1,23 @@
-import 'package:finia_app/constants.dart';
 import 'package:finia_app/screens/credit_card/credit_card_detail.dart';
 import 'package:finia_app/screens/credit_card/credit_card_widget.dart';
 import 'package:finia_app/screens/dashboard/components/my_fields.dart';
 import 'package:finia_app/screens/dashboard/components/transactions_dashboard.dart';
-import 'package:finia_app/screens/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class CreditCardHorizontalList extends StatelessWidget {
   final List<CreditCard> cards;
 
   const CreditCardHorizontalList({
-    Key? key,
+    super.key,
     required this.cards,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     final PageController _pageController =
         PageController(viewportFraction: 0.85);
 
-    return Container(
+    return SizedBox(
       height: MediaQuery.of(context).size.height * 0.6,
       child: PageView.builder(
         controller: _pageController,
@@ -30,7 +27,7 @@ class CreditCardHorizontalList extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 4.0),
             child: ListView(
               physics:
-                  NeverScrollableScrollPhysics(), // Desactiva el desplazamiento en ListView
+                  const NeverScrollableScrollPhysics(), // Desactiva el desplazamiento en ListView
               children: [
                 GestureDetector(
                   onTap: () => _handleCardTap(context, cards[index]),
@@ -39,7 +36,7 @@ class CreditCardHorizontalList extends StatelessWidget {
                     child: cards[index],
                   ),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 GestureDetector(
                   onTap: () => _handleCardTap(context, cards[index]),
                   child: InfoCardsAmounts(

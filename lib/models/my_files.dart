@@ -21,7 +21,7 @@ List<CloudStorageInfo> demoMyFiles = [
   CloudStorageInfo(
     title: "Gastado:",
     numOfFiles: 1328,
-    icon: Icon(Icons.credit_card, color: Colors.blue),
+    icon: const Icon(Icons.credit_card, color: Colors.blue),
     totalStorage: "\$1.9",
     color: primaryColor,
     percentage: 50,
@@ -29,9 +29,9 @@ List<CloudStorageInfo> demoMyFiles = [
   CloudStorageInfo(
     title: "Ingresado",
     numOfFiles: 1328,
-    icon: Icon(Icons.account_balance, color: Color(0xFFFFA113)),
+    icon: const Icon(Icons.account_balance, color: Color(0xFFFFA113)),
     totalStorage: "\$2.9",
-    color: Color(0xFFFFA113),
+    color: const Color(0xFFFFA113),
     percentage: 35,
   ),
 /*   CloudStorageInfo(

@@ -1,15 +1,15 @@
 import 'package:finia_app/constants.dart';
-import 'package:finia_app/controllers/MenuAppController.dart';
+import 'package:finia_app/controllers/menu_app_controller.dart';
 import 'package:finia_app/screens/credit_card/credit_card_widget.dart';
 import 'package:finia_app/screens/dashboard/components/charts/financial_categories.chat.dart';
 import 'package:finia_app/screens/dashboard/components/credit_card_horizontal.dart';
-import 'package:finia_app/screens/dashboard/components/header_custom.dart';
 import 'package:finia_app/screens/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class DashBoardScreen2 extends StatefulWidget {
+  const DashBoardScreen2({super.key});
   @override
   State<DashBoardScreen2> createState() => _DashBoardScreen2();
 }
@@ -45,7 +45,7 @@ class _DashBoardScreen2 extends State<DashBoardScreen2> {
               width: double.infinity,
               decoration: BoxDecoration(
                 color: themeProvider.getBackgroundColor(),
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(30),
                   topRight: Radius.circular(30),
                 ),
@@ -55,7 +55,7 @@ class _DashBoardScreen2 extends State<DashBoardScreen2> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -71,13 +71,13 @@ class _DashBoardScreen2 extends State<DashBoardScreen2> {
                           ),
                         ),
                         IconButton(
-                          icon: Icon(Icons.add),
+                          icon: const Icon(Icons.add),
                           onPressed: () {},
                         ),
                       ],
                     ),
                     CreditCardHorizontalList(cards: myProducts),
-                    SizedBox(height: defaultPadding),
+                    const SizedBox(height: defaultPadding),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: BudgetedExpensesChart(),
@@ -101,11 +101,11 @@ class _DashBoardScreen2 extends State<DashBoardScreen2> {
     required ThemeProvider themeProvider,
   }) {
     return Container(
-      padding: EdgeInsets.all(6),
+      padding: const EdgeInsets.all(6),
       decoration: BoxDecoration(
         color: themeProvider.getBackgroundColor(),
         borderRadius: BorderRadius.circular(10),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             color: Colors.black12,
             blurRadius: 10,
@@ -126,7 +126,7 @@ class _DashBoardScreen2 extends State<DashBoardScreen2> {
                 children: [
                   Text(
                     title,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.normal,
                     ),
@@ -141,7 +141,7 @@ class _DashBoardScreen2 extends State<DashBoardScreen2> {
                   ),
                 ],
               ),
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
             ],
           ),
         ],

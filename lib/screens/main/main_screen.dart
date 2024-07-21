@@ -1,20 +1,19 @@
 /* import 'package:finia_app/services/auth_service.dart';
 import 'package:finia_app/services/finance_summary_service.dart'; */
 import 'package:finia_app/screens/dashboard/dash4.beta.dart';
-import 'package:finia_app/screens/dashboard/dash4scroll.dart';
-import 'package:finia_app/screens/dashboard/dashboard4.dart';
-import 'package:finia_app/screens/dashscreenbeta2.dart';
 import 'package:flutter/material.dart';
-import 'package:finia_app/controllers/MenuAppController.dart';
+import 'package:finia_app/controllers/menu_app_controller.dart';
 import 'components/side_menu.dart';
 import 'package:provider/provider.dart';
 
 class MainScreen extends StatefulWidget {
   @override
-  _MainScreenState createState() => _MainScreenState();
+  MainScreenState createState() => MainScreenState();
+
+  const MainScreen({super.key});
 }
 
-class _MainScreenState extends State<MainScreen> {
+class MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
@@ -36,15 +35,15 @@ class _MainScreenState extends State<MainScreen> {
 
     return Scaffold(
       key: menuAppController.scaffoldKey,
-      drawer: SideMenu(),
+      drawer: const SideMenu(),
       body: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (MediaQuery.of(context).size.width > 600)
-            Expanded(
+            const Expanded(
               child: SideMenu(),
             ),
-          Expanded(
+          const Expanded(
             flex: 5,
             child: AdvancedScrollView(),
           ),

@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class BalanceSummary extends StatefulWidget {
+  const BalanceSummary({super.key});
   @override
-  _BalanceSummaryState createState() => _BalanceSummaryState();
+  BalanceSummaryState createState() => BalanceSummaryState();
 }
 
-class _BalanceSummaryState extends State<BalanceSummary> {
+class BalanceSummaryState extends State<BalanceSummary> {
   bool isExpanded = false;
 
   @override
@@ -32,7 +33,7 @@ class _BalanceSummaryState extends State<BalanceSummary> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
+                  const Text(
                     '\$5000',
                     style: TextStyle(
                         fontSize: 24,
@@ -40,10 +41,10 @@ class _BalanceSummaryState extends State<BalanceSummary> {
                         color: Colors.white),
                   ),
                   AnimatedRotation(
-                    duration: Duration(milliseconds: 300),
+                    duration: const Duration(milliseconds: 300),
                     curve: Curves.easeInOut,
                     turns: isExpanded ? 0.5 : 0.0, // Gira la flecha 180 grados
-                    child: Icon(
+                    child: const Icon(
                       Icons.expand_more,
                       color: Colors.white,
                     ),
@@ -51,9 +52,9 @@ class _BalanceSummaryState extends State<BalanceSummary> {
                 ],
               ),
             ),
-            SizedBox(height: 10), // Espacio entre título y contenido
+            const SizedBox(height: 10), // Espacio entre título y contenido
             AnimatedContainer(
-              duration: Duration(milliseconds: 300),
+              duration: const Duration(milliseconds: 300),
               curve: Curves.easeInOut,
               width:
                   MediaQuery.of(context).size.width * (isExpanded ? 0.9 : 0.8),
@@ -75,7 +76,7 @@ class _BalanceSummaryState extends State<BalanceSummary> {
   Widget _buildExpandedChart() {
     return SfCircularChart(
       backgroundColor: Colors.transparent, // Fondo transparente para el gráfico
-      legend: Legend(
+      legend: const Legend(
         isVisible: true,
         textStyle: TextStyle(color: Colors.white),
         overflowMode: LegendItemOverflowMode.wrap,
@@ -89,7 +90,7 @@ class _BalanceSummaryState extends State<BalanceSummary> {
           ],
           xValueMapper: (ChartData data, _) => data.category,
           yValueMapper: (ChartData data, _) => data.value,
-          dataLabelSettings: DataLabelSettings(
+          dataLabelSettings: const DataLabelSettings(
               isVisible: true, textStyle: TextStyle(color: Colors.white)),
         )
       ],

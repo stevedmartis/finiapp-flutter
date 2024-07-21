@@ -4,17 +4,17 @@ import 'package:flutter/material.dart';
 class CreditCardWidget extends StatelessWidget {
   final CreditCard card;
 
-  const CreditCardWidget({Key? key, required this.card}) : super(key: key);
+  const CreditCardWidget({super.key, required this.card});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: 200,
       height: 150,
-      margin: EdgeInsets.symmetric(horizontal: 8.0),
+      margin: const EdgeInsets.symmetric(horizontal: 8.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8.0),
-        gradient: LinearGradient(
+        gradient: const LinearGradient(
           colors: [
             Colors.blue,
             Colors.green,
@@ -27,7 +27,7 @@ class CreditCardWidget extends StatelessWidget {
             color: Colors.grey.withOpacity(0.5),
             spreadRadius: 1,
             blurRadius: 5,
-            offset: Offset(0, 2),
+            offset: const Offset(0, 2),
           ),
         ],
       ),
@@ -39,7 +39,7 @@ class CreditCardWidget extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Text(
               'Name: ${card.cardHolderName}',
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
               ),
@@ -49,14 +49,14 @@ class CreditCardWidget extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Text(
               'Number: ${card.cardNumber}',
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
+          const Padding(
+            padding: EdgeInsets.all(8.0),
             child: Text(
               'Currency: CLP',
               style: TextStyle(
@@ -72,21 +72,21 @@ class CreditCardWidget extends StatelessWidget {
               children: [
                 Text(
                   'Total: ${card.total}',
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 Text(
                   'Used: ${card.used}',
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 Text(
                   'Available: ${card.available}',
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),

@@ -1,9 +1,8 @@
 import 'package:finia_app/constants.dart';
-import 'package:finia_app/screens/credit_card/credit_card_widget.dart';
 import 'package:finia_app/screens/login/onboarding_page.dart';
-import 'package:finia_app/screens/login/success_animation_widget.dart';
+
 import 'package:finia_app/services/auth_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:finia_app/screens/login/phone_login.dart';
@@ -105,7 +104,7 @@ class SignIn extends StatelessWidget {
           SizedBox(
               height:
                   buttonSpacing * 2), // Espacio más grande antes de la línea
-          HorizontalLine(name: "O", height: 0.1),
+          const HorizontalLine(name: "O", height: 0.1),
           SizedBox(height: buttonSpacing), // Espacio después de la línea
           SignupWithPhone(
             name: defaultSignPhoneTitle,
@@ -116,7 +115,7 @@ class SignIn extends StatelessWidget {
           ),
 
           if (authProvider.isLoading)
-            Center(child: CircularProgressIndicator()),
+            const Center(child: CircularProgressIndicator()),
         ],
       ),
     );
@@ -132,15 +131,13 @@ class SignIn extends StatelessWidget {
     // Verifica si el usuario está autenticado
     if (!authProvider.isLoading) {
       Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => OnboardingScreen()),
+        MaterialPageRoute(builder: (context) => const OnboardingScreen()),
         (route) => false,
       );
-      print("Inicio de sesión exitoso");
     } else {
-      print("Error de inicio de sesión");
       // Muestra un Snackbar en caso de error
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("Inicio de sesión fallido")));
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Inicio de sesión fallido")));
     }
   }
 }

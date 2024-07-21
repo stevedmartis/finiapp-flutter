@@ -35,15 +35,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return SafeArea(
       child: SingleChildScrollView(
         primary: false,
-        padding: EdgeInsets.all(defaultPadding),
+        padding: const EdgeInsets.all(defaultPadding),
         child: Column(
           children: [
             Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 gradient: LinearGradient(colors: [logoCOLOR1, logoCOLOR2]),
-                borderRadius: const BorderRadius.all(Radius.circular(10)),
+                borderRadius: BorderRadius.all(Radius.circular(10)),
               ),
-              child: Column(
+              child: const Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Header(),
@@ -72,17 +72,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         ? Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => FloidWidgetScreen()))
+                                builder: (context) =>
+                                    const FloidWidgetScreen()))
                         : _launchUrl();
                   },
-                  icon: Icon(Icons.add),
-                  label: Text("Agregar"),
+                  icon: const Icon(Icons.add),
+                  label: const Text("Agregar"),
                 ),
               ],
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             CreditCardHorizontalList(cards: myProducts),
-            SizedBox(height: defaultPadding),
+            const SizedBox(height: defaultPadding),
             BudgetedExpensesChart(),
 
             /*  Row(

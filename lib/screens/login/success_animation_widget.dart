@@ -14,12 +14,12 @@ const secondaryDataBackupColor = Color(0xff3CFF50);
 class BublesSuccesPage extends StatefulWidget {
   final List<CreditCard> orders;
 
-  BublesSuccesPage({required this.orders});
+  const BublesSuccesPage({super.key, required this.orders});
   @override
-  _BublesSuccesPageState createState() => _BublesSuccesPageState();
+  BublesSuccesPageState createState() => BublesSuccesPageState();
 }
 
-class _BublesSuccesPageState extends State<BublesSuccesPage>
+class BublesSuccesPageState extends State<BublesSuccesPage>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _progressAnimation;
@@ -32,19 +32,19 @@ class _BublesSuccesPageState extends State<BublesSuccesPage>
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(
-        seconds: 3,
+        seconds: 5,
       ),
     );
     _progressAnimation = CurvedAnimation(
       parent: _animationController,
-      curve: Interval(
+      curve: const Interval(
         0.0,
         0.1,
       ),
     );
     _cloudOutAnimation = CurvedAnimation(
       parent: _animationController,
-      curve: Interval(
+      curve: const Interval(
         0.0,
         0.1,
         curve: Curves.easeOut,
@@ -52,7 +52,7 @@ class _BublesSuccesPageState extends State<BublesSuccesPage>
     );
     _bubblesAnimation = CurvedAnimation(
       parent: _animationController,
-      curve: Interval(
+      curve: const Interval(
         0.0,
         1.0,
         curve: Curves.decelerate,
@@ -60,7 +60,7 @@ class _BublesSuccesPageState extends State<BublesSuccesPage>
     );
     _endingAnimation = CurvedAnimation(
       parent: _animationController,
-      curve: Interval(
+      curve: const Interval(
         0.6,
         1.0,
         curve: Curves.decelerate,
@@ -80,7 +80,7 @@ class _BublesSuccesPageState extends State<BublesSuccesPage>
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [darkCardBackground, cardDark],
             begin: Alignment.topLeft,
@@ -95,7 +95,7 @@ class _BublesSuccesPageState extends State<BublesSuccesPage>
                 _animationController.forward();
               },
             ),
-            BublesAnimationPage(
+            BubblesAnimationPage(
               progressAnimation: _progressAnimation,
               cloudOutAnimation: _cloudOutAnimation,
               bubblesAnimation: _bubblesAnimation,

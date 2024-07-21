@@ -1,6 +1,5 @@
 import 'package:finia_app/constants.dart';
 import 'package:finia_app/screens/dashboard/components/header_custom.dart';
-import 'package:finia_app/screens/dashboard/components/storage_info_card.dart';
 import 'package:finia_app/screens/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:finia_app/models/transaction.model.dart';
@@ -10,8 +9,7 @@ import 'package:provider/provider.dart';
 class TransactionsDashBoardList extends StatelessWidget {
   final List<TransactionCreditCard> transactions;
 
-  TransactionsDashBoardList({Key? key, required this.transactions})
-      : super(key: key);
+  const TransactionsDashBoardList({super.key, required this.transactions});
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +42,7 @@ class TransactionsDashBoardList extends StatelessWidget {
                 color: Colors.black.withOpacity(0.1),
                 spreadRadius: 2,
                 blurRadius: 5,
-                offset: Offset(0, 3),
+                offset: const Offset(0, 3),
               ),
             ],
           ),
@@ -53,12 +51,12 @@ class TransactionsDashBoardList extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.cookie,
                     color: Colors.yellow,
                     size: 40,
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -89,7 +87,7 @@ class TransactionsDashBoardList extends StatelessWidget {
                   ),
                 ],
               ),
-              Icon(
+              const Icon(
                 Icons.arrow_forward,
                 color: logoCOLOR1,
               ),

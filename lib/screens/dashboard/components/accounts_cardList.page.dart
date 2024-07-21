@@ -5,8 +5,7 @@ import 'package:finia_app/screens/credit_card/credit_card_widget.dart';
 class AccountsCardHorizontalList extends StatefulWidget {
   final List<CreditCard> accounts;
 
-  const AccountsCardHorizontalList({Key? key, required this.accounts})
-      : super(key: key);
+  const AccountsCardHorizontalList({super.key, required this.accounts});
 
   @override
   State<AccountsCardHorizontalList> createState() =>

@@ -1,7 +1,6 @@
 import 'package:finia_app/screens/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:finia_app/helper/colors.dart';
 import 'package:provider/provider.dart';
 
 class SocialButton extends StatelessWidget {
@@ -41,7 +40,7 @@ class SocialButton extends StatelessWidget {
               ? SvgPicture.asset(
                   icon,
                   height: 30.0,
-                  colorFilter: ColorFilter.mode(
+                  colorFilter: const ColorFilter.mode(
                     Colors.white,
                     BlendMode.srcIn,
                   ),

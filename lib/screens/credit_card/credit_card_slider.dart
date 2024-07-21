@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'credit_card_widget.dart';
 
-typedef void OnCardClicked(int index);
+typedef OnCardClicked = void Function(int index);
 
 enum RepeatCards { down, bothDirection, none }
 
@@ -35,14 +35,14 @@ class CreditCardSlider extends StatefulWidget {
   }
 
   @override
-  _CreditCardSliderState createState() => _CreditCardSliderState();
+  CreditCardSliderState createState() => CreditCardSliderState();
 
   static void _defaultOnCardClicked(int index) {
     // Default implementation
   }
 }
 
-class _CreditCardSliderState extends State<CreditCardSlider> {
+class CreditCardSliderState extends State<CreditCardSlider> {
   late PageController _pageController;
   late int _currentPageIndex;
   int? _lastTappedIndex;
@@ -52,7 +52,7 @@ class _CreditCardSliderState extends State<CreditCardSlider> {
     super.initState();
 
     _currentPageIndex = widget.initialCard;
-    print(widget.creditCards[_currentPageIndex].cardNumber);
+
     // Inicializa con el valor de initialCard
     _pageController = widget.pageController;
     _pageController.addListener(_handlePageChange);
@@ -166,7 +166,7 @@ class _CreditCardSliderState extends State<CreditCardSlider> {
             // Optionally, animate to the tapped card if it's not the current one
             _pageController.animateToPage(
               index,
-              duration: Duration(milliseconds: 300),
+              duration: const Duration(milliseconds: 300),
               curve: Curves.easeInOut,
             );
             _lastTappedIndex = null; // Reset the last tapped index

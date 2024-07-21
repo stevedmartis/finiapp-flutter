@@ -8,8 +8,8 @@ import 'package:provider/provider.dart';
 
 class SideMenu extends StatefulWidget {
   const SideMenu({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<SideMenu> createState() => _SideMenuState();
@@ -62,12 +62,12 @@ class _SideMenuState extends State<SideMenu> {
               press: () async {
                 await context.read<AuthService>().signOut();
                 Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (context) => SignIn()),
+                  MaterialPageRoute(builder: (context) => const SignIn()),
                   (route) => false,
                 );
               },
               themeNotifier: themeNotifier),
-          Divider(),
+          const Divider(),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: Row(
@@ -95,13 +95,12 @@ class _SideMenuState extends State<SideMenu> {
 
 class DrawerListTile extends StatelessWidget {
   const DrawerListTile(
-      {Key? key,
+      {super.key,
       // For selecting those three lines once press "Command+D"
       required this.title,
       required this.svgSrc,
       required this.press,
-      required this.themeNotifier})
-      : super(key: key);
+      required this.themeNotifier});
 
   final String title, svgSrc;
   final VoidCallback press;

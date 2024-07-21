@@ -9,6 +9,7 @@ import 'package:webview_flutter_android/webview_flutter_android.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 
 class FloidWidgetScreen extends StatefulWidget {
+  const FloidWidgetScreen({super.key});
   @override
   State<FloidWidgetScreen> createState() => _FloidWidgetScreenState();
 }

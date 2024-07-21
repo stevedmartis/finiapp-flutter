@@ -1,19 +1,18 @@
-import 'package:finia_app/models/MyFiles.dart';
+import 'package:finia_app/models/my_files.dart';
 import 'package:flutter/material.dart';
 import 'package:finia_app/screens/credit_card/credit_card_widget.dart';
 
 class ProductsListAmmountsDashboard extends StatefulWidget {
   final List<CreditCard> cards;
 
-  const ProductsListAmmountsDashboard({Key? key, required this.cards})
-      : super(key: key);
+  const ProductsListAmmountsDashboard({super.key, required this.cards});
 
   @override
-  _ProductsListAmmountsDashboardState createState() =>
-      _ProductsListAmmountsDashboardState();
+  ProductsListAmmountsDashboardState createState() =>
+      ProductsListAmmountsDashboardState();
 }
 
-class _ProductsListAmmountsDashboardState
+class ProductsListAmmountsDashboardState
     extends State<ProductsListAmmountsDashboard> {
   late PageController _pageController;
   int _currentPageIndex = 0;

@@ -1,4 +1,3 @@
-import 'package:finia_app/constants.dart';
 import 'package:finia_app/screens/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -70,7 +69,7 @@ class SignupWithPhonePage extends StatelessWidget {
               // Define la lógica al presionar aquí
             },
           ),
-          SizedBox(height: 16), // Espacio entre botones
+          const SizedBox(height: 16), // Espacio entre botones
           // Agrega más widgets si es necesario
         ],
       ),

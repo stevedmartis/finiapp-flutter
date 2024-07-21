@@ -1,9 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:finia_app/constants.dart';
-import 'package:finia_app/models/MyFiles.dart';
+import 'package:finia_app/models/my_files.dart';
 import 'package:finia_app/models/transaction.model.dart';
 import 'package:finia_app/screens/credit_card/card_company.dart';
-import 'package:finia_app/screens/dashboard/components/header_custom.dart';
 import 'package:finia_app/screens/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -21,7 +20,7 @@ List<TransactionCreditCard> myTransactions = [
       inAmount: 0,
       outAmount: 50000,
       currency: "CLP",
-      icon: Icon(Icons.cookie, color: Color.fromARGB(255, 253, 127, 0))),
+      icon: const Icon(Icons.cookie, color: Color.fromARGB(255, 253, 127, 0))),
   TransactionCreditCard(
       id: '1',
       date: DateTime.now(),
@@ -30,34 +29,34 @@ List<TransactionCreditCard> myTransactions = [
       inAmount: 0,
       outAmount: 50000,
       currency: "CLP",
-      icon: Icon(Icons.store, color: Color.fromARGB(255, 0, 162, 238))),
+      icon: const Icon(Icons.store, color: Color.fromARGB(255, 0, 162, 238))),
   TransactionCreditCard(
       id: '2',
-      date: DateTime.now().subtract(Duration(days: 1)),
+      date: DateTime.now().subtract(const Duration(days: 1)),
       description: "Compra en Librería",
       category: "Ocio",
       inAmount: 0,
       outAmount: 30000,
       currency: "CLP",
-      icon: Icon(Icons.book, color: Color.fromARGB(255, 250, 0, 0))),
+      icon: const Icon(Icons.book, color: Color.fromARGB(255, 250, 0, 0))),
   TransactionCreditCard(
       id: '3',
-      date: DateTime.now().subtract(Duration(days: 1)),
+      date: DateTime.now().subtract(const Duration(days: 1)),
       description: "Compra en Librería",
       category: "Ocio",
       inAmount: 0,
       outAmount: 30000,
       currency: "CLP",
-      icon: Icon(Icons.book, color: Color.fromARGB(255, 253, 127, 0))),
+      icon: const Icon(Icons.book, color: Color.fromARGB(255, 253, 127, 0))),
   TransactionCreditCard(
       id: '4',
-      date: DateTime.now().subtract(Duration(days: 3)),
+      date: DateTime.now().subtract(const Duration(days: 3)),
       description: "Compra Galletas",
       category: "Alimentación",
       inAmount: 0,
       outAmount: 50000,
       currency: "CLP",
-      icon: Icon(Icons.cookie, color: Color.fromARGB(255, 253, 127, 0))),
+      icon: const Icon(Icons.cookie, color: Color.fromARGB(255, 253, 127, 0))),
   // Agrega más transacciones según necesites
 ];
 
@@ -67,7 +66,7 @@ List<CreditCard> myProducts = [
         CloudStorageInfo(
           title: "Ingresado:",
           numOfFiles: 1328,
-          icon: Icon(
+          icon: const Icon(
             Icons.account_balance,
             color: Colors.blue,
             size: 20,
@@ -79,22 +78,22 @@ List<CreditCard> myProducts = [
         CloudStorageInfo(
           title: "Gastado",
           numOfFiles: 1328,
-          icon: Icon(
+          icon: const Icon(
             Icons.credit_card,
             color: Color(0xFFFFA113),
             size: 20,
           ),
           totalStorage: "\$2.9",
-          color: Color(0xFFFFA113),
+          color: const Color(0xFFFFA113),
           percentage: 35,
         ),
       ],
       transactions: myTransactions,
       cardBackground: GradientCardBackground(
-        LinearGradient(
+        const LinearGradient(
           colors: [
-            const Color.fromARGB(255, 60, 78, 87),
-            const Color.fromARGB(255, 45, 58, 65)
+            Color.fromARGB(255, 60, 78, 87),
+            Color.fromARGB(255, 45, 58, 65)
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -116,7 +115,7 @@ List<CreditCard> myProducts = [
         CloudStorageInfo(
           title: "Ingresado:",
           numOfFiles: 1328,
-          icon: Icon(Icons.account_balance, color: Colors.blue, size: 20),
+          icon: const Icon(Icons.account_balance, color: Colors.blue, size: 20),
           totalStorage: "\$1.9",
           color: primaryColor,
           percentage: 50,
@@ -124,18 +123,19 @@ List<CreditCard> myProducts = [
         CloudStorageInfo(
           title: "Gastado",
           numOfFiles: 1328,
-          icon: Icon(Icons.credit_card, color: Color(0xFFFFA113), size: 20),
+          icon:
+              const Icon(Icons.credit_card, color: Color(0xFFFFA113), size: 20),
           totalStorage: "\$2.9",
-          color: Color(0xFFFFA113),
+          color: const Color(0xFFFFA113),
           percentage: 35,
         ),
       ],
       transactions: myTransactions,
       cardBackground: GradientCardBackground(
-        LinearGradient(
+        const LinearGradient(
           colors: [
-            const Color.fromARGB(255, 60, 78, 87),
-            const Color.fromARGB(255, 45, 58, 65)
+            Color.fromARGB(255, 60, 78, 87),
+            Color.fromARGB(255, 45, 58, 65)
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -157,7 +157,7 @@ List<CreditCard> myProducts = [
         CloudStorageInfo(
           title: "Ingresado:",
           numOfFiles: 1328,
-          icon: Icon(
+          icon: const Icon(
             Icons.account_balance,
             color: Colors.blue,
             size: 20,
@@ -169,22 +169,22 @@ List<CreditCard> myProducts = [
         CloudStorageInfo(
           title: "Gastado",
           numOfFiles: 1328,
-          icon: Icon(
+          icon: const Icon(
             Icons.credit_card,
             color: Color(0xFFFFA113),
             size: 20,
           ),
           totalStorage: "\$2.9",
-          color: Color(0xFFFFA113),
+          color: const Color(0xFFFFA113),
           percentage: 35,
         ),
       ],
       transactions: myTransactions,
       cardBackground: GradientCardBackground(
-        LinearGradient(
+        const LinearGradient(
           colors: [
-            const Color.fromARGB(255, 60, 78, 87),
-            const Color.fromARGB(255, 45, 58, 65)
+            Color.fromARGB(255, 60, 78, 87),
+            Color.fromARGB(255, 45, 58, 65)
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -224,6 +224,7 @@ class CreditCard extends StatefulWidget {
   final List<TransactionCreditCard> transactions;
 
   const CreditCard({
+    super.key,
     required this.cardBackground,
     this.cardNetworkType,
     this.cardNumber,
@@ -290,10 +291,10 @@ class _CreditCardState extends State<CreditCard> with TickerProviderStateMixin {
     final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       height: 180,
       decoration: _buildGlassBackground(themeProvider),
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -310,7 +311,7 @@ class _CreditCardState extends State<CreditCard> with TickerProviderStateMixin {
             ],
           ),
           _isDataLoading
-              ? Center(
+              ? const Center(
                   child: CircularProgressIndicator(),
                 )
               : FadeTransition(
@@ -319,9 +320,9 @@ class _CreditCardState extends State<CreditCard> with TickerProviderStateMixin {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       _buildCardNumber(themeProvider),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       _buildValidity(themeProvider),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       _buildNameAndCardNetworkType(themeProvider),
                     ],
                   ),
@@ -340,7 +341,7 @@ class _CreditCardState extends State<CreditCard> with TickerProviderStateMixin {
           color: Colors.black.withOpacity(0.2),
           spreadRadius: 2,
           blurRadius: 5,
-          offset: Offset(0, 3),
+          offset: const Offset(0, 3),
         ),
       ],
     );
@@ -348,7 +349,7 @@ class _CreditCardState extends State<CreditCard> with TickerProviderStateMixin {
 
   Widget _buildChip() {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 4, horizontal: 4),
+      margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
       alignment: Alignment.centerLeft,
       child: Image.asset(
         'assets/images/cards/chip.png',
@@ -359,7 +360,7 @@ class _CreditCardState extends State<CreditCard> with TickerProviderStateMixin {
 
   Widget _buildCardNumber(ThemeProvider themeProvider) {
     if (widget.cardNumber == null || widget.cardNumber!.trim() == "") {
-      return SizedBox.shrink();
+      return const SizedBox.shrink();
     }
     return Align(
       alignment: Alignment.centerLeft,
@@ -377,7 +378,7 @@ class _CreditCardState extends State<CreditCard> with TickerProviderStateMixin {
 
   Widget _buildValidity(ThemeProvider themeProvider) {
     if (widget.validity == null) {
-      return SizedBox.shrink();
+      return const SizedBox.shrink();
     }
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -392,7 +393,7 @@ class _CreditCardState extends State<CreditCard> with TickerProviderStateMixin {
                 fontSize: 8,
               ),
             ),
-            SizedBox(height: 2),
+            const SizedBox(height: 2),
             Text(
               '${widget.validity!.validThruMonth.toString().padLeft(2, '0')}/${widget.validity!.validThruYear.toString().padLeft(2, '0')}',
               style: TextStyle(
@@ -413,7 +414,7 @@ class _CreditCardState extends State<CreditCard> with TickerProviderStateMixin {
                 fontSize: 8,
               ),
             ),
-            SizedBox(height: 2),
+            const SizedBox(height: 2),
             Text(
               '${widget.validity!.validThruMonth.toString().padLeft(2, '0')}/${widget.validity!.validThruYear.toString().padLeft(2, '0')}',
               style: TextStyle(

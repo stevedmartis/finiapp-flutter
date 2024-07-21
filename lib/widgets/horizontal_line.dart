@@ -1,10 +1,9 @@
 import 'package:finia_app/screens/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:finia_app/helper/colors.dart';
 import 'package:provider/provider.dart';
 
 class HorizontalLine extends StatelessWidget {
-  HorizontalLine({super.key, required this.name, required this.height});
+  const HorizontalLine({super.key, required this.name, required this.height});
 
   final String name;
   final double height;

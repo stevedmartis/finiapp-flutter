@@ -8,7 +8,7 @@ Route bubleSuccessRouter(List<CreditCard> orders) {
       return BublesSuccesPage(orders: orders);
     },
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      var begin = Offset(0.0, 0.5);
+      var begin = const Offset(0.0, 0.5);
       var end = Offset.zero;
       var curve = Curves.ease;
 

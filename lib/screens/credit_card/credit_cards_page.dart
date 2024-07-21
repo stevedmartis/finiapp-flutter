@@ -37,7 +37,7 @@ class _CreditCardDemoState extends State<CreditCardDemo> {
     // Desplazar el PageView a la tarjeta seleccionada con animación
     _pageController.animateToPage(
       index,
-      duration: Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
     );
     setState(() {
@@ -53,15 +53,15 @@ class _CreditCardDemoState extends State<CreditCardDemo> {
     // Asegúrate de que no hay un índice fuera de rango si la lista está vacía
     if (myProducts.isEmpty) {
       return Scaffold(
-        appBar: AppBar(title: Text('Credit Cards')),
-        body: Center(child: Text('No hay tarjetas disponibles')),
+        appBar: AppBar(title: const Text('Credit Cards')),
+        body: const Center(child: Text('No hay tarjetas disponibles')),
       );
     }
 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: logoAppBarCOLOR,
-        title: Text('Credit Cards'),
+        title: const Text('Credit Cards'),
       ),
       body: isScreenWide
           ? Row(
@@ -79,7 +79,7 @@ class _CreditCardDemoState extends State<CreditCardDemo> {
                 Expanded(
                   flex: 2,
                   child: AnimatedSwitcher(
-                    duration: Duration(milliseconds: 500),
+                    duration: const Duration(milliseconds: 500),
                     child: CreditCardDetailWidget(
                       key: ValueKey(
                           _currentCardIndex), // Clave única para animación
@@ -103,16 +103,15 @@ class _CreditCardDemoState extends State<CreditCardDemo> {
 class CreditCardDetailWidget extends StatelessWidget {
   final CreditCard card;
 
-  const CreditCardDetailWidget({Key? key, required this.card})
-      : super(key: key);
+  const CreditCardDetailWidget({super.key, required this.card});
 
   @override
   Widget build(BuildContext context) {
     return Card(
       elevation: 4.0,
-      margin: EdgeInsets.all(16.0),
+      margin: const EdgeInsets.all(16.0),
       child: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: ClipRect(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -120,11 +119,11 @@ class CreditCardDetailWidget extends StatelessWidget {
               Text('Nombre: ${card.cardHolderName}'),
               Text('Número: ${card.cardNumber}'),
               Text('Total: ${card.total}'),
-              SizedBox(
+              const SizedBox(
                 width: 20,
               ),
               Text('Usado: ${card.used}'),
-              SizedBox(
+              const SizedBox(
                 width: 20,
               ),
               Text('Disponible: ${card.available}'),
