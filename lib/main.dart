@@ -64,7 +64,7 @@ class MyApp extends StatelessWidget {
             routes: {
               '/mainScreen': (context) => const MainScreen(),
               '/signIn': (context) => const SignIn(),
-              '/cards': (context) => CreditCardDemo(),
+              '/cards': (context) => const CreditCardDemo(),
               '/onB': (context) => const OnboardingScreen(),
             },
             home: Consumer<AuthService>(

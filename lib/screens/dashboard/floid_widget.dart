@@ -1,4 +1,6 @@
 import 'package:finia_app/constants.dart';
+import 'package:finia_app/screens/credit_card/credit_card_widget.dart';
+import 'package:finia_app/widgets/reouter_pages.dart';
 import 'package:flutter/material.dart';
 
 import 'package:webview_flutter/webview_flutter.dart';
@@ -100,6 +102,12 @@ class _FloidWidgetScreenState extends State<FloidWidgetScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.push(context, bubleSuccessRouter(myProducts));
+          },
+        ),
         backgroundColor: logoAppBarCOLOR,
       ),
       body: WebViewWidget(controller: _controller),

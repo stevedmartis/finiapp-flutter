@@ -2,6 +2,7 @@ import 'package:finia_app/constants.dart';
 import 'package:finia_app/screens/login/onboarding_page.dart';
 
 import 'package:finia_app/services/auth_service.dart';
+import 'package:finia_app/widgets/buttons/button_continue_loading_widget.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -114,8 +115,14 @@ class SignIn extends StatelessWidget {
             },
           ),
 
-          if (authProvider.isLoading)
-            const Center(child: CircularProgressIndicator()),
+          Padding(
+            padding: const EdgeInsets.only(top: 50.0),
+            child: IconOrSpinnerButton(
+              showIcon: authProvider.isLoading,
+              loading: authProvider.isLoading,
+              onPressed: () {},
+            ),
+          )
         ],
       ),
     );

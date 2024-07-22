@@ -78,8 +78,8 @@ class _DashBoardScreen2 extends State<DashBoardScreen2> {
                     ),
                     CreditCardHorizontalList(cards: myProducts),
                     const SizedBox(height: defaultPadding),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
                       child: BudgetedExpensesChart(),
                     ),
                   ],

@@ -1,8 +1,10 @@
 import 'package:finia_app/constants.dart';
-import 'package:finia_app/screens/credit_card/credit_card_widget.dart';
-import 'package:finia_app/widgets/reouter_pages.dart';
+import 'package:finia_app/screens/dashboard/floid_widget.dart';
+import 'package:finia_app/widgets/buttons/button_continue_loading_widget.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -14,7 +16,7 @@ class OnboardingScreen extends StatefulWidget {
 class OnboardingScreenState extends State<OnboardingScreen> {
   final PageController _pageController = PageController();
   int _currentIndex = 0;
-  bool _showButton = false;
+  bool showButton = false;
 
   final List<Map<String, String>> _onboardingData = [
     {
@@ -34,6 +36,12 @@ class OnboardingScreenState extends State<OnboardingScreen> {
       "title": "¡Invierte como un experto! 🚀",
       "description":
           "Obtén recomendaciones personalizadas y claras para hacer crecer tu dinero. ¡Con FinIA, invertir es Izi Pizi! 💪"
+    },
+    {
+      "image": "assets/images/join.svg",
+      "title": "¡Sincroniza tu banco! 🏦",
+      "description":
+          "Conéctate a tu banco y autoriza las cuentas para gestionar tus gastos de forma automatica y eficiente este proceso es totalmente seguro."
     }
   ];
 
@@ -43,13 +51,21 @@ class OnboardingScreenState extends State<OnboardingScreen> {
       if (index == _onboardingData.length - 1) {
         Future.delayed(const Duration(milliseconds: 800), () {
           setState(() {
-            _showButton = true;
+            showButton = true;
           });
         });
       } else {
-        _showButton = false;
+        showButton = false;
       }
     });
+  }
+
+  Future<void> _launchUrl() async {
+    final Uri url = Uri.parse(
+        'https://admin.floid.app/finia_app/widget/80c2083bbc755fa3548e55c627c78006?sandbox');
+    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+      throw 'Could not launch $url';
+    }
   }
 
   @override
@@ -88,55 +104,26 @@ class OnboardingScreenState extends State<OnboardingScreen> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  AnimatedOpacity(
-                    opacity: _showButton ? 1.0 : 0.0,
-                    duration: const Duration(milliseconds: 900),
-                    child: Container(
-                      width: 60,
-                      height: 60,
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          colors: [logoCOLOR1, logoCOLOR2],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
-                            spreadRadius: 2,
-                            blurRadius: 5,
-                            offset: const Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      child: IconButton(
-                        icon: const Icon(
-                          Icons.arrow_forward,
-                          color: Colors.white,
-                          size: 30,
-                        ),
-                        onPressed: () {
-                          if (_currentIndex == _onboardingData.length - 1) {
-                            /*                       Navigator.push(
+                  IconOrSpinnerButton(
+                    loading: false,
+                    showIcon: true,
+                    onPressed: () {
+                      if (_currentIndex == _onboardingData.length - 1) {
+                        (!kIsWeb)
+                            ? Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => BublesSuccesPage(
-                                          orders: myProducts,
-                                        )));
- */
-                            Navigator.push(
-                                context, bubleSuccessRouter(myProducts));
-                          } else {
-                            _pageController.nextPage(
-                              duration: const Duration(milliseconds: 300),
-                              curve: Curves.ease,
-                            );
-                          }
-                        },
-                      ),
-                    ),
-                  ),
+                                    builder: (context) =>
+                                        const FloidWidgetScreen()))
+                            : _launchUrl();
+                      } else {
+                        _pageController.nextPage(
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.ease,
+                        );
+                      }
+                    },
+                  )
                 ],
               ),
             ),

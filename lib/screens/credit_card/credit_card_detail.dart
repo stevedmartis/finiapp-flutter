@@ -15,10 +15,10 @@ class CreditCardDetail extends StatefulWidget {
   const CreditCardDetail({super.key, required this.card});
 
   @override
-  _CreditCardDetailState createState() => _CreditCardDetailState();
+  CreditCardDetailState createState() => CreditCardDetailState();
 }
 
-class _CreditCardDetailState extends State<CreditCardDetail> {
+class CreditCardDetailState extends State<CreditCardDetail> {
   @override
   Widget build(BuildContext context) {
     var authService = Provider.of<AuthService>(context, listen: false);

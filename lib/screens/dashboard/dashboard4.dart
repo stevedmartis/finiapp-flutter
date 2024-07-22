@@ -208,7 +208,7 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView1> {
                       ),
                     );
                   } else {
-                    return BudgetedExpensesChart();
+                    return const BudgetedExpensesChart();
                   }
                 },
               );

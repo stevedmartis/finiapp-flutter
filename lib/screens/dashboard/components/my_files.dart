@@ -10,7 +10,7 @@ class MyFiles extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
-    final Size _size = MediaQuery.of(context).size;
+    final Size size = MediaQuery.of(context).size;
     return Column(
       children: [
         Row(
@@ -37,12 +37,12 @@ class MyFiles extends StatelessWidget {
         const SizedBox(height: defaultPadding),
         Responsive(
           mobile: FileInfoCardGridView(
-            crossAxisCount: _size.width < 650 ? 2 : 4,
-            childAspectRatio: _size.width < 650 ? 1.3 : 1,
+            crossAxisCount: size.width < 650 ? 2 : 4,
+            childAspectRatio: size.width < 650 ? 1.3 : 1,
           ),
           tablet: const FileInfoCardGridView(),
           desktop: FileInfoCardGridView(
-            childAspectRatio: _size.width < 1400 ? 1.1 : 1.4,
+            childAspectRatio: size.width < 1400 ? 1.1 : 1.4,
           ),
         ),
       ],

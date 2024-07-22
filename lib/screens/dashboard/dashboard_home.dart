@@ -7,6 +7,7 @@ import 'package:finia_app/screens/dashboard/components/my_fields.dart';
 import 'package:finia_app/screens/dashboard/components/transactions_dashboard.dart';
 import 'package:finia_app/screens/dashboard/floid_widget.dart';
 import 'package:finia_app/screens/providers/theme_provider.dart';
+import 'package:finia_app/services/auth_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,18 +16,18 @@ import 'package:provider/provider.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 
-class AdvancedScrollView extends StatefulWidget {
-  const AdvancedScrollView({super.key});
+class DashBoardHomeScreen extends StatefulWidget {
+  const DashBoardHomeScreen({super.key});
   @override
-  State<AdvancedScrollView> createState() => _AdvancedScrollViewState();
+  State<DashBoardHomeScreen> createState() => DashBoardHomeScreenState();
 }
 
-class _AdvancedScrollViewState extends State<AdvancedScrollView> {
+class DashBoardHomeScreenState extends State<DashBoardHomeScreen> {
   late ScrollController _scrollController;
   late MenuAppController menuAppController;
 
   final PageController _pageController = PageController(viewportFraction: 0.85);
-  bool _showTitle = false;
+  bool showTitle = false;
 
   @override
   void initState() {
@@ -34,7 +35,7 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView> {
     _scrollController = ScrollController()
       ..addListener(() {
         setState(() {
-          _showTitle =
+          showTitle =
               _scrollController.hasClients && _scrollController.offset > 150;
         });
       });
@@ -77,6 +78,7 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView> {
   @override
   Widget build(BuildContext context) {
     final currentTheme = Provider.of<ThemeProvider>(context);
+    final authProvider = Provider.of<AuthService>(context);
 
     return Scaffold(
       body: RefreshIndicator(
@@ -87,23 +89,46 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView> {
           controller: _scrollController,
           slivers: <Widget>[
             SliverAppBar(
-              leadingWidth: 60,
+              leadingWidth: 200,
               backgroundColor: logoAppBarCOLOR,
-              leading: Container(
-                margin: const EdgeInsets.only(left: 20, top: 10),
-                child: GestureDetector(
-                  onTap: () {
-                    HapticFeedback.mediumImpact();
-                    context.read<MenuAppController>().controlMenu();
-                  },
-                  child: const CircleAvatar(
-                    radius: 20,
-                    backgroundImage: AssetImage(
-                        'assets/images/profile_pic.png'), // Ruta a tu imagen
-                    backgroundColor: Colors
-                        .transparent, // Para asegurar que no haya un color de fondo
+              leading: Row(
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(left: 20, top: 10),
+                    child: GestureDetector(
+                      onTap: () {
+                        HapticFeedback.mediumImpact();
+                        context.read<MenuAppController>().controlMenu();
+                      },
+                      child: const CircleAvatar(
+                        radius: 20,
+                        backgroundImage: AssetImage(
+                            'assets/images/profile_pic.png'), // Ruta a tu imagen
+                        backgroundColor: Colors
+                            .transparent, // Para asegurar que no haya un color de fondo
+                      ),
+                    ),
                   ),
-                ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20.0, left: 10),
+                    child: Row(children: [
+                      const Text(
+                        'Hola,',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        ' ${authProvider.globalUser?.fullName}',
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold),
+                      )
+                    ]),
+                  )
+                ],
               ),
               actions: [
                 GestureDetector(
@@ -164,7 +189,34 @@ class _AdvancedScrollViewState extends State<AdvancedScrollView> {
                     ),
                   ],
                 ),
-                centerTitle: true,
+                centerTitle: false, // Ajusta según necesites
+                /* title: (_showTitle)
+                    ? AnimatedOpacity(
+                        opacity: _showTitle ? 0.0 : 1.0,
+                        duration: const Duration(milliseconds: 500),
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 5.0),
+                          child: Row(children: [
+                            const Text(
+                              'Hola,',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              ' ${authProvider.globalUser?.fullName}',
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold),
+                            )
+                          ]),
+                        ),
+                      )
+                    : const Text(''),
+              
+               */
               ),
             ),
             SliverToBoxAdapter(

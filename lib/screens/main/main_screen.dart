@@ -1,6 +1,6 @@
 /* import 'package:finia_app/services/auth_service.dart';
 import 'package:finia_app/services/finance_summary_service.dart'; */
-import 'package:finia_app/screens/dashboard/dash4.beta.dart';
+import 'package:finia_app/screens/dashboard/dashboard_home.dart';
 import 'package:flutter/material.dart';
 import 'package:finia_app/controllers/menu_app_controller.dart';
 import 'components/side_menu.dart';
@@ -45,7 +45,7 @@ class MainScreenState extends State<MainScreen> {
             ),
           const Expanded(
             flex: 5,
-            child: AdvancedScrollView(),
+            child: DashBoardHomeScreen(),
           ),
           /*             Expanded(
             flex: 5,

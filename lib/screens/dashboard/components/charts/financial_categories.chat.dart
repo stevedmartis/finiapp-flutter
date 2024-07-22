@@ -4,11 +4,12 @@ import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class BudgetedExpensesChart extends StatefulWidget {
+  const BudgetedExpensesChart({super.key});
   @override
-  _BudgetedExpensesChartState createState() => _BudgetedExpensesChartState();
+  BudgetedExpensesChartState createState() => BudgetedExpensesChartState();
 }
 
-class _BudgetedExpensesChartState extends State<BudgetedExpensesChart> {
+class BudgetedExpensesChartState extends State<BudgetedExpensesChart> {
   late List<BudgetItem> budgetItems;
 
   @override

@@ -148,15 +148,15 @@ class _CloudBubblePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    for (_Bubble _bubble in bubbles) {
+    for (_Bubble bubble in bubbles) {
       final offset = Offset(
-        size.width / 2 + _bubble.direction * animation.value,
+        size.width / 2 + bubble.direction * animation.value,
         size.height * 1.2 * (1 - animation.value) -
-            _bubble.speed * animation.value +
-            _bubble.initialPosition * (1 - animation.value),
+            bubble.speed * animation.value +
+            bubble.initialPosition * (1 - animation.value),
       );
 
-      canvas.drawCircle(offset, _bubble.size, Paint()..color = _bubble.color);
+      canvas.drawCircle(offset, bubble.size, Paint()..color = bubble.color);
     }
   }
 

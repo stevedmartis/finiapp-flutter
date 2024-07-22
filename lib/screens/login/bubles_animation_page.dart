@@ -217,10 +217,10 @@ class BubblesAnimationPage extends StatelessWidget {
         'Cookie',
       ];
       final category = categories[math.Random().nextInt(categories.length)];
-      final iconColor = getColorForCategory(category);
+      //final iconColor = getColorForCategory(category);
       final icon = getIconForCategory(category);
       final colorRandom = math.Random().nextBool();
-      final color = colorRandom ? iconColor : iconColor.withOpacity(0.5);
+      final color = colorRandom ? logoCOLOR1 : logoCOLOR2.withOpacity(0.5);
 
       return Bubble(
         color: color,
@@ -349,7 +349,7 @@ class _CloudBubblePainter extends CustomPainter {
       canvas.drawCircle(offset, bubble.size, Paint()..color = bubble.color);
 
       // Draw icon
-      final iconPainter = TextPainter(
+      /*  final iconPainter = TextPainter(
         text: TextSpan(
           text: String.fromCharCode(bubble.icon.codePoint),
           style: TextStyle(
@@ -359,32 +359,18 @@ class _CloudBubblePainter extends CustomPainter {
           ),
         ),
         textDirection: TextDirection.ltr,
-      );
-      iconPainter.layout();
+      ); */
+      /*  iconPainter.layout();
       iconPainter.paint(
         canvas,
         Offset(
           offset.dx - iconPainter.width / 2,
           offset.dy - iconPainter.height / 2,
         ),
-      );
+      ); */
     }
   }
 
   @override
   bool shouldRepaint(CustomPainter oldDelegate) => false;
-}
-
-void main() {
-  runApp(MaterialApp(
-    home: Scaffold(
-      body: Center(
-        child: BubblesAnimationPage(
-          progressAnimation: const AlwaysStoppedAnimation(1.0),
-          cloudOutAnimation: const AlwaysStoppedAnimation(0.5),
-          bubblesAnimation: const AlwaysStoppedAnimation(0.8),
-        ),
-      ),
-    ),
-  ));
 }

@@ -7,11 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CreditCardDemo extends StatefulWidget {
+  const CreditCardDemo({super.key});
   @override
-  _CreditCardDemoState createState() => _CreditCardDemoState();
+  CreditCardDemoState createState() => CreditCardDemoState();
 }
 
-class _CreditCardDemoState extends State<CreditCardDemo> {
+class CreditCardDemoState extends State<CreditCardDemo> {
   // Inicializa el índice de la tarjeta actual con 0 o el índice de una tarjeta inicial
   int _currentCardIndex = 0;
   late final PageController _pageController;

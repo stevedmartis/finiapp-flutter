@@ -55,12 +55,12 @@ class PageSlider extends StatelessWidget {
           value = _pageController.page! - index;
 
           if (value >= 0) {
-            double _lowerLimit = percentOfUpperCard;
-            double _upperLimit = pi / 2;
+            double lowerLimit = percentOfUpperCard;
+            double upperLimit = pi / 2;
 
-            value = (_upperLimit - (value.abs() * (_upperLimit - _lowerLimit)))
-                .clamp(_lowerLimit, _upperLimit);
-            value = _upperLimit - value;
+            value = (upperLimit - (value.abs() * (upperLimit - lowerLimit)))
+                .clamp(lowerLimit, upperLimit);
+            value = upperLimit - value;
             value *= -1;
           }
         } else {

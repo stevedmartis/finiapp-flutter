@@ -84,7 +84,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             const SizedBox(height: 10),
             CreditCardHorizontalList(cards: myProducts),
             const SizedBox(height: defaultPadding),
-            BudgetedExpensesChart(),
+            const BudgetedExpensesChart(),
 
             /*  Row(
               crossAxisAlignment: CrossAxisAlignment.start,
