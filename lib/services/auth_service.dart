@@ -110,6 +110,11 @@ class AuthService with ChangeNotifier {
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       if (googleUser == null) return;
+
+      isLoading =
+          true; // Establecer isLoading como true antes de realizar la solicitud de registro
+      notifyListeners();
+
       final GoogleSignInAuthentication googleAuth =
           await googleUser.authentication;
       final OAuthCredential credential = GoogleAuthProvider.credential(
@@ -138,10 +143,6 @@ class AuthService with ChangeNotifier {
   }
 
   Future<void> register(CreateUserDto user) async {
-    isLoading =
-        true; // Establecer isLoading como true antes de realizar la solicitud de registro
-    notifyListeners();
-
     var url = Uri.parse('http://localhost:3000/user');
     var headers = {'Content-Type': 'application/json'};
     var body = jsonEncode(user.toJson());

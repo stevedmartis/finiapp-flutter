@@ -6,6 +6,26 @@
 	objectVersion = 54;
 	objects = {
 
+
+/* Begin XCBuildConfiguration section */
+        4B9792791AD99517002A59ED /* Debug */ = {
+            isa = XCBuildConfiguration;
+            buildSettings = {
+                // Otras configuraciones existentes
+                BASE_CONFIGURATION_REFERENCE = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig";
+            };
+            name = Debug;
+        };
+        4B97927A1AD99517002A59ED /* Release */ = {
+            isa = XCBuildConfiguration;
+            buildSettings = {
+                // Otras configuraciones existentes
+                BASE_CONFIGURATION_REFERENCE = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig";
+            };
+            name = Release;
+        };
+/* End XCBuildConfiguration section */
+
 /* Begin PBXBuildFile section */
 		111326E3600C0B8E4AF71E66 /* Pods_RunnerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24CC8CB7CD861942CE7EF086 /* Pods_RunnerTests.framework */; };
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
