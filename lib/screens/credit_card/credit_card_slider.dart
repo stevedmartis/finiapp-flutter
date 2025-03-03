@@ -21,6 +21,7 @@ class CreditCardSlider extends StatefulWidget {
 
   CreditCardSlider(
     this.creditCards, {
+    super.key,
     this.onCardClicked = _defaultOnCardClicked,
     this.repeatCards = RepeatCards.none,
     this.initialCard = 0,

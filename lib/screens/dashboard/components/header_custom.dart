@@ -110,7 +110,7 @@ String formatCurrency(double amount) {
   formatted = formatted
       .replaceAll('\$', '')
       .replaceAll(',', ''); // Eliminar símbolo y separador de miles
-  return '\$${formatted}'.substring(0, formatted.length - 2);
+  return '\$$formatted'.substring(0, formatted.length - 2);
 }
 
 class SliverCustomHeaderDelegate extends SliverPersistentHeaderDelegate {

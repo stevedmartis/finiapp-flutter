@@ -6,14 +6,15 @@ import 'package:finia_app/screens/dashboard/components/charts/financial_categori
 import 'package:finia_app/screens/dashboard/components/my_fields.dart';
 import 'package:finia_app/screens/dashboard/components/transactions_dashboard.dart';
 import 'package:finia_app/screens/dashboard/floid_widget.dart';
+import 'package:finia_app/screens/login/add_accouts_explain_page.dart';
 import 'package:finia_app/screens/providers/theme_provider.dart';
+import 'package:finia_app/services/accounts_services.dart';
 import 'package:finia_app/services/auth_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-
 import 'package:url_launcher/url_launcher.dart';
 
 class DashBoardHomeScreen extends StatefulWidget {
@@ -75,6 +76,11 @@ class DashBoardHomeScreenState extends State<DashBoardHomeScreen> {
     }
   }
 
+  String getFirstWord(String? fullName) {
+    if (fullName == null || fullName.isEmpty) return "";
+    return fullName.split(" ").first; // Divide y toma la primera palabra
+  }
+
   @override
   Widget build(BuildContext context) {
     final currentTheme = Provider.of<ThemeProvider>(context);
@@ -120,7 +126,7 @@ class DashBoardHomeScreenState extends State<DashBoardHomeScreen> {
                             fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        ' ${authProvider.globalUser?.fullName}',
+                        ' ${getFirstWord(authProvider.globalUser?.fullName)}',
                         style: const TextStyle(
                             color: Colors.white,
                             fontSize: 18,
@@ -241,7 +247,7 @@ class DashBoardHomeScreenState extends State<DashBoardHomeScreen> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        const FloidWidgetScreen()))
+                                        const AddAccountScreen()))
                             : _launchUrl();
                       },
                     ),
@@ -250,29 +256,37 @@ class DashBoardHomeScreenState extends State<DashBoardHomeScreen> {
               ),
             ),
             SliverToBoxAdapter(
-              child: Container(
-                padding: const EdgeInsets.all(0.0),
-                height:
-                    MediaQuery.of(context).size.height * 0.235, // Full height
-                child: PageView.builder(
-                  controller: _pageController,
-                  itemCount: myProducts.length,
-                  itemBuilder: (context, index) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        GestureDetector(
-                          onTap: () =>
-                              _handleCardTap(context, myProducts[index]),
-                          child: Hero(
-                            tag: 'cardsHome-${myProducts[index].cardNumber}',
-                            child: myProducts[index],
+              child: Consumer<AccountsProvider>(
+                builder: (context, accountsProvider, child) {
+                  return Container(
+                    padding: const EdgeInsets.all(0.0),
+                    height: MediaQuery.of(context).size.height * 0.235,
+                    child: accountsProvider.accounts.isEmpty
+                        ? const Center(
+                            child: Text(
+                              "No tienes cuentas agregadas.",
+                              style: TextStyle(
+                                  color: Color.fromARGB(179, 17, 12, 12),
+                                  fontSize: 16),
+                            ),
+                          )
+                        : PageView.builder(
+                            controller: _pageController,
+                            itemCount: accountsProvider.accounts.length,
+                            itemBuilder: (context, index) {
+                              final account = accountsProvider.accounts[index];
+
+                              return GestureDetector(
+                                onTap: () => _handleCardTap(context, account),
+                                child: Hero(
+                                  tag: 'accountsHome-${account.name}',
+                                  child: _buildAccountCard(account),
+                                ),
+                              );
+                            },
                           ),
-                        ),
-                      ],
-                    );
-                  },
-                ),
+                  );
+                },
               ),
             ),
             SliverToBoxAdapter(
@@ -295,7 +309,8 @@ class DashBoardHomeScreenState extends State<DashBoardHomeScreen> {
                         vertical: 8.0,
                       ),
                       child: GestureDetector(
-                        onTap: () => _handleCardTap(context, myProducts[0]),
+                        onTap: () =>
+                            (), // _handleCardTap(context, myProducts[0]),
                         child: TransactionsDashBoardList(
                           transactions: myProducts[0].transactions,
                         ),
@@ -354,8 +369,8 @@ class DashBoardHomeScreenState extends State<DashBoardHomeScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           GestureDetector(
-                            onTap: () =>
-                                _handleCardTap(context, myProducts[index]),
+                            onTap: () => (),
+                            // _handleCardTap(context, myProducts[index]),
                             child: Hero(
                               tag: 'cardsHome-${myProducts[index].cardNumber}',
                               child: myProducts[index],
@@ -363,24 +378,24 @@ class DashBoardHomeScreenState extends State<DashBoardHomeScreen> {
                           ),
                           const SizedBox(height: 16),
                           GestureDetector(
-                            onTap: () =>
-                                _handleCardTap(context, myProducts[index]),
+                            onTap: () => (),
+                            // _handleCardTap(context, myProducts[index]),
                             child: InfoCardsAmounts(
                               fileInfo: myProducts[index].fileInfo,
                             ),
                           ),
                           const SizedBox(height: 16),
                           GestureDetector(
-                            onTap: () =>
-                                _handleCardTap(context, myProducts[index]),
+                            onTap: () => (),
+                            // _handleCardTap(context, myProducts[index]),
                             child: TransactionsDashBoardList(
                               transactions: myProducts[index].transactions,
                             ),
                           ),
                           const SizedBox(height: 16),
                           GestureDetector(
-                            onTap: () =>
-                                _handleCardTap(context, myProducts[index]),
+                            onTap: () => (),
+                            //_handleCardTap(context, myProducts[index]),
                             child: BudgetedExpensesChart(),
                           ),
                           const SizedBox(
@@ -399,13 +414,116 @@ class DashBoardHomeScreenState extends State<DashBoardHomeScreen> {
     );
   }
 
-  void _handleCardTap(BuildContext context, CreditCard card) {
-    Navigator.push(
+  Widget _buildAccountCard(Account account) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.all(16),
+      decoration: _getBackgroundDecoration(account.type),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          _buildHeader(account),
+          const SizedBox(height: 10),
+          Text(
+            account.name,
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+          const SizedBox(height: 5),
+          Text(
+            "Saldo: ${formatCurrency(account.balance)}",
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.greenAccent,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHeader(Account account) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        _getAccountIcon(account.type),
+        Text(
+          account.type,
+          style: const TextStyle(
+            fontSize: 14,
+            color: Colors.white70,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _getAccountIcon(String type) {
+    switch (type) {
+      case "Cuenta Corriente":
+        return const Icon(Icons.account_balance, color: Colors.white);
+      case "Cuenta de Ahorro":
+        return const Icon(Icons.savings, color: Colors.white);
+      case "Efectivo":
+        return const Icon(Icons.money, color: Colors.white);
+      default:
+        return const Icon(Icons.account_balance_wallet, color: Colors.white);
+    }
+  }
+
+  BoxDecoration _getBackgroundDecoration(String type) {
+    switch (type) {
+      case "Cuenta Corriente":
+        return BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          gradient: const LinearGradient(
+            colors: [Color(0xFF1E88E5), Color(0xFF0D47A1)], // Azul
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        );
+      case "Cuenta de Ahorro":
+        return BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          gradient: const LinearGradient(
+            colors: [Color(0xFF43A047), Color(0xFF2E7D32)], // Verde
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        );
+      case "Efectivo":
+        return BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          gradient: const LinearGradient(
+            colors: [Color(0xFFFFB300), Color(0xFFFF6F00)], // Naranja
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        );
+      default:
+        return BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          gradient: const LinearGradient(
+            colors: [Color(0xFF607D8B), Color(0xFF455A64)], // Gris oscuro
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        );
+    }
+  }
+
+  void _handleCardTap(BuildContext context, Account card) {
+    /* Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => CreditCardDetail(card: card),
       ),
-    );
+    ); */
   }
 
   Widget buildHeaderContent(BuildContext context, ThemeProvider themeProvider) {

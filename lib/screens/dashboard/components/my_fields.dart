@@ -14,12 +14,12 @@ class InfoCardsAmounts extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Size _size = MediaQuery.of(context).size;
+    final Size size = MediaQuery.of(context).size;
     return Responsive(
       mobile: FileInfoCardGridView(
         files: fileInfo,
-        crossAxisCount: _size.width < 600 ? 2 : 4,
-        childAspectRatio: _size.width < 650 && _size.width > 350 ? 1.3 : 1,
+        crossAxisCount: size.width < 600 ? 2 : 4,
+        childAspectRatio: size.width < 650 && size.width > 350 ? 1.3 : 1,
       ),
       tablet: FileInfoCardGridView(
         files: fileInfo,
@@ -28,7 +28,7 @@ class InfoCardsAmounts extends StatelessWidget {
       desktop: FileInfoCardGridView(
         files: fileInfo,
         crossAxisCount: 4, // Default to 4 columns on desktop
-        childAspectRatio: _size.width < 1400 ? 1.1 : 1.4,
+        childAspectRatio: size.width < 1400 ? 1.1 : 1.4,
       ),
     );
   }

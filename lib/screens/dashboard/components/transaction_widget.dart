@@ -24,9 +24,9 @@ Map<String, List<TransactionCreditCard>> groupTransactionsByDate(
     String key;
 
     if (transactionDate == today) {
-      key = 'Hoy ' + dateCurrent;
+      key = 'Hoy $dateCurrent';
     } else if (transactionDate == yesterday) {
-      key = 'Ayer ' + dateCurrent;
+      key = 'Ayer $dateCurrent';
     } else {
       key = dateCurrent;
     }

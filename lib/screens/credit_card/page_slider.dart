@@ -10,6 +10,7 @@ class PageSlider extends StatelessWidget {
 
   PageSlider(
     this.cards, {
+    super.key,
     this.repeatCards = false,
     this.percentOfUpperCard = 0.35,
     this.initialPage = 0,

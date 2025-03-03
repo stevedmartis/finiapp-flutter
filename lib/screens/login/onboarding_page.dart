@@ -1,5 +1,6 @@
 import 'package:finia_app/constants.dart';
 import 'package:finia_app/screens/dashboard/floid_widget.dart';
+import 'package:finia_app/screens/login/add_accouts_explain_page.dart';
 import 'package:finia_app/widgets/buttons/button_continue_loading_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -109,13 +110,11 @@ class OnboardingScreenState extends State<OnboardingScreen> {
                     showIcon: true,
                     onPressed: () {
                       if (_currentIndex == _onboardingData.length - 1) {
-                        (!kIsWeb)
-                            ? Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const FloidWidgetScreen()))
-                            : _launchUrl();
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const AddAccountScreen()));
                       } else {
                         _pageController.nextPage(
                           duration: const Duration(milliseconds: 300),

@@ -73,7 +73,7 @@ class FinancialSummary {
   });
 
   factory FinancialSummary.fromJson(Map<String, dynamic> json) {
-    var categoriesMap = Map<String, List<Transaction>>();
+    var categoriesMap = <String, List<Transaction>>{};
     json['categories'].forEach((key, dynamic value) {
       var transactionList = List<Transaction>.from(
           value.map((model) => Transaction.fromJson(model)));

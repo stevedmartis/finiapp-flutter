@@ -23,7 +23,7 @@ class CreditCardDetailState extends State<CreditCardDetail> {
   Widget build(BuildContext context) {
     var authService = Provider.of<AuthService>(context, listen: false);
     var tagActual = authService.cardsHero;
-    final heroTag = '${tagActual}-${widget.card.cardNumber}';
+    final heroTag = '$tagActual-${widget.card.cardNumber}';
     final currentTheme = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
