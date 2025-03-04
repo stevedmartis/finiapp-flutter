@@ -34,9 +34,10 @@ void main() async {
 
   AuthService authService = AuthService();
   AccountsProvider accountsProvider = AccountsProvider();
-  await accountsProvider.loadAccounts();
-  print(
-      "📢 Cuentas después de cargar en `main()`: ${accountsProvider.accounts.map((e) => e.name).toList()}");
+
+  if (hasCompletedOnboarding) {
+    await accountsProvider.loadAccounts();
+  }
   InterceptedClient client =
       InterceptedClient.build(interceptors: [TokenInterceptor(authService)]);
 

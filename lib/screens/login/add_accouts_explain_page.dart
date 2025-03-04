@@ -23,7 +23,7 @@ class AddAccountScreenState extends State<AddAccountScreen> {
   final TextEditingController _accountNameController = TextEditingController();
   final TextEditingController _balanceController = TextEditingController();
   String _selectedAccountType = "Cuenta Corriente";
-
+  bool _hasCompletedOnboarding = false; // 🔥 Nuevo flag
   List<Map<String, dynamic>> _accounts = []; // Lista de cuentas agregadas
 
   final List<String> _accountTypes = [
@@ -38,6 +38,24 @@ class AddAccountScreenState extends State<AddAccountScreen> {
   double _wants = 0.0;
   double _savings = 0.0;
   bool _isEditing = false; // Evita bucles de actualización
+
+  @override
+  void initState() {
+    super.initState();
+    _loadOnboardingStatus(); // 🔥 Carga si ya completó el onboarding
+  }
+
+  /// ✅ Cargar `hasCompletedOnboarding` desde `SharedPreferences`
+  Future<void> _loadOnboardingStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool status = prefs.getBool("hasCompletedOnboarding") ?? false;
+
+    setState(() {
+      _hasCompletedOnboarding = status;
+    });
+
+    debugPrint("🔵 Estado de onboarding: $_hasCompletedOnboarding");
+  }
 
   void _onBalanceChanged(TextEditingController controller, String value) {
     if (_isEditing) return; // Evita llamadas múltiples innecesarias
@@ -84,12 +102,13 @@ class AddAccountScreenState extends State<AddAccountScreen> {
     }
 
     Account newAccount = Account(
-        name: name,
-        type: _selectedAccountType,
-        balance: balance,
-        bankName: 'bank_chile');
+      name: name,
+      type: _selectedAccountType,
+      balance: balance,
+      bankName: 'bank_chile',
+    );
 
-    // 🔥 Imprimir datos en la consola para verificar
+    // 🔥 Imprimir datos en consola para verificar
     debugPrint(
         "🔵 Cuenta agregada: ${newAccount.name} - ${newAccount.balance}");
 
@@ -107,6 +126,11 @@ class AddAccountScreenState extends State<AddAccountScreen> {
       _accountNameController.clear();
       _balanceController.clear();
     });
+
+    // 🔹 Si ya pasó el onboarding, guarda y cierra la pantalla
+    if (_hasCompletedOnboarding) {
+      Navigator.pop(context); // 🔙 Cierra la pantalla
+    }
   }
 
   void _finishSetup() async {
@@ -212,6 +236,24 @@ class AddAccountScreenState extends State<AddAccountScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          "Agrega tus cuentas 📊",
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+          textAlign: TextAlign.center,
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () =>
+              Navigator.pop(context), // 🔙 Regresa a la pantalla anterior
+        ),
+      ),
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -222,20 +264,10 @@ class AddAccountScreenState extends State<AddAccountScreen> {
         ),
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(
-              horizontal: 16, vertical: 30), // Aumenta el padding vertical
+              horizontal: 16, vertical: 0), // Aumenta el padding vertical
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(height: 30),
-              const Text(
-                "Agrega tus cuentas 📊",
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-                textAlign: TextAlign.center,
-              ),
               const SizedBox(height: 10),
               SizedBox(
                 height: 200,
@@ -288,13 +320,14 @@ class AddAccountScreenState extends State<AddAccountScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-              Consumer<AccountsProvider>(
-                builder: (context, accountsProvider, child) {
-                  return accountsProvider.accounts.isNotEmpty
-                      ? _buildAccountsList()
-                      : const SizedBox();
-                },
-              ),
+              if (!_hasCompletedOnboarding)
+                Consumer<AccountsProvider>(
+                  builder: (context, accountsProvider, child) {
+                    return accountsProvider.accounts.isNotEmpty
+                        ? _buildAccountsList()
+                        : const SizedBox();
+                  },
+                ),
               const SizedBox(height: 30),
               _accounts.isNotEmpty
                   ? Column(
@@ -322,7 +355,8 @@ class AddAccountScreenState extends State<AddAccountScreen> {
                   : const SizedBox(),
               Consumer<AccountsProvider>(
                 builder: (context, accountsProvider, child) {
-                  return accountsProvider.accounts.isNotEmpty
+                  return (!_hasCompletedOnboarding &&
+                          accountsProvider.accounts.isNotEmpty)
                       ? SizedBox(
                           width: double.infinity,
                           child: IconOrSpinnerButton(
