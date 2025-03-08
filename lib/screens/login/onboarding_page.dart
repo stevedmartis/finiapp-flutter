@@ -1,8 +1,6 @@
 import 'package:finia_app/constants.dart';
-import 'package:finia_app/screens/dashboard/floid_widget.dart';
 import 'package:finia_app/screens/login/add_accouts_explain_page.dart';
 import 'package:finia_app/widgets/buttons/button_continue_loading_widget.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';

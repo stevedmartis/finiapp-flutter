@@ -97,8 +97,8 @@ class _DataBackupInitialPageState extends State<DataBackupInitialPage> {
                     ),
                   );
                 },
-                child: Column(
-                  children: const [
+                child: const Column(
+                  children: [
                     Text(
                       "last backup:",
                       style: TextStyle(),

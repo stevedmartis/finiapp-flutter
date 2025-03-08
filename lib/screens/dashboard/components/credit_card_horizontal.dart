@@ -1,11 +1,10 @@
+import 'package:finia_app/screens/credit_card/account_cards_widget.dart';
 import 'package:finia_app/screens/credit_card/credit_card_detail.dart';
-import 'package:finia_app/screens/credit_card/credit_card_widget.dart';
-import 'package:finia_app/screens/dashboard/components/my_fields.dart';
-import 'package:finia_app/screens/dashboard/components/transactions_dashboard.dart';
+import 'package:finia_app/services/accounts_services.dart';
 import 'package:flutter/material.dart';
 
 class CreditCardHorizontalList extends StatelessWidget {
-  final List<CreditCard> cards;
+  final List<Account> cards;
 
   const CreditCardHorizontalList({
     super.key,
@@ -32,23 +31,23 @@ class CreditCardHorizontalList extends StatelessWidget {
                 GestureDetector(
                   onTap: () => _handleCardTap(context, cards[index]),
                   child: Hero(
-                    tag: 'cardsHome-${cards[index].cardNumber}',
-                    child: cards[index],
+                    tag: 'cardsHome-${cards[index].name}',
+                    child: AccountCard(account: cards[index]),
                   ),
                 ),
                 const SizedBox(height: 8),
-                GestureDetector(
+                /*  GestureDetector(
                   onTap: () => _handleCardTap(context, cards[index]),
                   child: InfoCardsAmounts(
                     fileInfo: cards[index].fileInfo,
                   ),
-                ),
-                GestureDetector(
+                ), */
+                /*  GestureDetector(
                   onTap: () => _handleCardTap(context, cards[index]),
                   child: TransactionsDashBoardList(
                     transactions: cards[index].transactions,
                   ),
-                ),
+                ), */
               ],
             ),
           );
@@ -57,7 +56,7 @@ class CreditCardHorizontalList extends StatelessWidget {
     );
   }
 
-  void _handleCardTap(BuildContext context, CreditCard card) {
+  void _handleCardTap(BuildContext context, Account card) {
     Navigator.push(
       context,
       MaterialPageRoute(

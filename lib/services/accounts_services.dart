@@ -8,11 +8,13 @@ class Account {
   String type;
   double balance;
   String bankName;
+  String id;
 
   Account({
     required this.name,
     required this.type,
     required this.balance,
+    required this.id,
     this.bankName = "bank_default",
   });
 
@@ -22,11 +24,13 @@ class Account {
         "type": type,
         "balance": balance,
         "bankName": bankName,
+        "idAccount": id,
       };
 
   // Convertir desde JSON
   factory Account.fromJson(Map<String, dynamic> json) {
     return Account(
+      id: json["id"],
       name: json["name"],
       type: json["type"],
       balance: (json["balance"] as num).toDouble(),
@@ -40,21 +44,32 @@ class AccountsProvider extends ChangeNotifier {
 
   List<Account> get accounts => _accounts;
 
+  String? _currentAccountId;
+
+  String? get currentAccountId => _currentAccountId;
+
+  void setCurrentAccountId(String id) {
+    _currentAccountId = id;
+    notifyListeners(); // 🔥 Notifica a los widgets que escuchan
+  }
+
   /// 🔹 Cargar cuentas desde `SharedPreferences`
   Future<void> loadAccounts() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? accountsString = prefs.getString("accounts");
 
-    // 🔥 Primero intentamos cargar desde `SharedPreferences`
-    if (accountsString != null &&
-        accountsString.isNotEmpty &&
-        accountsString != "[]") {
+    if (accountsString != null && accountsString.isNotEmpty) {
       List<dynamic> decodedList = jsonDecode(accountsString);
       if (decodedList.isNotEmpty) {
         _accounts = decodedList.map((item) => Account.fromJson(item)).toList();
-        print("✅ Cuentas cargadas desde SharedPreferences: $_accounts");
+
+        // ✅ Si hay cuentas, asignar la primera como la cuenta activa
+        if (_accounts.isNotEmpty) {
+          _currentAccountId = _accounts.first.id; // ✅ ASIGNA EL VALOR INICIAL
+        }
+
+        _calculateTotalBalance(); // 🔥 Actualizar el balance total
         notifyListeners();
-        return; // ⬅️ Si hay datos válidos, terminamos aquí y no llamamos a la API
       }
     }
 
@@ -63,15 +78,14 @@ class AccountsProvider extends ChangeNotifier {
 
     // 🔥 Ahora intentamos sincronizar con la API
     try {
-      List<dynamic> apiResponse =
-          await fetchAccountsFromServer(); // 🔥 Recibe List<dynamic>
-      List<Account> apiData = apiResponse
-          .map((item) => Account.fromJson(item))
-          .toList(); // 🔄 Convertir a List<Account>
+      List<dynamic> apiResponse = await fetchAccountsFromServer();
+      List<Account> apiData =
+          apiResponse.map((item) => Account.fromJson(item)).toList();
 
       if (apiData.isNotEmpty) {
         _accounts = apiData;
         await _saveAccounts(); // Guardamos en `SharedPreferences`
+        _calculateTotalBalance(); // 🔥 Actualizar balance total después de cargar desde la API
         print("✅ Cuentas cargadas desde la API y guardadas localmente.");
       } else {
         print("⚠️ La API no devolvió cuentas.");
@@ -87,7 +101,7 @@ class AccountsProvider extends ChangeNotifier {
     try {
       final response = await http.get(
         Uri.parse(
-            'https://run.mocky.io/v3/e52fad95-20a8-424a-b252-fa5dc2e274ea'), // 🔹 Reemplaza con tu endpoint real
+            'https://tu-api.com/cuentas'), // 🔹 Reemplaza con tu endpoint real
         headers: {
           'Content-Type': 'application/json',
           'Authorization':
@@ -109,17 +123,35 @@ class AccountsProvider extends ChangeNotifier {
     }
   }
 
+  double _totalBalance = 0.0;
+
+  double get totalBalance => _totalBalance;
+
+  /// 🔥 Calcula el balance total sumando el saldo de todas las cuentas
+  void _calculateTotalBalance() {
+    _totalBalance =
+        _accounts.fold(0.0, (sum, account) => sum + account.balance);
+    print("🔵 Balance Total Actualizado: $_totalBalance");
+    notifyListeners();
+  }
+
+  Future<void> deleteAccount(Account account) async {
+    _accounts.remove(account);
+    _calculateTotalBalance(); // 🔥 Actualizar balance total después de eliminar cuenta
+    await _saveAccounts();
+    notifyListeners();
+  }
+
+  double getTotalBalance() {
+    return _accounts.fold(0.0, (sum, account) => sum + account.balance);
+  }
+
   /// 🔹 Agregar una nueva cuenta y guardarla en `SharedPreferences`
   Future<void> addAccount(Account newAccount) async {
-    print(
-        "🟢 ANTES de agregar cuenta: ${_accounts.map((e) => e.name).toList()}");
-
     _accounts.add(newAccount);
-    notifyListeners();
+    _calculateTotalBalance(); // 🔥 Actualizar balance total después de agregar cuenta
     await _saveAccounts();
-
-    print(
-        "🟢 DESPUÉS de agregar cuenta: ${_accounts.map((e) => e.name).toList()}");
+    notifyListeners();
   }
 
   /// 🔹 Guardar cuentas en `SharedPreferences`
@@ -133,5 +165,12 @@ class AccountsProvider extends ChangeNotifier {
     await prefs.setString("accounts", encodedData);
     print(
         "✅ DESPUÉS de guardar: ${prefs.getString("accounts")}"); // 🔍 Debug después de guardar
+  }
+
+  Future<void> clearAccounts() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs
+        .remove('accounts'); // ✅ Eliminar todas las transacciones guardadas
+    print("✅ accounts eliminadas correctamente.");
   }
 }

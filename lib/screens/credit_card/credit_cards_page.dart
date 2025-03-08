@@ -1,6 +1,7 @@
 import 'package:finia_app/constants.dart';
 import 'package:finia_app/screens/credit_card/credit_card_slider.dart';
 import 'package:finia_app/screens/credit_card/credit_card_widget.dart';
+import 'package:finia_app/services/accounts_services.dart';
 
 import 'package:finia_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
@@ -69,12 +70,29 @@ class CreditCardDemoState extends State<CreditCardDemo> {
               children: [
                 Expanded(
                   flex: 2,
-                  child: CreditCardSlider(
-                    myProducts,
-                    pageController: _pageController,
-                    initialCard: _currentCardIndex,
-                    onCardClicked: _onCardClicked,
-                    isVertical: true,
+                  child: Consumer<AccountsProvider>(
+                    builder: (context, accountsProvider, child) {
+                      return Container(
+                        padding: const EdgeInsets.all(0.0),
+                        height: MediaQuery.of(context).size.height * 0.235,
+                        child: accountsProvider.accounts.isEmpty
+                            ? const Center(
+                                child: Text(
+                                  "No tienes cuentas agregadas.",
+                                  style: TextStyle(
+                                      color: Color.fromARGB(179, 17, 12, 12),
+                                      fontSize: 16),
+                                ),
+                              )
+                            : CreditCardSlider(
+                                accountsProvider.accounts,
+                                pageController: _pageController,
+                                initialCard: _currentCardIndex,
+                                onCardClicked: _onCardClicked,
+                                isVertical: true,
+                              ),
+                      );
+                    },
                   ),
                 ),
                 Expanded(
@@ -90,12 +108,29 @@ class CreditCardDemoState extends State<CreditCardDemo> {
                 ),
               ],
             )
-          : CreditCardSlider(
-              myProducts,
-              pageController: _pageController,
-              initialCard: _currentCardIndex,
-              onCardClicked: _onCardClicked,
-              isVertical: true,
+          : Consumer<AccountsProvider>(
+              builder: (context, accountsProvider, child) {
+                return Container(
+                  padding: const EdgeInsets.all(0.0),
+                  height: MediaQuery.of(context).size.height * 0.235,
+                  child: accountsProvider.accounts.isEmpty
+                      ? const Center(
+                          child: Text(
+                            "No tienes cuentas agregadas.",
+                            style: TextStyle(
+                                color: Color.fromARGB(179, 17, 12, 12),
+                                fontSize: 16),
+                          ),
+                        )
+                      : CreditCardSlider(
+                          accountsProvider.accounts,
+                          pageController: _pageController,
+                          initialCard: _currentCardIndex,
+                          onCardClicked: _onCardClicked,
+                          isVertical: true,
+                        ),
+                );
+              },
             ),
     );
   }

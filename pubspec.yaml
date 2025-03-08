@@ -56,6 +56,9 @@ dependencies:
   syncfusion_flutter_charts: ^25.2.3+1
   shared_preferences: ^2.2.3
   cached_network_image: ^3.3.1
+  flutter_animate: ^4.5.2
+  lucide_icons: ^0.257.0
+  uuid: ^4.2.1
 
 dev_dependencies:
   flutter_test:
@@ -87,6 +90,7 @@ flutter:
     - assets/icons/apple-logo.svg
     - assets/images/signup-vector.svg
     - assets/images/cards/
+    - assets/images/banks/
 
   fonts:
     - family: NetflixSans

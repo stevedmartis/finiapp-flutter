@@ -1,3 +1,5 @@
+import 'package:finia_app/services/accounts_services.dart';
+import 'package:finia_app/services/transaction_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:finia_app/screens/main/main_screen.dart';
@@ -7,10 +9,14 @@ import 'package:http_interceptor/http_interceptor.dart';
 import 'package:finia_app/services/auth_service.dart';
 import 'package:provider/provider.dart';
 
-// Mocks para InterceptedClient y AuthService
+// Mocks para InterceptedClient, AuthService y AccountsProvider
 class MockClient extends Mock implements InterceptedClient {}
 
 class MockAuthService extends Mock implements AuthService {}
+
+class MockAccountsProvider extends Mock implements AccountsProvider {}
+
+class MockTransactionProvider extends Mock implements TransactionProvider {}
 
 void main() {
   testWidgets('MyApp utiliza las dependencias simuladas',
@@ -18,11 +24,10 @@ void main() {
     // Crea instancias simuladas
     final mockClient = MockClient();
     final mockAuthService = MockAuthService();
-
-    // Asumiendo que tienes un comportamiento predeterminado para los mocks,
-    // de lo contrario, configúralos según sea necesario
-    // Ejemplo de configuración de un método:
-    // when(mockAuthService.isUserLoggedIn()).thenAnswer((_) async => true);
+    final mockAccountsProvider = MockAccountsProvider();
+    final mockTransactionProvider = MockTransactionProvider();
+    // 🔹 Simular que el usuario ya completó el onboarding
+    bool hasCompletedOnboarding = true;
 
     // Construye la aplicación utilizando las instancias simuladas
     await tester.pumpWidget(
@@ -31,15 +36,23 @@ void main() {
           providers: [
             Provider<InterceptedClient>.value(value: mockClient),
             ChangeNotifierProvider<AuthService>.value(value: mockAuthService),
+            ChangeNotifierProvider<AccountsProvider>.value(
+                value: mockAccountsProvider),
+            ChangeNotifierProvider<TransactionProvider>.value(
+                value: mockTransactionProvider),
           ],
-          child: MyApp(client: mockClient, authService: mockAuthService),
+          child: MyApp(
+              client: mockClient,
+              authService: mockAuthService,
+              hasCompletedOnboarding:
+                  hasCompletedOnboarding, // ✅ Se agregó este argumento
+              accountsProvider: mockAccountsProvider,
+              transactionProvider: mockTransactionProvider),
         ),
       ),
     );
 
-    // Puedes querer probar widgets o acciones específicas dentro de tu aplicación aquí
-    // Ejemplo: Verifica si un widget específico se encuentra según las condiciones simuladas
-    expect(find.byType(MainScreen),
-        findsOneWidget); // Modifica según la lógica de navegación real
+    // ✅ Verifica que `MainScreen` se encuentra en la jerarquía de widgets
+    expect(find.byType(MainScreen), findsOneWidget);
   });
 }

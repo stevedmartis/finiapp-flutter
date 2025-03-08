@@ -2,7 +2,7 @@ import 'dart:convert';
 
 class FinancialData {
   final List<CreditCardInfo> creditcards;
-  final List<FinancialSummary> financialSummary;
+  List<FinancialSummary> financialSummary;
 
   FinancialData({
     required this.creditcards,
@@ -55,9 +55,9 @@ class CreditCardInfo {
 
 class FinancialSummary {
   final int accountId;
-  final double balance;
-  final double totalIncome;
-  final double totalExpenses;
+  double balance;
+  double totalIncome;
+  double totalExpenses;
   final double averageIncome;
   final double averageExpenses;
   final Map<String, List<Transaction>> categories;

@@ -8,7 +8,7 @@ const secondaryDataBackupColor = Color(0xFFBC53FA);
 const backgroundColor = Color(0xFFFCE7FE);
 
 class Loading extends StatefulWidget {
-  const Loading({Key? key}) : super(key: key);
+  const Loading({super.key});
 
   @override
   State<Loading> createState() => _LoadingState();

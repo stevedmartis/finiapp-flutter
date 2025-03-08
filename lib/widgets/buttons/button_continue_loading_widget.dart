@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 class IconOrSpinnerButton extends StatelessWidget {
   final bool showIcon;
   final bool loading;
+  final bool isMenu;
   final VoidCallback onPressed;
 
   const IconOrSpinnerButton({
     super.key,
     required this.showIcon,
     required this.loading,
+    this.isMenu = false,
     required this.onPressed,
   });
 
@@ -39,11 +41,17 @@ class IconOrSpinnerButton extends StatelessWidget {
         ),
         child: !loading
             ? IconButton(
-                icon: const Icon(
-                  Icons.arrow_forward,
-                  color: Colors.white,
-                  size: 30,
-                ),
+                icon: isMenu
+                    ? const Icon(
+                        Icons.add,
+                        color: Colors.white,
+                        size: 30,
+                      )
+                    : const Icon(
+                        Icons.arrow_forward,
+                        color: Colors.white,
+                        size: 30,
+                      ),
                 onPressed: onPressed,
               )
             : const Center(
