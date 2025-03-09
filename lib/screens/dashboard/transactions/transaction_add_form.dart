@@ -1,5 +1,3 @@
-import 'package:finia_app/constants.dart';
-import 'package:finia_app/models/finance_summary.dart';
 import 'package:finia_app/screens/dashboard/components/header_custom.dart';
 import 'package:finia_app/services/accounts_services.dart';
 import 'package:finia_app/services/finance_summary_service.dart';
@@ -19,7 +17,7 @@ class AddTransactionBottomSheet extends StatefulWidget {
 }
 
 class AddTransactionBottomSheetState extends State<AddTransactionBottomSheet> {
-  final TextEditingController _amountController = TextEditingController();
+  late TextEditingController _amountController = TextEditingController();
   final TextEditingController _noteController = TextEditingController();
   int _selectedCategoryIndex = 0;
   bool _isIncome = true;
@@ -47,13 +45,13 @@ class AddTransactionBottomSheetState extends State<AddTransactionBottomSheet> {
     {"icon": Icons.fitness_center, "label": "Gimnasio"},
     {"icon": Icons.card_giftcard, "label": "Regalos"},
     {"icon": Icons.flight_takeoff, "label": "Viajes"},
-    {"icon": Icons.savings, "label": "Inversión"},
+    {"icon": Icons.savings, "label": "Ahorro"},
   ];
 
   @override
   void initState() {
     super.initState();
-
+    _amountController = TextEditingController();
     // ✅ Si viene desde una cuenta → se preselecciona automáticamente
     _selectedAccountId = widget.accountId ??
         Provider.of<AccountsProvider>(context, listen: false).currentAccountId;
@@ -78,25 +76,46 @@ class AddTransactionBottomSheetState extends State<AddTransactionBottomSheet> {
     _isEditing = false;
   }
 
+  List<Map<String, dynamic>> get _allCategories =>
+      List.from(_categories)..addAll(_extraCategories);
+
   void _saveTransaction() {
+    String cleanBalance =
+        _amountController.text.replaceAll(RegExp(r'[^\d]'), '');
+    double amount = double.tryParse(cleanBalance) ?? 0;
+
+    if (amount <= 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Por favor ingresa un monto válido."),
+        ),
+      );
+      return;
+    }
+
     final transactionProvider =
         Provider.of<TransactionProvider>(context, listen: false);
     final financialProvider =
         Provider.of<FinancialDataService>(context, listen: false);
 
-    String cleanBalance =
-        _amountController.text.replaceAll(RegExp(r'[^\d]'), '');
-    double amount = double.tryParse(cleanBalance) ?? 0;
+    if (_selectedCategoryIndex < 0 ||
+        _selectedCategoryIndex >= _allCategories.length) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('Por favor selecciona una categoría válida.')),
+      );
+      return;
+    }
 
-    String type = _isIncome ? "Ingreso" : "Gasto";
-    String selectedCategory =
-        _categories[_selectedCategoryIndex]['label'] as String;
+    // ✅ Usa _allCategories en lugar de _categories
+    String selectedCategory = _allCategories[_selectedCategoryIndex]['label'];
+
+    print("✅ Categoría seleccionada: $selectedCategory");
 
     final String transactionId = const Uuid().v4();
-
     TransactionDto newTransaction = TransactionDto(
       id: transactionId,
-      type: type,
+      type: _isIncome ? "Ingreso" : "Gasto",
       amount: amount,
       category: selectedCategory,
       date: DateFormat('dd-MM-yyyy').format(_selectedDate),
@@ -104,13 +123,12 @@ class AddTransactionBottomSheetState extends State<AddTransactionBottomSheet> {
       accountId: _selectedAccountId!,
     );
 
-    // ✅ Añadir la transacción
     transactionProvider.addTransaction(newTransaction);
-
-    // ✅ Añadir la transacción al resumen
     financialProvider.addTransactionToSummary(newTransaction);
 
-    financialProvider.calculateGlobalSummary();
+    setState(() {
+      _selectedCategoryIndex = -1; // ✅ Reset después de guardar
+    });
 
     Navigator.pop(context);
   }
@@ -128,7 +146,7 @@ class AddTransactionBottomSheetState extends State<AddTransactionBottomSheet> {
         return Container(
           padding:
               EdgeInsets.fromLTRB(16, _showMoreCategories ? 45 : 24, 16, 16),
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: Colors.black,
             borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
           ),
@@ -139,7 +157,7 @@ class AddTransactionBottomSheetState extends State<AddTransactionBottomSheet> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
+                  const Text(
                     "Registrar movimiento",
                     style: TextStyle(
                       fontSize: 20,
@@ -148,13 +166,13 @@ class AddTransactionBottomSheetState extends State<AddTransactionBottomSheet> {
                     ),
                   ),
                   IconButton(
-                    icon: Icon(Icons.close, color: Colors.white),
+                    icon: const Icon(Icons.close, color: Colors.white),
                     onPressed: () => Navigator.pop(context),
                   ),
                 ],
               ),
 
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
 
               // 🔹 Selector de Tipo de Transacción
               Row(
@@ -211,22 +229,17 @@ class AddTransactionBottomSheetState extends State<AddTransactionBottomSheet> {
                   ),
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
               // 🔹 Campo de Monto con Formateo Automático
 
-              _buildTextField("Monto", _amountController, isNumeric: true,
-                  onChanged: (value) {
-                double balance =
-                    double.tryParse(value.replaceAll(RegExp(r'[^\d]'), '')) ??
-                        0;
-                // Llamar con un `double` corregido
-              }),
-              SizedBox(height: 20),
+              _buildTextField("Monto", _amountController,
+                  isNumeric: true, onChanged: (value) {}),
+              const SizedBox(height: 20),
 
               // 🔹 Categorías (2 filas por defecto)
-              Text("Categoría", style: TextStyle(color: Colors.white70)),
-              SizedBox(height: 10),
+              const Text("Categoría", style: TextStyle(color: Colors.white70)),
+              const SizedBox(height: 10),
               Wrap(
                 spacing: 8,
                 runSpacing: 8,
@@ -239,7 +252,7 @@ class AddTransactionBottomSheetState extends State<AddTransactionBottomSheet> {
                         .map((category) => _buildCategoryChip(category)),
                 ],
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               // 🔹 Botón "Ver más"
               TextButton(
                 onPressed: () {
@@ -249,7 +262,7 @@ class AddTransactionBottomSheetState extends State<AddTransactionBottomSheet> {
                 },
                 child: Text(
                   _showMoreCategories ? "Ver menos" : "Ver más categorías",
-                  style: TextStyle(color: Colors.purpleAccent),
+                  style: const TextStyle(color: Colors.purpleAccent),
                 ),
               ),
               const Spacer(),
@@ -269,7 +282,7 @@ class AddTransactionBottomSheetState extends State<AddTransactionBottomSheet> {
                   onPressed: _saveTransaction,
                   child: Text(
                     "Agregar ${_isIncome ? 'Ingreso' : 'Gasto'} ",
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white, // Asegura buen contraste
                       fontWeight: FontWeight.bold,
                       fontSize: 16,

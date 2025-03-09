@@ -1,10 +1,11 @@
 import 'package:finia_app/screens/credit_card/account_cards_widget.dart';
 import 'package:finia_app/screens/credit_card/credit_card_detail.dart';
+import 'package:finia_app/screens/dashboard/dashboard_home.dart';
 import 'package:finia_app/services/accounts_services.dart';
 import 'package:flutter/material.dart';
 
 class CreditCardHorizontalList extends StatelessWidget {
-  final List<Account> cards;
+  final List<AccountWithSummary> cards;
 
   const CreditCardHorizontalList({
     super.key,
@@ -31,8 +32,8 @@ class CreditCardHorizontalList extends StatelessWidget {
                 GestureDetector(
                   onTap: () => _handleCardTap(context, cards[index]),
                   child: Hero(
-                    tag: 'cardsHome-${cards[index].name}',
-                    child: AccountCard(account: cards[index]),
+                    tag: 'cardsHome-${cards[index].account.name}',
+                    child: AccountCard(accountSumarry: cards[index]),
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -56,11 +57,11 @@ class CreditCardHorizontalList extends StatelessWidget {
     );
   }
 
-  void _handleCardTap(BuildContext context, Account card) {
+  void _handleCardTap(BuildContext context, AccountWithSummary accountSummary) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => CreditCardDetail(card: card),
+        builder: (context) => CreditCardDetail(accountSummary: accountSummary),
       ),
     );
   }

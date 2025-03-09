@@ -1,32 +1,36 @@
 import 'package:finia_app/screens/dashboard/components/header_custom.dart';
+import 'package:finia_app/screens/dashboard/dashboard_home.dart';
+import 'package:finia_app/services/transaction_service.dart';
 import 'package:flutter/material.dart';
 import 'package:finia_app/services/accounts_services.dart';
+import 'package:provider/provider.dart';
 
 class AccountCard extends StatelessWidget {
-  final Account account;
+  final AccountWithSummary accountSumarry;
 
-  const AccountCard({super.key, required this.account});
+  const AccountCard({super.key, required this.accountSumarry});
 
   @override
   Widget build(BuildContext context) {
+    final transactionProvider = context.watch<TransactionProvider>();
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       padding: const EdgeInsets.all(16),
-      decoration: _getBackgroundDecoration(account.type),
+      decoration: _getBackgroundDecoration(accountSumarry.account.type),
       child: Stack(
         children: [
           Positioned(
             top: 30,
             right: 10,
-            child: _getBankLogo(account.bankName),
+            child: _getBankLogo(accountSumarry.account.bankName),
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildHeader(account),
+              _buildHeader(accountSumarry.account),
               const SizedBox(height: 12),
               Text(
-                account.name.toUpperCase(),
+                accountSumarry.account.name.toUpperCase(),
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -36,7 +40,7 @@ class AccountCard extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               Text(
-                "Saldo: ${formatCurrency(account.balance)}",
+                'Saldo: ${formatCurrency(accountSumarry.getCalculatedBalance(transactionProvider))}',
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,

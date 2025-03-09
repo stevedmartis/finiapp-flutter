@@ -4,12 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:vector_math/vector_math_64.dart' as vector;
 
 class SuccessCompletePage extends AnimatedWidget {
-  final List<CreditCard> ordersCreate;
-
   const SuccessCompletePage({
     super.key,
     required Animation<double> endingAnimation,
-    required this.ordersCreate,
   }) : super(listenable: endingAnimation);
 
   Animation<double> get animation => listenable as Animation<double>;

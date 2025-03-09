@@ -12,9 +12,7 @@ const mainDataBackupColor = Color(0xff32D73F);
 const secondaryDataBackupColor = Color(0xff3CFF50);
 
 class BublesSuccesPage extends StatefulWidget {
-  final List<CreditCard> orders;
-
-  const BublesSuccesPage({super.key, required this.orders});
+  const BublesSuccesPage({super.key});
   @override
   BublesSuccesPageState createState() => BublesSuccesPageState();
 }
@@ -102,7 +100,6 @@ class BublesSuccesPageState extends State<BublesSuccesPage>
             ),
             SuccessCompletePage(
               endingAnimation: _endingAnimation,
-              ordersCreate: widget.orders,
             ),
           ],
         ),

@@ -1,6 +1,4 @@
-import 'package:finia_app/screens/credit_card/credit_card_widget.dart';
 import 'package:finia_app/screens/dashboard/components/header_custom.dart';
-import 'package:finia_app/screens/dashboard/transactions/transaction_add_form.dart';
 import 'package:finia_app/services/accounts_services.dart';
 import 'package:finia_app/services/finance_summary_service.dart';
 import 'package:finia_app/shared_preference/global_preference.dart';
@@ -8,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:finia_app/constants.dart';
 import 'package:finia_app/widgets/buttons/button_continue_loading_widget.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
@@ -28,7 +25,7 @@ class AddAccountScreenState extends State<AddAccountScreen> {
   final TextEditingController _balanceController = TextEditingController();
   String _selectedAccountType = "Cuenta Corriente";
   bool _hasCompletedOnboarding = false; // 🔥 Nuevo flag
-  List<Map<String, dynamic>> _accounts = []; // Lista de cuentas agregadas
+  final List<Map<String, dynamic>> _accounts = []; // Lista de cuentas agregadas
 
   final List<String> _accountTypes = [
     "Cuenta Corriente",
@@ -90,8 +87,6 @@ class AddAccountScreenState extends State<AddAccountScreen> {
     });
   }
 
-  String? _currentAccountId;
-
   void _addAccount() {
     String name = _accountNameController.text.trim();
     String cleanBalance =
@@ -120,12 +115,6 @@ class AddAccountScreenState extends State<AddAccountScreen> {
     final accountsProvider =
         Provider.of<AccountsProvider>(context, listen: false);
     accountsProvider.addAccount(newAccount);
-
-    // ✅ Si es la primera cuenta, asignarla automáticamente
-    bool isFirstAccount = accountsProvider.accounts.length == 1;
-    if (isFirstAccount) {
-      _currentAccountId = newAccount.id; // ✅ ASIGNA EL ID DE CUENTA
-    }
 
     final financialProvider =
         Provider.of<FinancialDataService>(context, listen: false);
@@ -164,7 +153,7 @@ class AddAccountScreenState extends State<AddAccountScreen> {
 
       Navigator.pushReplacement(
         context,
-        bubleSuccessRouter(myProducts), // ✅ Primera vez → Animación → Dashboard
+        bubleSuccessRouter(), // ✅ Primera vez → Animación → Dashboard
       );
     } else {
       // Ya pasó la animación → Va directo al Dashboard

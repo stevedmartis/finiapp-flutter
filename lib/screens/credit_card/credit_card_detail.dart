@@ -1,5 +1,6 @@
 import 'package:finia_app/screens/credit_card/account_cards_widget.dart';
 import 'package:finia_app/screens/dashboard/components/header_custom.dart';
+import 'package:finia_app/screens/dashboard/dashboard_home.dart';
 import 'package:finia_app/screens/providers/theme_provider.dart';
 import 'package:finia_app/services/transaction_service.dart';
 import 'package:flutter/material.dart';
@@ -11,9 +12,9 @@ import 'package:finia_app/services/auth_service.dart';
 import '../../services/accounts_services.dart';
 
 class CreditCardDetail extends StatefulWidget {
-  final Account card;
+  final AccountWithSummary accountSummary;
 
-  const CreditCardDetail({super.key, required this.card});
+  const CreditCardDetail({super.key, required this.accountSummary});
 
   @override
   CreditCardDetailState createState() => CreditCardDetailState();
@@ -24,7 +25,7 @@ class CreditCardDetailState extends State<CreditCardDetail> {
   Widget build(BuildContext context) {
     var authService = Provider.of<AuthService>(context, listen: false);
     var tagActual = authService.cardsHero;
-    final heroTag = '$tagActual-${widget.card.name}';
+    final heroTag = '$tagActual-${widget.accountSummary.account.name}';
     final currentTheme = Provider.of<ThemeProvider>(context);
     final transactionProvider = Provider.of<TransactionProvider>(context);
     final double totalIncome = transactionProvider.transactions
@@ -37,7 +38,7 @@ class CreditCardDetailState extends State<CreditCardDetail> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: logoAppBarCOLOR,
-        title: Text('Cuenta: ${widget.card.name}'),
+        title: Text('Cuenta: ${widget.accountSummary.account.name}'),
       ),
       body: CustomScrollView(
         slivers: <Widget>[
@@ -47,7 +48,7 @@ class CreditCardDetailState extends State<CreditCardDetail> {
               child: Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                child: AccountCard(account: widget.card),
+                child: AccountCard(accountSumarry: widget.accountSummary),
               ),
             ),
           ),
@@ -58,7 +59,7 @@ class CreditCardDetailState extends State<CreditCardDetail> {
                 [
                   _buildCurrentBalance(
                     currentTheme,
-                    widget.card.balance,
+                    widget.accountSummary.summary.balance,
                     totalIncome,
                     totalExpense,
                   ),
@@ -67,7 +68,8 @@ class CreditCardDetailState extends State<CreditCardDetail> {
                     fileInfo: widget.card.fileInfo,
                   ), */
                   if (Responsive.isMobile(context))
-                    const TransactionHistorialPage(),
+                    TransactionHistorialPage(
+                        accountId: widget.accountSummary.account.id),
                 ],
               ),
             ),
@@ -80,20 +82,24 @@ class CreditCardDetailState extends State<CreditCardDetail> {
   Widget _buildCurrentBalance(ThemeProvider themeProvider, double available,
       double totalIncome, double totalExpense) {
     return Padding(
-      padding: const EdgeInsets.only(left: 10.0, top: 0.0, right: 16),
+      padding: const EdgeInsets.only(left: 16.0, top: 0.0, right: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
             decoration: BoxDecoration(
-              gradient: themeProvider.getGradientCard(),
+              gradient: const LinearGradient(
+                colors: [Color(0xFF6A1B9A), Color(0xFF8E24AA)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
+                  color: Colors.black.withOpacity(0.15),
                   spreadRadius: 2,
-                  blurRadius: 8,
+                  blurRadius: 6,
                   offset: const Offset(0, 4),
                 ),
               ],
@@ -101,7 +107,7 @@ class CreditCardDetailState extends State<CreditCardDetail> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // 🔹 Saldo disponible
+                // ✅ Saldo Disponible
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -131,46 +137,12 @@ class CreditCardDetailState extends State<CreditCardDetail> {
                 ),
                 const SizedBox(height: 12),
 
-                // 🔹 Ingresos y Gastos
+                // ✅ Ingresos y Gastos
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // ✅ Ingresos
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.arrow_upward,
-                          color: Colors.greenAccent,
-                          size: 20,
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          "+\$${totalIncome.toStringAsFixed(0)}",
-                          style: const TextStyle(
-                            fontSize: 16,
-                            color: Colors.greenAccent,
-                          ),
-                        ),
-                      ],
-                    ),
-                    // ✅ Gastos
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.arrow_downward,
-                          color: Colors.redAccent,
-                          size: 20,
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          "-\$${totalExpense.toStringAsFixed(0)}",
-                          style: const TextStyle(
-                            fontSize: 16,
-                            color: Colors.redAccent,
-                          ),
-                        ),
-                      ],
-                    ),
+                    _buildAmount("+", totalIncome, Colors.greenAccent),
+                    _buildAmount("-", totalExpense, Colors.redAccent),
                   ],
                 ),
               ],
@@ -178,6 +150,28 @@ class CreditCardDetailState extends State<CreditCardDetail> {
           ),
         ],
       ),
+    );
+  }
+
+// ✅ Crear un método para evitar código repetido
+  Widget _buildAmount(String prefix, double amount, Color color) {
+    return Row(
+      children: [
+        Icon(
+          prefix == "+" ? Icons.arrow_upward : Icons.arrow_downward,
+          color: color,
+          size: 20,
+        ),
+        const SizedBox(width: 4),
+        Text(
+          "$prefix${formatCurrency(amount)}",
+          style: TextStyle(
+            fontSize: 16,
+            color: color,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ],
     );
   }
 }

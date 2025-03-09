@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:finia_app/screens/credit_card/account_cards_widget.dart';
 import 'package:finia_app/screens/credit_card/credit_card_detail.dart';
+import 'package:finia_app/screens/dashboard/dashboard_home.dart';
 import 'package:finia_app/services/accounts_services.dart';
 import 'package:finia_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,7 @@ typedef OnCardClicked = void Function(int index);
 enum RepeatCards { down, bothDirection, none }
 
 class CreditCardSlider extends StatefulWidget {
-  final List<Account> creditCards;
+  final List<AccountWithSummary> creditCards;
   final double percentOfUpperCard;
   final OnCardClicked onCardClicked;
   final RepeatCards repeatCards;
@@ -155,7 +156,7 @@ class CreditCardSliderState extends State<CreditCardSlider> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => CreditCardDetail(
-                    card: card,
+                    accountSummary: card,
                   ),
                 ),
               ).then((value) => {
@@ -176,8 +177,9 @@ class CreditCardSliderState extends State<CreditCardSlider> {
           }
         },
         child: Hero(
-            tag: 'cardsMenu-${widget.creditCards[index % length].name}',
-            child: AccountCard(account: widget.creditCards[index % length])),
+            tag: 'cardsMenu-${widget.creditCards[index % length].account.name}',
+            child: AccountCard(
+                accountSumarry: widget.creditCards[index % length])),
       ),
     );
   }

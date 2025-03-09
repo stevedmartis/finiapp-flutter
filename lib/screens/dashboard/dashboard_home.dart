@@ -1,13 +1,11 @@
 import 'package:finia_app/constants.dart';
 import 'package:finia_app/controllers/menu_app_controller.dart';
+import 'package:finia_app/models/finance_summary.dart';
 import 'package:finia_app/screens/credit_card/account_cards_widget.dart';
 import 'package:finia_app/screens/credit_card/credit_card_detail.dart';
-import 'package:finia_app/screens/credit_card/credit_card_widget.dart';
 import 'package:finia_app/screens/dashboard/components/charts/financial_categories.chat.dart';
 import 'package:finia_app/screens/dashboard/components/custom_nav_bar.dart';
 import 'package:finia_app/screens/dashboard/components/header_custom.dart';
-import 'package:finia_app/screens/dashboard/components/my_fields.dart';
-import 'package:finia_app/screens/dashboard/components/transactions_dashboard.dart';
 import 'package:finia_app/screens/dashboard/transactions/transaction_add_form.dart';
 import 'package:finia_app/screens/dashboard/transactions/transaction_dash_list.dart';
 import 'package:finia_app/screens/login/add_accouts_explain_page.dart';
@@ -15,6 +13,7 @@ import 'package:finia_app/screens/providers/theme_provider.dart';
 import 'package:finia_app/services/accounts_services.dart';
 import 'package:finia_app/services/auth_service.dart';
 import 'package:finia_app/services/finance_summary_service.dart';
+import 'package:finia_app/services/transaction_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -22,6 +21,37 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+class AccountWithSummary {
+  final Account account;
+  final FinancialSummary summary;
+  final TransactionProvider transactionProvider;
+
+  AccountWithSummary({
+    required this.account,
+    required this.summary,
+    required this.transactionProvider,
+  });
+
+  double getCalculatedBalance(TransactionProvider transactionProvider) {
+    // ✅ Tomar el saldo inicial desde el resumen financiero (NO desde account.balance)
+    double initialBalance = summary.balance;
+
+    // ✅ Obtener ingresos y gastos desde las transacciones
+    double totalIncome =
+        transactionProvider.getTotalIncomeForAccount(account.id) ?? 0;
+    double totalExpenses =
+        transactionProvider.getTotalExpensesForAccount(account.id) ?? 0;
+
+    // ✅ Calcular el balance correctamente
+    double calculatedBalance = initialBalance + totalIncome - totalExpenses;
+
+    print(
+        "✅ Account ID: ${account.id} → Ingresos: $totalIncome | Gastos: $totalExpenses | Balance Inicial: $initialBalance | Balance Calculado: $calculatedBalance");
+
+    return calculatedBalance;
+  }
+}
 
 class DashBoardHomeScreen extends StatefulWidget {
   const DashBoardHomeScreen({super.key});
@@ -337,36 +367,33 @@ class DashBoardHomeScreenState extends State<DashBoardHomeScreen> {
               ),
             ),
             SliverToBoxAdapter(
-              child: Consumer<AccountsProvider>(
-                builder: (context, accountsProvider, child) {
-                  return Container(
-                    padding: const EdgeInsets.all(0.0),
-                    height: accountsProvider.accounts.isEmpty
-                        ? MediaQuery.of(context).size.height * 0.10
-                        : MediaQuery.of(context).size.height * 0.230,
-                    child: accountsProvider.accounts.isEmpty
-                        ? const Center(
-                            child: Text(
-                              "No tienes cuentas agregadas.",
-                              style:
-                                  TextStyle(color: Colors.grey, fontSize: 16),
-                            ),
-                          )
-                        : PageView.builder(
-                            controller: _pageController,
-                            itemCount: accountsProvider.accounts.length,
-                            itemBuilder: (context, index) {
-                              final account = accountsProvider.accounts[index];
+              child: Consumer3<FinancialDataService, AccountsProvider,
+                  TransactionProvider>(
+                builder: (context, financialData, accountsProvider,
+                    transactionProvider, _) {
+                  final combinedAccounts = financialData.getCombinedAccounts(
+                    accountsProvider.accounts,
+                    transactionProvider,
+                  );
 
-                              return Hero(
-                                tag: 'cardsHome-${account.name}',
-                                child: GestureDetector(
-                                  onTap: () => _handleCardTap(context, account),
-                                  child: _buildAccountCard(account),
-                                ),
-                              );
-                            },
+                  return SizedBox(
+                    height: 220,
+                    child: PageView.builder(
+                      controller: _pageController,
+                      itemCount: combinedAccounts.length,
+                      itemBuilder: (context, index) {
+                        final accountSummary = combinedAccounts[index];
+
+                        return Hero(
+                          tag: 'cardsHome-${accountSummary.account.name}',
+                          child: GestureDetector(
+                            onTap: () =>
+                                _handleCardTap(context, accountSummary),
+                            child: _buildAccountCard(accountSummary),
                           ),
+                        );
+                      },
+                    ),
                   );
                 },
               ),
@@ -400,7 +427,7 @@ class DashBoardHomeScreenState extends State<DashBoardHomeScreen> {
                                         : Container(),
                                   ],
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 35,
                                 ),
                                 const Center(
@@ -429,7 +456,21 @@ class DashBoardHomeScreenState extends State<DashBoardHomeScreen> {
                                     accountsProvider.accounts.isNotEmpty
                                         ? IconButton(
                                             icon: const Icon(Icons.add),
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              showModalBottomSheet(
+                                                context: context,
+                                                isScrollControlled: true,
+                                                shape:
+                                                    const RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.vertical(
+                                                          top: Radius.circular(
+                                                              20)),
+                                                ),
+                                                builder: (context) =>
+                                                    const AddTransactionBottomSheet(),
+                                              );
+                                            },
                                           )
                                         : Container(),
                                   ],
@@ -456,9 +497,39 @@ class DashBoardHomeScreenState extends State<DashBoardHomeScreen> {
                 (BuildContext context, int index) {
                   return Container(
                     padding: const EdgeInsets.all(defaultPadding),
-                    height: MediaQuery.of(context).size.width *
-                        2, // Ajusta la altura según tu diseño
-                    child: const BudgetedExpensesChart(),
+                    child: Consumer2<FinancialDataService, AccountsProvider>(
+                      builder:
+                          (context, financialData, accountsProvider, child) {
+                        final currentAccount = accountsProvider
+                            .getCurrentAccount(); // ✅ Obtenemos la cuenta actual
+
+                        if (currentAccount == null) {
+                          return const Center(
+                            child: Text(
+                              'No hay cuenta seleccionada',
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          );
+                        }
+
+                        // ✅ Ahora usamos el valor del saldo total disponible
+                        final totalAvailable =
+                            financialData.getTotalDisponible(accountsProvider);
+
+                        return Consumer<TransactionProvider>(
+                          builder: (context, transactionProvider, child) {
+                            final transactions =
+                                transactionProvider.transactions;
+
+                            // ✅ Pasamos el saldo total en lugar de solo los ingresos
+                            return BudgetedExpensesChart(
+                              // ✅ Saldo total real
+                              transactions: transactions,
+                            );
+                          },
+                        );
+                      },
+                    ),
                   );
                 },
                 childCount: 1,
@@ -470,139 +541,21 @@ class DashBoardHomeScreenState extends State<DashBoardHomeScreen> {
     );
   }
 
-  SliverList makeListRecomendations(bool loading) {
-    return SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (BuildContext context, int index) {
-          return Container(
-            padding: const EdgeInsets.all(16.0),
-            height: MediaQuery.of(context).size.height, // Full height
-            child: PageView.builder(
-              controller: _pageController,
-              itemCount: myProducts.length,
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: NotificationListener<ScrollNotification>(
-                    onNotification: (scrollNotification) {
-                      if (scrollNotification is ScrollUpdateNotification &&
-                          scrollNotification.metrics.axis == Axis.vertical) {
-                        _scrollController.jumpTo(
-                          _scrollController.position.pixels +
-                              scrollNotification.scrollDelta!,
-                        );
-                      }
-                      return false; // Permite que otras notificaciones continúen propagándose
-                    },
-                    child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          GestureDetector(
-                            onTap: () => (),
-                            // _handleCardTap(context, myProducts[index]),
-                            child: Hero(
-                              tag: 'cardsHome-${myProducts[index].cardNumber}',
-                              child: myProducts[index],
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          GestureDetector(
-                            onTap: () => (),
-                            // _handleCardTap(context, myProducts[index]),
-                            child: InfoCardsAmounts(
-                              fileInfo: myProducts[index].fileInfo,
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          GestureDetector(
-                            onTap: () => (),
-                            // _handleCardTap(context, myProducts[index]),
-                            child: TransactionsDashBoardList(
-                              transactions: myProducts[index].transactions,
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          GestureDetector(
-                            onTap: () => (),
-                            //_handleCardTap(context, myProducts[index]),
-                            child: const BudgetedExpensesChart(),
-                          ),
-                          const SizedBox(
-                              height: 16), // Agrega espacio adicional al final
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-          );
-        },
-        childCount: 1, // Solo un PageView en la lista
-      ),
-    );
+  Widget _buildAccountCard(AccountWithSummary account) {
+    return AccountCard(accountSumarry: account);
   }
 
-  Widget _buildAccountCard(Account account) {
-    return AccountCard(account: account);
-  }
-
-  BoxDecoration _getBackgroundDecoration(String type) {
-    switch (type) {
-      case "Cuenta Corriente":
-        return BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          gradient: const LinearGradient(
-            colors: [Color(0xFF1E88E5), Color(0xFF0D47A1)], // Azul
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        );
-      case "Cuenta de Ahorro":
-        return BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          gradient: const LinearGradient(
-            colors: [Color(0xFF43A047), Color(0xFF2E7D32)], // Verde
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        );
-      case "Efectivo":
-        return BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          gradient: const LinearGradient(
-            colors: [Color(0xFFFFB300), Color(0xFFFF6F00)], // Naranja
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        );
-      default:
-        return BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          gradient: const LinearGradient(
-            colors: [Color(0xFF607D8B), Color(0xFF455A64)], // Gris oscuro
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        );
-    }
-  }
-
-  void _handleCardTap(BuildContext context, Account card) {
+  void _handleCardTap(BuildContext context, AccountWithSummary accountSummary) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => CreditCardDetail(card: card),
+        builder: (context) => CreditCardDetail(accountSummary: accountSummary),
       ),
     );
   }
 
   Widget buildHeaderContent(
       BuildContext context, ThemeProvider themeProvider, double balance) {
-    final financialData = Provider.of<FinancialDataService>(context);
-
     return Container(
       padding: const EdgeInsets.all(16.0),
       child: Column(
@@ -618,11 +571,43 @@ class DashBoardHomeScreenState extends State<DashBoardHomeScreen> {
           const SizedBox(height: 6),
           Animate(
             effects: const [FadeEffect(), ScaleEffect()],
-            child: Consumer<FinancialDataService>(
-              builder: (context, financialData, _) {
+            // ✅ Ahora usamos Consumer2 para pasar el `accountsProvider`
+            child: Consumer2<FinancialDataService, AccountsProvider>(
+              builder: (context, financialData, accountsProvider, _) {
+                double balanceTotal =
+                    financialData.getBalanceTotal(accountsProvider);
+
+                // ✅ Si no hay cuentas → Mostrar 0 directamente
+                if (balanceTotal == 0) {
+                  return const Text(
+                    '\$0',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  );
+                }
+
+                // ✅ Si solo hay una cuenta y no hay transacciones → Mostrar directamente el saldo de la cuenta
+                if (financialData.financialSummary.length == 1 &&
+                    financialData.financialSummary.first.totalIncome == 0 &&
+                    financialData.financialSummary.first.totalExpenses == 0) {
+                  return Text(
+                    formatCurrency(
+                        financialData.financialSummary.first.balance),
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  );
+                }
+
+                // ✅ Si hay varias cuentas o transacciones → Mostrar el balance total calculado
                 return Text(
-                  formatCurrency(financialData.getBalanceTotal()),
-                  style: TextStyle(
+                  formatCurrency(balanceTotal),
+                  style: const TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
@@ -632,16 +617,17 @@ class DashBoardHomeScreenState extends State<DashBoardHomeScreen> {
             ),
           ),
           const SizedBox(height: 10),
-          Consumer<FinancialDataService>(
-            builder: (context, financialData, _) {
+          // ✅ También corregimos el componente de ingresos y gastos
+          Consumer2<FinancialDataService, AccountsProvider>(
+            builder: (context, financialData, accountsProvider, _) {
               return Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   buildIndicator(
                     icon: Icons.arrow_upward,
                     title: 'Ingresado',
-                    amount: formatAbrevCurrency(financialData
-                        .getTotalIngresado()), // ✅ Ahora es dinámico
+                    amount: formatAbrevCurrency(
+                        financialData.getTotalIngresado(accountsProvider)),
                     context: context,
                     isPositive: true,
                     themeProvider: themeProvider,
@@ -650,8 +636,8 @@ class DashBoardHomeScreenState extends State<DashBoardHomeScreen> {
                   buildIndicator(
                     icon: Icons.arrow_downward,
                     title: 'Gastado',
-                    amount: formatAbrevCurrency(
-                        financialData.getTotalGastado()), // ✅ Ahora es dinámico
+                    amount:
+                        formatAbrevCurrency(financialData.getTotalGastado()),
                     context: context,
                     isPositive: false,
                     themeProvider: themeProvider,

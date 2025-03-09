@@ -2,10 +2,10 @@ import 'package:finia_app/screens/credit_card/credit_card_widget.dart';
 import 'package:finia_app/screens/login/success_animation_widget.dart';
 import 'package:flutter/material.dart';
 
-Route bubleSuccessRouter(List<CreditCard> orders) {
+Route bubleSuccessRouter() {
   return PageRouteBuilder(
     pageBuilder: (context, animation, secondaryAnimation) {
-      return BublesSuccesPage(orders: orders);
+      return BublesSuccesPage();
     },
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       var begin = const Offset(0.0, 0.5);

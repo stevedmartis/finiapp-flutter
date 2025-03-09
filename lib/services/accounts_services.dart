@@ -24,7 +24,7 @@ class Account {
         "type": type,
         "balance": balance,
         "bankName": bankName,
-        "idAccount": id,
+        "id": id,
       };
 
   // Convertir desde JSON
@@ -35,6 +35,22 @@ class Account {
       type: json["type"],
       balance: (json["balance"] as num).toDouble(),
       bankName: json["bankName"] ?? "bank_default",
+    );
+  }
+
+  Account copyWith({
+    String? id,
+    String? name,
+    double? balance,
+    String? bankName,
+    String? type,
+  }) {
+    return Account(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      balance: balance ?? this.balance,
+      bankName: bankName ?? this.bankName,
+      type: type ?? this.type,
     );
   }
 }
@@ -48,9 +64,27 @@ class AccountsProvider extends ChangeNotifier {
 
   String? get currentAccountId => _currentAccountId;
 
+  Account? getCurrentAccount() {
+    if (_currentAccountId == null) return null;
+    for (var account in _accounts) {
+      if (account.id == _currentAccountId) {
+        return account;
+      }
+    }
+    return null; // ✅ Devuelve null directamente
+  }
+
   void setCurrentAccountId(String id) {
     _currentAccountId = id;
     notifyListeners(); // 🔥 Notifica a los widgets que escuchan
+  }
+
+  void updateAccountBalance(String accountId, double newBalance) {
+    int index = _accounts.indexWhere((account) => account.id == accountId);
+    if (index != -1) {
+      _accounts[index] = _accounts[index].copyWith(balance: newBalance);
+      notifyListeners(); // ✅ Forzar actualización en la UI
+    }
   }
 
   /// 🔹 Cargar cuentas desde `SharedPreferences`
@@ -143,7 +177,16 @@ class AccountsProvider extends ChangeNotifier {
   }
 
   double getTotalBalance() {
-    return _accounts.fold(0.0, (sum, account) => sum + account.balance);
+    if (_accounts.isNotEmpty) {
+      if (_accounts.length == 1) {
+        // ✅ Si solo hay una cuenta y no hay transacciones → Devuelve el saldo directamente
+        return _accounts.first.balance;
+      } else {
+        // ✅ Si hay múltiples cuentas → Sumar todos los saldos
+        return _accounts.fold(0.0, (sum, account) => sum + account.balance);
+      }
+    }
+    return 0;
   }
 
   /// 🔹 Agregar una nueva cuenta y guardarla en `SharedPreferences`

@@ -1,4 +1,5 @@
 import 'package:finia_app/services/accounts_services.dart';
+import 'package:finia_app/services/finance_summary_service.dart';
 import 'package:finia_app/services/transaction_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -18,6 +19,8 @@ class MockAccountsProvider extends Mock implements AccountsProvider {}
 
 class MockTransactionProvider extends Mock implements TransactionProvider {}
 
+class MockFinancialProvider extends Mock implements FinancialDataService {}
+
 void main() {
   testWidgets('MyApp utiliza las dependencias simuladas',
       (WidgetTester tester) async {
@@ -26,6 +29,7 @@ void main() {
     final mockAuthService = MockAuthService();
     final mockAccountsProvider = MockAccountsProvider();
     final mockTransactionProvider = MockTransactionProvider();
+    final mockFinancialProvider = MockFinancialProvider();
     // 🔹 Simular que el usuario ya completó el onboarding
     bool hasCompletedOnboarding = true;
 
@@ -40,6 +44,8 @@ void main() {
                 value: mockAccountsProvider),
             ChangeNotifierProvider<TransactionProvider>.value(
                 value: mockTransactionProvider),
+            ChangeNotifierProvider<FinancialDataService>.value(
+                value: mockFinancialProvider),
           ],
           child: MyApp(
               client: mockClient,
@@ -47,7 +53,8 @@ void main() {
               hasCompletedOnboarding:
                   hasCompletedOnboarding, // ✅ Se agregó este argumento
               accountsProvider: mockAccountsProvider,
-              transactionProvider: mockTransactionProvider),
+              transactionProvider: mockTransactionProvider,
+              financialProvider: mockFinancialProvider),
         ),
       ),
     );

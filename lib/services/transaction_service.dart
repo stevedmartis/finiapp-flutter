@@ -62,6 +62,41 @@ class TransactionProvider extends ChangeNotifier {
     }
   }
 
+  double getTotalIncomeForAccount(String accountId) {
+    final filteredTransactions = transactions
+        .where((transaction) => transaction.accountId == accountId)
+        .toList();
+
+    print(
+        "🔍 Transacciones encontradas para ID: $accountId → $filteredTransactions");
+
+    return filteredTransactions
+        .where((transaction) => transaction.type == 'Ingreso')
+        .fold(0, (sum, transaction) => sum + transaction.amount);
+  }
+
+  double getTotalExpensesForAccount(String accountId) {
+    return transactions
+        .where((transaction) =>
+            transaction.accountId == accountId) // ✅ UUID como String
+        .where((transaction) => transaction.type == 'Gasto')
+        .fold(0, (sum, transaction) => sum + transaction.amount);
+  }
+
+  double getBalanceForAccount(String accountId) {
+    double totalIncome = transactions
+        .where((transaction) =>
+            transaction.accountId == accountId && transaction.type == 'Ingreso')
+        .fold(0, (sum, transaction) => sum + transaction.amount);
+
+    double totalExpenses = transactions
+        .where((transaction) =>
+            transaction.accountId == accountId && transaction.type == 'Gasto')
+        .fold(0, (sum, transaction) => sum + transaction.amount);
+
+    return totalIncome - totalExpenses;
+  }
+
   /// 🔹 Agregar una nueva transacción y guardarla en `SharedPreferences`
   Future<void> addTransaction(TransactionDto newTransaction) async {
     _transactions.add(newTransaction);
@@ -89,5 +124,18 @@ class TransactionProvider extends ChangeNotifier {
     await prefs
         .remove('transactions'); // ✅ Eliminar todas las transacciones guardadas
     print("✅ Transacciones eliminadas correctamente.");
+  }
+
+  double getTotalIncome(double initialBalance) {
+    final calculo = _transactions
+        .where(
+            (transaction) => transaction.type.trim().toLowerCase() == "ingreso")
+        .fold(0.0, (sum, transaction) => sum + transaction.amount);
+
+    // ✅ Sumar saldo inicial directamente
+    final totalIncome = calculo + initialBalance;
+
+    print(totalIncome); // ✅ Para depurar
+    return totalIncome;
   }
 }

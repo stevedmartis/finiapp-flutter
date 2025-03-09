@@ -60,7 +60,9 @@ class FinancialSummary {
   double totalExpenses;
   final double averageIncome;
   final double averageExpenses;
-  final Map<String, List<Transaction>> categories;
+
+  // ✅ Mapeo directo de categoría y valor acumulado
+  final Map<String, double> categories;
 
   FinancialSummary({
     required this.accountId,
@@ -73,11 +75,9 @@ class FinancialSummary {
   });
 
   factory FinancialSummary.fromJson(Map<String, dynamic> json) {
-    var categoriesMap = <String, List<Transaction>>{};
+    var categoriesMap = <String, double>{};
     json['categories'].forEach((key, dynamic value) {
-      var transactionList = List<Transaction>.from(
-          value.map((model) => Transaction.fromJson(model)));
-      categoriesMap[key] = transactionList;
+      categoriesMap[key] = (value as num).toDouble(); // ✅ Convertir a double
     });
 
     return FinancialSummary(

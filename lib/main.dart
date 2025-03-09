@@ -38,13 +38,23 @@ void main() async {
   FinancialDataService financialProvider = FinancialDataService();
 
   if (hasCompletedOnboarding) {
-    await transactionProvider.clearTransactions();
-    await accountsProvider.clearAccounts();
+    // await transactionProvider.clearTransactions();
+
+    // await accountsProvider.clearAccounts();
     await accountsProvider.loadAccounts();
     await transactionProvider.loadTransactions();
 
-    financialProvider.initializeData();
+    // financialProvider.initializeData();
+
+    financialProvider.syncTransactionsWithSummary(
+      transactionProvider.transactions,
+    );
+    final combinedAccounts = financialProvider.getCombinedAccounts(
+      accountsProvider.accounts,
+      transactionProvider, // ✅ Pasar directamente la instancia
+    );
   }
+
   InterceptedClient client =
       InterceptedClient.build(interceptors: [TokenInterceptor(authService)]);
 
@@ -56,12 +66,12 @@ void main() async {
   }); */
 
   runApp(MyApp(
-    client: client,
-    authService: authService,
-    hasCompletedOnboarding: hasCompletedOnboarding,
-    accountsProvider: accountsProvider,
-    transactionProvider: transactionProvider,
-  ));
+      client: client,
+      authService: authService,
+      hasCompletedOnboarding: hasCompletedOnboarding,
+      accountsProvider: accountsProvider,
+      transactionProvider: transactionProvider,
+      financialProvider: financialProvider));
 }
 
 Future<void> resetOnboarding() async {
@@ -75,7 +85,7 @@ class MyApp extends StatefulWidget {
   final bool hasCompletedOnboarding;
   final AccountsProvider accountsProvider;
   final TransactionProvider transactionProvider; // ✅ Recibe el provider cargado
-
+  final FinancialDataService financialProvider;
   const MyApp({
     super.key,
     required this.client,
@@ -83,6 +93,7 @@ class MyApp extends StatefulWidget {
     required this.hasCompletedOnboarding,
     required this.accountsProvider,
     required this.transactionProvider,
+    required this.financialProvider,
     // ✅ Lo pasamos aquí
   });
 
@@ -104,13 +115,13 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => MenuAppController()),
-        ChangeNotifierProvider(create: (context) => FinancialDataService()),
         ChangeNotifierProvider.value(value: widget.authService),
         ChangeNotifierProvider(create: (context) => ThemeProvider()),
         ChangeNotifierProvider.value(value: widget.accountsProvider),
+        ChangeNotifierProvider.value(value: widget.transactionProvider),
+
         ChangeNotifierProvider.value(
-            value:
-                widget.transactionProvider) // ✅ Se usa el que ya está cargado
+            value: widget.financialProvider), // ✅ Se usa el que ya está cargado
       ],
       child: Consumer<ThemeProvider>(
         builder: (context, themeProvider, _) {

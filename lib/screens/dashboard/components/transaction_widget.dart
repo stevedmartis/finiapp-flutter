@@ -1,92 +1,112 @@
-import 'package:finia_app/models/transaction.model.dart';
 import 'package:finia_app/screens/dashboard/components/header_custom.dart';
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
-
-Map<String, List<TransactionCreditCard>> groupTransactionsByDate(
-    List<TransactionCreditCard> transactions) {
-  Map<String, List<TransactionCreditCard>> grouped = {};
-  final now = DateTime.now();
-  final today = DateTime(now.year, now.month, now.day);
-  final yesterday = DateTime(now.year, now.month, now.day - 1);
-
-  for (var transaction in transactions) {
-    final dateCurrent = DateFormat('EEEE, d', 'es_ES').format(transaction.date);
-    final transactionDate = DateTime(
-        transaction.date.year, transaction.date.month, transaction.date.day);
-    String key;
-
-    if (transactionDate == today) {
-      key = 'Hoy $dateCurrent';
-    } else if (transactionDate == yesterday) {
-      key = 'Ayer $dateCurrent';
-    } else {
-      key = dateCurrent;
-    }
-
-    if (!grouped.containsKey(key)) {
-      grouped[key] = [];
-    }
-    grouped[key]?.add(transaction);
-  }
-
-  return grouped;
-}
+import 'package:finia_app/services/transaction_service.dart';
 
 class TransactionsWidget extends StatelessWidget {
-  final List<TransactionCreditCard> transactions;
+  final String accountId;
 
-  const TransactionsWidget({super.key, required this.transactions});
+  const TransactionsWidget({
+    super.key,
+    required this.accountId,
+  });
 
   @override
   Widget build(BuildContext context) {
-    var groupedTransactions = groupTransactionsByDate(transactions);
+    // ✅ Obtener las transacciones desde el Provider
+    final transactionProvider = Provider.of<TransactionProvider>(context);
+    final filteredTransactions =
+        transactionProvider.getTransactionsByAccountId(accountId);
+
+    if (filteredTransactions.isEmpty) {
+      return const Padding(
+        padding: EdgeInsets.all(16),
+        child: Center(
+          child: Text(
+            'No hay transacciones recientes',
+            style: TextStyle(color: Colors.grey),
+          ),
+        ),
+      );
+    }
+
+    // ✅ Agrupar por fecha y mostrar secciones
+    var groupedTransactions = _groupTransactionsByDate(filteredTransactions);
 
     return ListView.builder(
-      physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
       itemCount: groupedTransactions.keys.length,
       itemBuilder: (context, index) {
         String key = groupedTransactions.keys.elementAt(index);
-        List<TransactionCreditCard> tList = groupedTransactions[key]!;
+        List<TransactionDto> tList = groupedTransactions[key]!;
 
         return _buildTransactionSection(key, tList);
       },
     );
   }
 
+  // ✅ Función para agrupar por fecha
+  Map<String, List<TransactionDto>> _groupTransactionsByDate(
+      List<TransactionDto> transactions) {
+    Map<String, List<TransactionDto>> grouped = {};
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final yesterday = DateTime(now.year, now.month, now.day - 1);
+
+    for (var transaction in transactions) {
+      // ✅ Convertir desde formato 'dd-MM-yyyy' a DateTime
+      final transactionDate = DateFormat('dd-MM-yyyy').parse(transaction.date);
+
+      final dateCurrent =
+          DateFormat('EEEE, d', 'es_ES').format(transactionDate);
+
+      String key;
+
+      if (transactionDate == today) {
+        key = 'Hoy $dateCurrent';
+      } else if (transactionDate == yesterday) {
+        key = 'Ayer $dateCurrent';
+      } else {
+        key = dateCurrent;
+      }
+
+      if (!grouped.containsKey(key)) {
+        grouped[key] = [];
+      }
+      grouped[key]?.add(transaction);
+    }
+
+    return grouped;
+  }
+
   // ✅ Sección agrupada por fecha
   Widget _buildTransactionSection(
-      String date, List<TransactionCreditCard> transactions) {
-    return Theme(
-      data: ThemeData(
-        dividerColor: Colors.transparent, // Eliminar borde por defecto
-      ),
-      child: ExpansionTile(
-        initiallyExpanded: true,
-        tilePadding: const EdgeInsets.symmetric(horizontal: 16),
-        childrenPadding: const EdgeInsets.only(bottom: 8),
-        backgroundColor: Colors.transparent,
-        collapsedBackgroundColor: Colors.grey[850],
-        title: Text(
-          date,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
+      String date, List<TransactionDto> transactions) {
+    if (transactions.isEmpty) return Container();
+
+    return ExpansionTile(
+      initiallyExpanded: true,
+      tilePadding: const EdgeInsets.symmetric(horizontal: 16),
+      childrenPadding: const EdgeInsets.only(bottom: 8),
+      backgroundColor: Colors.transparent,
+      title: Text(
+        date,
+        style: const TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
         ),
-        children: transactions
-            .map((transaction) => _buildTransactionItem(transaction))
-            .toList(),
       ),
+      children: transactions
+          .map((transaction) => _buildTransactionItem(transaction))
+          .toList(),
     );
   }
 
   // ✅ Componente para mostrar cada transacción
-  Widget _buildTransactionItem(TransactionCreditCard transaction) {
-    // 🔹 Mapeo de iconos por categoría
+  Widget _buildTransactionItem(TransactionDto transaction) {
     final Map<String, IconData> categoryIcons = {
       "Comida": Icons.fastfood,
       "Transporte": Icons.directions_car,
@@ -106,20 +126,28 @@ class TransactionsWidget extends StatelessWidget {
       "Inversión": Icons.savings,
     };
 
-    final bool isIncome = transaction.outAmount > 0;
+    final bool isIncome = transaction.type == "Ingreso";
     final IconData icon =
         categoryIcons[transaction.category] ?? Icons.help_outline;
 
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-      padding: const EdgeInsets.all(12),
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
+      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.symmetric(vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.grey[800],
+        gradient: const LinearGradient(
+          colors: [
+            Color(0xFF1C1C1E),
+            Color(0xFF2C2C2E),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 6,
+            color: Colors.black.withOpacity(0.15),
+            blurRadius: 8,
             offset: const Offset(0, 4),
           ),
         ],
@@ -130,34 +158,37 @@ class TransactionsWidget extends StatelessWidget {
           // 🔹 Icono de la categoría
           CircleAvatar(
             backgroundColor: isIncome ? Colors.green[400] : Colors.red[400],
-            radius: 20,
+            radius: 24,
             child: Icon(
               icon,
               color: Colors.white,
-              size: 24,
+              size: 28,
             ),
           ),
+
           const SizedBox(width: 12),
 
-          // 🔹 Título y fecha
+          // 🔹 Descripción y monto
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  transaction.description,
+                  transaction.category,
                   style: const TextStyle(
-                    fontSize: 14,
+                    fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  DateFormat('dd-MM-yyyy').format(transaction.date),
+                  DateFormat('dd-MM-yyyy').format(
+                    DateFormat('dd-MM-yyyy').parse(transaction.date),
+                  ),
                   style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey[400],
+                    fontSize: 14,
+                    color: Colors.grey[500],
                   ),
                 ),
               ],
@@ -166,11 +197,11 @@ class TransactionsWidget extends StatelessWidget {
 
           // 🔹 Monto
           Text(
-            "${isIncome ? '+' : '-'} ${formatCurrency(transaction.outAmount)}",
+            "${isIncome ? '+' : '-'} ${formatCurrency(transaction.amount)}",
             style: TextStyle(
-              fontSize: 14,
+              fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: isIncome ? Colors.greenAccent : Colors.redAccent,
+              color: isIncome ? Colors.greenAccent[400] : Colors.redAccent[400],
             ),
           ),
         ],

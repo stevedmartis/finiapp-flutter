@@ -57,15 +57,15 @@ class TransactionsDashList extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         margin: const EdgeInsets.symmetric(vertical: 8),
         decoration: BoxDecoration(
-          gradient: LinearGradient(
+          gradient: const LinearGradient(
             colors: [
-              Colors.grey[900]!,
-              Colors.grey[800]!,
+              Color(0xFF1C1C1E),
+              Color(0xFF2C2C2E),
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.15),

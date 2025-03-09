@@ -1,5 +1,4 @@
 import 'package:finia_app/constants.dart';
-import 'package:finia_app/screens/credit_card/credit_card_widget.dart';
 import 'package:finia_app/widgets/reouter_pages.dart';
 import 'package:flutter/material.dart';
 
@@ -105,7 +104,7 @@ class _FloidWidgetScreenState extends State<FloidWidgetScreen> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.push(context, bubleSuccessRouter(myProducts));
+            Navigator.push(context, bubleSuccessRouter());
           },
         ),
         backgroundColor: logoAppBarCOLOR,
