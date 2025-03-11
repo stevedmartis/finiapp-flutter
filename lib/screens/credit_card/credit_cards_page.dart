@@ -1,6 +1,5 @@
 import 'package:finia_app/constants.dart';
 import 'package:finia_app/screens/credit_card/credit_card_slider.dart';
-import 'package:finia_app/screens/credit_card/credit_card_widget.dart';
 import 'package:finia_app/screens/dashboard/dashboard_home.dart';
 import 'package:finia_app/services/accounts_services.dart';
 
@@ -132,7 +131,7 @@ class CreditCardDetailWidget extends StatelessWidget {
       elevation: 4.0,
       margin: EdgeInsets.all(16.0),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(16.0),
         child: ClipRect(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

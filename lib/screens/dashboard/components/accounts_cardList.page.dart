@@ -1,7 +1,6 @@
 import 'package:finia_app/screens/credit_card/account_cards_widget.dart';
 import 'package:finia_app/screens/credit_card/credit_card_detail.dart';
 import 'package:finia_app/screens/dashboard/dashboard_home.dart';
-import 'package:finia_app/services/accounts_services.dart';
 import 'package:flutter/material.dart';
 
 class AccountsCardHorizontalList extends StatefulWidget {

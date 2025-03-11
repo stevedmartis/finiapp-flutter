@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:finia_app/main.dart';
 import 'package:finia_app/models/account_summary.dart';
 import 'package:finia_app/models/finance_summary.dart';
@@ -7,6 +9,7 @@ import 'package:finia_app/services/transaction_service.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FinancialDataService with ChangeNotifier {
   FinancialData? _financialData;
@@ -98,7 +101,8 @@ class FinancialDataService with ChangeNotifier {
       }
     }
 
-    notifyListeners(); // ✅ Asegura que se actualice el estado
+    notifyListeners();
+    saveData(); // ✅ Asegura que se actualice el estado
   }
 
   void addTransactionToSummary(TransactionDto transaction) {
@@ -158,28 +162,27 @@ class FinancialDataService with ChangeNotifier {
 
     // ✅ Recalcular el balance global para que sume el saldo inicial + nuevos valores
     calculateGlobalSummary();
-    notifyListeners(); // ✅ Notificar cambios a la UI
+    notifyListeners();
+    saveData(); // ✅ Notificar cambios a la UI
   }
 
   double getTotalIngresado(AccountsProvider accountsProvider) {
+    // Get initial balances
     double initialBalance = accountsProvider.accounts
         .map((account) => account.balance)
         .fold(0.0, (a, b) => a + b);
 
+    // Add any transaction income
+    double transactionIncome = 0;
     if (_financialData != null && _financialData!.financialSummary.isNotEmpty) {
-      double transactionIncome = _financialData!.financialSummary
+      transactionIncome = _financialData!.financialSummary
           .map((summary) => summary.totalIncome)
           .fold(0.0, (a, b) => a + b);
-
-      // ✅ Sumar saldo inicial + ingresos desde transacciones
-      double totalIncome = initialBalance + transactionIncome;
-
-      print("🟢 Total Ingresado (Saldo inicial + Transacciones): $totalIncome");
-      return totalIncome;
     }
 
-    // ✅ Si no hay transacciones → Solo saldo inicial
-    return initialBalance;
+    double totalIncome = initialBalance + transactionIncome;
+    print("🟢 Total Income (Initial balance + Transactions): $totalIncome");
+    return totalIncome;
   }
 
   double getTotalGastado() {
@@ -193,27 +196,25 @@ class FinancialDataService with ChangeNotifier {
   }
 
   double getBalanceTotal(AccountsProvider accountsProvider) {
-    double totalBalance = 0;
-
-    // ✅ Sumar el saldo inicial de las cuentas
-    double initialBalance = accountsProvider.accounts
+    // First, get the sum of all account balances
+    double initialBalances = accountsProvider.accounts
         .map((account) => account.balance)
         .fold(0.0, (a, b) => a + b);
 
-    // ✅ Sumar también las transacciones acumuladas desde financeData
+    // Next, if we have financial data, add transactions
+    double transactionBalance = 0.0;
     if (_financialData != null && _financialData!.financialSummary.isNotEmpty) {
-      double transactionBalance = _financialData!.financialSummary
-          .map((summary) => summary.balance)
-          .fold(0.0, (a, b) => a + b);
-
-      totalBalance = initialBalance + transactionBalance;
-    } else {
-      // ✅ Si no hay transacciones → Solo tomar el saldo inicial de las cuentas
-      totalBalance = initialBalance;
+      transactionBalance =
+          _financialData!.financialSummary.fold(0.0, (sum, summary) {
+        return sum + summary.totalIncome - summary.totalExpenses;
+      });
     }
 
+    // Final balance is initial balances plus transaction activity
+    double totalBalance = initialBalances + transactionBalance;
+
     print(
-        "🟢 Balance total calculado (cuentas + transacciones): $totalBalance");
+        "🟢 Balance total: $totalBalance = $initialBalances (initial) + $transactionBalance (transactions)");
     return totalBalance;
   }
 
@@ -295,22 +296,23 @@ class FinancialDataService with ChangeNotifier {
     }
 
     if (totalIncome == 0 && totalExpenses == 0) {
-      // ✅ Si no hay transacciones, basar el resumen en el saldo inicial
-      totalIncome = _financialData!.financialSummary
+      // Si no hay transacciones, basar el resumen en el saldo inicial
+      totalIncome = _financialData!.financialSummary.isEmpty
+          ? 0 // Si la lista está vacía, usar 0
+          : _financialData!.financialSummary
               .map((summary) => summary.balance)
-              .reduce((a, b) => a + b) ??
-          0;
+              .fold(0.0, (a, b) => a + b); // Usar fold en lugar de reduce
     }
 
     double totalBalance = totalIncome - totalExpenses;
 
-    // ✅ Asignar el nuevo balance total directamente al resumen
+    // Asignar el nuevo balance total al resumen
     _financialData = FinancialData(
       creditcards: _financialData!.creditcards,
       financialSummary: _financialData!.financialSummary.map((summary) {
         return FinancialSummary(
           accountId: summary.accountId,
-          balance: summary.balance, // ✅ Mantener el saldo actualizado
+          balance: summary.balance,
           totalIncome: summary.totalIncome,
           totalExpenses: summary.totalExpenses,
           averageIncome: summary.averageIncome,
@@ -324,7 +326,8 @@ class FinancialDataService with ChangeNotifier {
     print("✅ [Global] Total Gastos: $totalExpenses");
     print("✅ [Global] Balance Total: $totalBalance");
 
-    notifyListeners(); // ✅ Notificar cambios a la UI
+    notifyListeners();
+    // Aquí podrías llamar a saveData()
   }
 
   void addAccountToSummary(Account account) {
@@ -335,27 +338,26 @@ class FinancialDataService with ChangeNotifier {
       );
     }
 
-    // ✅ Verifica que la cuenta no exista ya en el summary
     int index = _financialData!.financialSummary
         .indexWhere((summary) => summary.accountId == int.tryParse(account.id));
 
     if (index == -1) {
-      // ✅ Si no existe, agrega una nueva entrada
+      // Add new account entry correctly
       _financialData!.financialSummary.add(FinancialSummary(
         accountId: int.tryParse(account.id) ?? 0,
-        balance: account.balance, // ✅ Saldo inicial
-        totalIncome: account.balance, // ✅ Añadir saldo inicial como ingreso
-        totalExpenses: 0, // ✅ No hay gastos aún
+        balance: account.balance,
+        totalIncome: 0, // Don't count initial balance as income
+        totalExpenses: 0,
         averageIncome: 0,
         averageExpenses: 0,
         categories: {},
       ));
     } else {
-      // ✅ Si ya existe, actualiza el saldo inicial
+      // Update existing account
       _financialData!.financialSummary[index] = FinancialSummary(
         accountId: int.tryParse(account.id) ?? 0,
         balance: account.balance,
-        totalIncome: account.balance, // ✅ Añadir saldo inicial como ingreso
+        totalIncome: 0,
         totalExpenses: 0,
         averageIncome: 0,
         averageExpenses: 0,
@@ -363,10 +365,8 @@ class FinancialDataService with ChangeNotifier {
       );
     }
 
-    print(
-        "✅ Cuenta añadida a summary: ${account.id} con saldo ${account.balance}");
-
-    notifyListeners(); // 🔥 Notifica a la UI
+    notifyListeners();
+    saveData();
   }
 
   void calculateSummaryForAccount(String accountId) {
@@ -403,6 +403,41 @@ class FinancialDataService with ChangeNotifier {
       );
 
       notifyListeners(); // ✅ Esto notificará al widget automáticamente
+    }
+  }
+
+// Add this to your FinancialDataService class
+  Future<void> saveData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    // Save your financial summary as JSON
+    if (_financialData != null) {
+      await prefs.setString('financial_data', jsonEncode(_financialData));
+    }
+  }
+
+// And this method to load it
+  Future<void> loadData() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? data = prefs.getString('financial_data');
+      if (data != null && data.isNotEmpty) {
+        _financialData = FinancialData.fromJsonString(data);
+        print("✅ Datos financieros cargados correctamente");
+      } else {
+        print("⚠️ No hay datos financieros guardados");
+        _financialData ??= FinancialData(
+          creditcards: [],
+          financialSummary: [],
+        );
+      }
+      notifyListeners();
+    } catch (e) {
+      print("❌ Error al cargar datos financieros: $e");
+      _financialData ??= FinancialData(
+        creditcards: [],
+        financialSummary: [],
+      );
+      notifyListeners();
     }
   }
 }

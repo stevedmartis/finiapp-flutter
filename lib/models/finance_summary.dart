@@ -1,26 +1,32 @@
 import 'dart:convert';
 
 class FinancialData {
-  final List<CreditCardInfo> creditcards;
-  List<FinancialSummary> financialSummary;
+  final List<dynamic> creditcards;
+  final List<FinancialSummary> financialSummary;
 
   FinancialData({
     required this.creditcards,
     required this.financialSummary,
   });
 
-  factory FinancialData.fromJson(Map<String, dynamic> json) {
-    return FinancialData(
-      creditcards: List<CreditCardInfo>.from(
-          json['creditcards'].map((x) => CreditCardInfo.fromJson(x))),
-      financialSummary: List<FinancialSummary>.from(
-          json['financialSummary'].map((x) => FinancialSummary.fromJson(x))),
-    );
+  // Añade este método para convertir a JSON
+  Map<String, dynamic> toJson() {
+    return {
+      'creditcards': creditcards,
+      'financialSummary':
+          financialSummary.map((summary) => summary.toJson()).toList(),
+    };
   }
 
-  static FinancialData fromJsonString(String str) {
-    final jsonData = json.decode(str);
-    return FinancialData.fromJson(jsonData);
+  // Mantén el método from JSON que ya tienes
+  factory FinancialData.fromJsonString(String jsonString) {
+    final Map<String, dynamic> data = json.decode(jsonString);
+    return FinancialData(
+      creditcards: data['creditcards'] ?? [],
+      financialSummary: (data['financialSummary'] as List)
+          .map((item) => FinancialSummary.fromJson(item))
+          .toList(),
+    );
   }
 }
 
@@ -58,11 +64,9 @@ class FinancialSummary {
   double balance;
   double totalIncome;
   double totalExpenses;
-  final double averageIncome;
-  final double averageExpenses;
-
-  // ✅ Mapeo directo de categoría y valor acumulado
-  final Map<String, double> categories;
+  double averageIncome;
+  double averageExpenses;
+  Map<String, dynamic> categories;
 
   FinancialSummary({
     required this.accountId,
@@ -74,20 +78,29 @@ class FinancialSummary {
     required this.categories,
   });
 
-  factory FinancialSummary.fromJson(Map<String, dynamic> json) {
-    var categoriesMap = <String, double>{};
-    json['categories'].forEach((key, dynamic value) {
-      categoriesMap[key] = (value as num).toDouble(); // ✅ Convertir a double
-    });
+  // Añade este método para convertir a JSON
+  Map<String, dynamic> toJson() {
+    return {
+      'accountId': accountId,
+      'balance': balance,
+      'totalIncome': totalIncome,
+      'totalExpenses': totalExpenses,
+      'averageIncome': averageIncome,
+      'averageExpenses': averageExpenses,
+      'categories': categories,
+    };
+  }
 
+  // Mantén el método fromJson que ya tienes
+  factory FinancialSummary.fromJson(Map<String, dynamic> json) {
     return FinancialSummary(
-      accountId: json['accountId'] as int,
-      balance: (json['balance'] as num).toDouble(),
-      totalIncome: (json['totalIncome'] as num).toDouble(),
-      totalExpenses: (json['totalExpenses'] as num).toDouble(),
-      averageIncome: (json['averageIncome'] as num).toDouble(),
-      averageExpenses: (json['averageExpenses'] as num).toDouble(),
-      categories: categoriesMap,
+      accountId: json['accountId'],
+      balance: json['balance']?.toDouble() ?? 0.0,
+      totalIncome: json['totalIncome']?.toDouble() ?? 0.0,
+      totalExpenses: json['totalExpenses']?.toDouble() ?? 0.0,
+      averageIncome: json['averageIncome']?.toDouble() ?? 0.0,
+      averageExpenses: json['averageExpenses']?.toDouble() ?? 0.0,
+      categories: Map<String, dynamic>.from(json['categories'] ?? {}),
     );
   }
 }

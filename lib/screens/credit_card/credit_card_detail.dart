@@ -9,7 +9,6 @@ import 'package:finia_app/constants.dart';
 import 'package:finia_app/responsive.dart';
 import 'package:finia_app/screens/dashboard/components/transactions_list.page.dart';
 import 'package:finia_app/services/auth_service.dart';
-import '../../services/accounts_services.dart';
 
 class CreditCardDetail extends StatefulWidget {
   final AccountWithSummary accountSummary;
