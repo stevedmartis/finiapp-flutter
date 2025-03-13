@@ -79,6 +79,27 @@ class AccountsProvider extends ChangeNotifier {
     notifyListeners(); // 🔥 Notifica a los widgets que escuchan
   }
 
+  double getTotalIncome() {
+    // Como en tu modelo no hay un campo específico para ingresos,
+    // asumimos que queremos el balance total de todas las cuentas
+    return _accounts.fold(0, (sum, account) => sum + account.balance);
+  }
+
+  // Obtener deuda total (asumiendo que las deudas son balances negativos o cuentas de tipo "debt")
+  double getTotalDebt() {
+    // Enfoque 1: Si las deudas son representadas por balances negativos
+    // return _accounts.fold(0, (sum, account) =>
+    //   sum + (account.balance < 0 ? -account.balance : 0));
+
+    // Enfoque 2: Si tienes un tipo de cuenta específico para deudas
+    return _accounts
+        .where((account) =>
+            account.type.toLowerCase() == "debt" ||
+            account.type.toLowerCase() == "credito" ||
+            account.type.toLowerCase() == "préstamo")
+        .fold(0, (sum, account) => sum + account.balance);
+  }
+
   void updateAccountBalance(String accountId, double newBalance) {
     int index = _accounts.indexWhere((account) => account.id == accountId);
     if (index != -1) {

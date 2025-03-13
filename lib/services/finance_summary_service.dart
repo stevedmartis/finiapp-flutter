@@ -440,4 +440,11 @@ class FinancialDataService with ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<void> clearFinanceData() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(
+        'financial_data'); // ✅ Eliminar todas las transacciones guardadas
+    print("✅ financial_data eliminadas correctamente.");
+  }
 }

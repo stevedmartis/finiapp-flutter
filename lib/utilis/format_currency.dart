@@ -1,25 +1,36 @@
-import 'package:intl/intl.dart';
-
 String formatAbrevCurrency(double amount) {
-  if (amount.abs() >= 1e9) {
-    // Si es mayor a mil millones → Billones (B)
-    return '\$${(amount / 1e9).toStringAsFixed(1)}B';
-  } else if (amount.abs() >= 1e6) {
-    // Si es mayor a un millón → Millones (M)
-    return '\$${(amount / 1e6).toStringAsFixed(1)}M';
-  } else if (amount.abs() >= 1e3) {
-    // Si es mayor a mil → Miles (K)
-    return '\$${(amount / 1e3).toStringAsFixed(1)}K';
-  } else {
-    // ✅ Si es menor a mil → Formato tradicional
-    final NumberFormat format =
-        NumberFormat.currency(locale: 'es_CL', symbol: '');
-    String formatted = format.format(amount);
-    formatted = formatted
-        .replaceAll('\$', '')
-        .replaceAll(',', ''); // Eliminar símbolo y separador de miles
+  // Para números negativos, manejamos el signo por separado
+  bool isNegative = amount < 0;
+  double absAmount = amount.abs();
+  String prefix = isNegative ? "-\$" : "\$";
 
-    // ✅ Mostrar sin decimales
-    return '\$${formatted.substring(0, formatted.length - 3)}';
+  if (absAmount >= 1e9) {
+    // Billones (B)
+    double value = absAmount / 1e9;
+    // Eliminar el decimal si es un número entero
+    return value % 1 == 0
+        ? '$prefix${value.toInt()}B'
+        : '$prefix${value.toStringAsFixed(1)}B';
+  } else if (absAmount >= 1e6) {
+    // Millones (M)
+    double value = absAmount / 1e6;
+    return value % 1 == 0
+        ? '$prefix${value.toInt()}M'
+        : '$prefix${value.toStringAsFixed(1)}M';
+  } else if (absAmount >= 1e3) {
+    // Miles (K)
+    double value = absAmount / 1e3;
+    return value % 1 == 0
+        ? '$prefix${value.toInt()}K'
+        : '$prefix${value.toStringAsFixed(1)}K';
+  } else {
+    // Para valores menores a mil
+    if (absAmount % 1 == 0) {
+      // Si es un número entero
+      return '$prefix${absAmount.toInt()}';
+    } else {
+      // Con decimales
+      return '$prefix${absAmount.toStringAsFixed(2)}';
+    }
   }
 }

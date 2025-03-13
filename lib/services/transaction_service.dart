@@ -48,6 +48,82 @@ class TransactionProvider extends ChangeNotifier {
   List<TransactionDto> _transactions = [];
 
   List<TransactionDto> get transactions => _transactions;
+  String _getGlobalCategory(String category) {
+    const needs = [
+      'Comida',
+      'Transporte',
+      'Salud',
+      'Educación',
+      'Gasolina',
+      'Uber / Taxi',
+      'Hogar',
+      'Mascota'
+    ];
+
+    const wants = [
+      'Ocio',
+      'Streaming',
+      'Ropa',
+      'Videojuegos',
+      'Gimnasio',
+      'Regalos',
+      'Viajes'
+    ];
+
+    const savings = ['Ahorro'];
+
+    if (needs.contains(category)) return 'Necesidades';
+    if (wants.contains(category)) return 'Deseos';
+    if (savings.contains(category)) return 'Ahorros';
+
+    return 'Otro';
+  }
+
+// En el proveedor de transacciones
+  double getTotalNeedsExpenses() {
+    const needs = [
+      'Comida',
+      'Transporte',
+      'Salud',
+      'Educación',
+      'Gasolina',
+      'Uber / Taxi',
+      'Hogar',
+      'Mascota'
+    ];
+
+    return _transactions
+        .where((transaction) =>
+            transaction.type == "Gasto" && needs.contains(transaction.category))
+        .fold(0, (sum, transaction) => sum + transaction.amount);
+  }
+
+  double getTotalWantsExpenses() {
+    const wants = [
+      'Ocio',
+      'Streaming',
+      'Ropa',
+      'Videojuegos',
+      'Gimnasio',
+      'Regalos',
+      'Viajes'
+    ];
+
+    return _transactions
+        .where((transaction) =>
+            transaction.type == "Gasto" && wants.contains(transaction.category))
+        .fold(0, (sum, transaction) => sum + transaction.amount);
+  }
+
+  double getTotalSavings() {
+    const savings = ['Ahorro'];
+
+    return _transactions
+        .where((transaction) =>
+            transaction.type == "Ingreso" &&
+            savings.contains(transaction.category))
+        .fold(0, (sum, transaction) => sum + transaction.amount);
+  }
 
   /// 🔹 Cargar transacciones desde `SharedPreferences`
   Future<void> loadTransactions() async {
@@ -72,6 +148,13 @@ class TransactionProvider extends ChangeNotifier {
 
     return filteredTransactions
         .where((transaction) => transaction.type == 'Ingreso')
+        .fold(0, (sum, transaction) => sum + transaction.amount);
+  }
+
+  // Obtener gastos totales
+  double getTotalExpenses() {
+    return _transactions
+        .where((transaction) => transaction.type == "Gasto")
         .fold(0, (sum, transaction) => sum + transaction.amount);
   }
 

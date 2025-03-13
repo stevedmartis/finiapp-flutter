@@ -408,17 +408,75 @@ class AddAccountScreenState extends State<AddAccountScreen> {
   }
 
   Widget _buildBudgetDistribution() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.grey[900],
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            "Distribución del saldo:",
+            style: TextStyle(
+                fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+          ),
+          const SizedBox(height: 16),
+          _buildCategoryRow("Necesidades", formatCurrency(_needs), "50%",
+              Colors.redAccent, Icons.shopping_cart),
+          const SizedBox(height: 10),
+          _buildCategoryRow("Deseos", formatCurrency(_wants), "30%",
+              Colors.blueAccent, Icons.star),
+          const SizedBox(height: 10),
+          _buildCategoryRow("Ahorro", formatCurrency(_savings), "20%",
+              Colors.greenAccent, Icons.savings),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCategoryRow(String title, String amount, String percentage,
+      Color color, IconData icon) {
+    return Row(
       children: [
-        const Text(
-          "Distribución del saldo:",
-          style: TextStyle(fontSize: 16, color: Colors.white70),
+        Container(
+          width: 30,
+          height: 30,
+          decoration: BoxDecoration(
+            color: color.withOpacity(0.2),
+            shape: BoxShape.circle,
+          ),
+          child: Icon(
+            icon,
+            size: 16,
+            color: color,
+          ),
         ),
-        const SizedBox(height: 10),
-        _buildBudgetRow("🟢 50% Necesidades", formatCurrency(_needs)),
-        _buildBudgetRow("🔵 30% Deseos", formatCurrency(_wants)),
-        _buildBudgetRow("🟠 20% Ahorro", formatCurrency(_savings)),
+        const SizedBox(width: 12),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 14,
+              ),
+            ),
+            Text(
+              percentage,
+              style: TextStyle(
+                color: Colors.grey[400],
+                fontSize: 12,
+              ),
+            ),
+          ],
+        ),
+        const Spacer(),
+        Text(amount,
+            style: TextStyle(
+                color: color, fontWeight: FontWeight.bold, fontSize: 16)),
       ],
     );
   }

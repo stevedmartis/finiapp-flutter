@@ -47,6 +47,13 @@ void main() async {
 
   FinancialDataService financialProvider = FinancialDataService();
   print("✅ FinancialDataService inicializado");
+/* 
+  print("🧹 Limpiando todos los datos de la aplicación...");
+  await accountsProvider.clearAccounts();
+  await transactionProvider.clearTransactions();
+  await financialProvider
+      .clearFinanceData(); // Asegúrate de haber implementado este método
+  print("✅ Todos los datos han sido eliminados"); */
 
   // Load financial data first
   print("🔄 Cargando datos financieros guardados...");
@@ -63,6 +70,7 @@ void main() async {
     // Only sync if we don't have existing financial data
     if (financialProvider.financialSummary.isEmpty) {
       print("⚠️ No hay datos financieros, inicializando...");
+
       // Initialize if needed
       financialProvider.initializeData();
 
